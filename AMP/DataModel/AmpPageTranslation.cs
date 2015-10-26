@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Anfema.Amp.DataModel
+{
+    public class AmpPageTranslation
+    {
+        public string locale { get; set; }
+        public List<AmpPageTranslationContent> content { get; set; }
+
+        public AmpPageTranslation()
+        {
+            content = new List<AmpPageTranslationContent>();
+        }
+    }
+}
