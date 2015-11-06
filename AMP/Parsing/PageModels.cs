@@ -51,7 +51,7 @@ namespace Anfema.Amp.Parsing
         public string variation { get; set; }
         public string outlet { get; set; }
         public List<ContentNodeRaw> children { get; set; }
-        public bool is_searchable { get; set; }
+        //public bool is_searchable { get; set; }
     }
 
     public class TranslationRaw
@@ -65,12 +65,16 @@ namespace Anfema.Amp.Parsing
         public string parent { get; set; }
         public string identifier { get; set; }
         public string collection { get; set; }
+        public DateTime last_changed { get; set; }
         public List<TranslationRaw> translations { get; set; }
         public List<string> children { get; set; }
     }
 
 
-
+    public class AmpPageRootRaw
+    {
+        public List<AmpPageRaw> page { get; set; }
+    }
 
 
     public class KeyValuePairRaw

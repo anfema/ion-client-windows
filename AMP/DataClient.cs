@@ -1,4 +1,5 @@
 ﻿using Anfema.Amp.DataModel;
+using Anfema.Amp.Parsing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,25 @@ namespace Anfema.Amp
                 Debug.WriteLine("getData exception: " + e.Message);
                 return "";
             }
+        }
+
+
+        // Gets a complete page in raw json format
+        public async Task<string> getPageOfCollection( string pageIdentifier, string collectionIdentifier )
+        {
+            string response = "";
+
+            try
+            {
+                response = await _client.GetStringAsync(_loginData.api_url + "pages/" + collectionIdentifier + "/" + pageIdentifier );
+            }
+
+            catch (HttpRequestException e)
+            {
+                Debug.WriteLine("getData exception: " + e.Message);
+            }
+
+            return response;
         }
     }
 }

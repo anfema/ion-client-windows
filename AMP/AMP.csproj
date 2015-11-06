@@ -110,7 +110,6 @@
     <Compile Include="Parsing\GeneralModels.cs" />
     <Compile Include="Parsing\PageContent.cs" />
     <Compile Include="Parsing\PageModels.cs" />
-    <Compile Include="Parsing\PagesRootRaw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -70,31 +70,23 @@ namespace Anfema.Amp
             });
         }
 
-        public void BeginLoadData()
+        private void BeginLoadData()
         {
             this.initTask = new TaskFactory().StartNew(() =>
             {
-                // Init the pages
-                string pagesString = _client.getData("pages").Result;
-                PagesRootRaw pagesRoot = JsonConvert.DeserializeObject<PagesRootRaw>(pagesString);
-
-                // Generate the raw page content
-                List<AmpPageRaw> pagesCacheRaw = new List<AmpPageRaw>();
-                pagesCacheRaw = pagesRoot.page;
-
-                // Parse the raw datat to the working data types
-                _pagesCache = _parser.parsePages(pagesCacheRaw);
-
                 // Init the collections
                 string collectionsString = _client.getData("collections").Result;
                 CollectionRoot collectionsRoot = JsonConvert.DeserializeObject<CollectionRoot>(collectionsString);
                 _collectionCache = collectionsRoot.collection;
+
+                // Load all pages. TODO: only testing purpose
+                _pagesCache = getAllPagesOfCollection(_collectionCache[0].identifier).Result;
             });
         }
 
 
         // Gets a page with the desired name and all included translations
-        public AmpPage getPageAll(string name, string translation, Action callback)
+        public AmpPage getPageAllTranslations(string name, string translation, Action callback)
         {
             this.EnsureDataInitCompleted();
 
@@ -128,18 +120,21 @@ namespace Anfema.Amp
 
 
         // Returns a list of pagenames from the cached pages
-        public void getPagesNames(out List<string> pageNames, Action callback)
+        public void getPagesNames( string collectionIdentifier, out List<string> pageNames, Action callback)
         {
             this.EnsureDataInitCompleted();
 
             pageNames = new List<string>();
 
-            for (int i = 0; i < _pagesCache.Count; i++)
-            {
-                pageNames.Add(_pagesCache[i].identifier);
-            }
+            AmpCollection desiredCollection = _collectionCache.Find(x => x.identifier.Equals(collectionIdentifier));
 
-            // Alternatively the names could be extracted from the collection cache
+            if( desiredCollection != null )
+            {
+                for (int i = 0; i < desiredCollection.pages.Count; i++)
+                {
+                    pageNames.Add( desiredCollection.pages[i].identifier);
+                }
+            } 
 
             if (callback != null)
             {
@@ -193,6 +188,34 @@ namespace Anfema.Amp
                     throw this.initTask.Exception;
                 }
             }
+        }
+
+
+        // Gets all pages for a given collection name
+        private async Task<List<AmpPage>> getAllPagesOfCollection( string collectionName )
+        {
+            AmpCollection currentCollection = _collectionCache.Find(x => x.identifier.Equals(collectionName));
+
+            if( currentCollection == null)
+            {
+                return new List<AmpPage>();
+            }
+
+            List<AmpPageRaw> pagesCacheRaw = new List<AmpPageRaw>();
+
+
+            for ( int i=0; i<currentCollection.pages.Count; i++ )
+            {
+                string pageRawContent = await _client.getPageOfCollection(currentCollection.pages[i].identifier, currentCollection.identifier);
+                AmpPageRootRaw ampPageRootRaw = JsonConvert.DeserializeObject<AmpPageRootRaw>(pageRawContent);
+
+                AmpPageRaw ampPageRaw = ampPageRootRaw.page[0];
+
+                pagesCacheRaw.Add(ampPageRaw);
+            }
+
+            // Parse the raw data to the working data types
+            return _parser.parsePages(pagesCacheRaw);
         }
     }
 }
