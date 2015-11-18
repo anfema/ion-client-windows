@@ -31,7 +31,7 @@ namespace AMP_Test
     /// </summary>
     public sealed partial class AllData : Page
     {
-        private AmpPageContent _allContent = new AmpPageContent();
+        private AmpPageObservableCollection _allContent = new AmpPageObservableCollection();
 
         private AmpPageRaw _data;
 

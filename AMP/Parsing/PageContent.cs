@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Anfema.Amp.DataModel
 {
     // Class for all the data content parsed from the server
-    public class AmpPageContent
+    public class AmpPageObservableCollection
     {
         public ObservableCollection<AmpColorContent> colorContent { get; set; }
         public ObservableCollection<AmpDateTimeContent> dateTimeContent { get; set; }
@@ -21,7 +21,7 @@ namespace Anfema.Amp.DataModel
         public ObservableCollection<AmpTextContent> textContent { get; set; }
 
 
-        public AmpPageContent()
+        public AmpPageObservableCollection()
         {
             colorContent = new ObservableCollection<AmpColorContent>();
             dateTimeContent = new ObservableCollection<AmpDateTimeContent>();

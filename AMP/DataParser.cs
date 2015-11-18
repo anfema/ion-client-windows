@@ -14,9 +14,9 @@ namespace Anfema.Amp
     public class DataParser
     {
         // Parses the content from the generic data type to a more specific type
-        public AmpPageContent parseContent( List<ContentNodeRaw> content )
+        public AmpPageObservableCollection parseContent( List<ContentNodeRaw> content )
         {
-            AmpPageContent allContent = new AmpPageContent();
+            AmpPageObservableCollection allContent = new AmpPageObservableCollection();
 
             for( int i=0; i<content.Count; i++ )
             {
@@ -124,7 +124,7 @@ namespace Anfema.Amp
                     for (int k = 0; k < pageRaw.translations[i].content[j].children.Count; k++)
                     {
                         // Parse the whole content
-                        AmpPageContent pageContent = parseContent(pageRaw.translations[i].content[j].children);
+                        AmpPageObservableCollection pageContent = parseContent(pageRaw.translations[i].content[j].children);
                         content.children.Add(pageContent);
                     }
 

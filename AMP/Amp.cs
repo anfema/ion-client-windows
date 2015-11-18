@@ -101,14 +101,14 @@ namespace Anfema.Amp
         }
 
 
-        // Returns already as PageContent parsed data
-        public AmpPageContent getPageContent(string name, string translation, Action callback)
+        // Returns the whole data of a desired page already parsed as observable collections
+        public AmpPageObservableCollection getPageContent(string name, string translation, Action callback)
         {
             this.EnsureDataInitCompleted();
 
             AmpPage page = _pagesCache.Find(x => x.identifier.Equals(name));
             AmpPageTranslation pageTranslation = page.translations.Find(x => x.locale.Equals(translation));
-            AmpPageContent content = pageTranslation.content[0].children[0];
+            AmpPageObservableCollection content = pageTranslation.content[0].children[0];
 
             if (callback != null)
             {
@@ -143,7 +143,7 @@ namespace Anfema.Amp
         }
 
 
-        // Creates a list of all pages and their included translationss
+        // Creates a list of all pages and their included translations
         public List<PageAllTranslationsModel> GetPageTranslations()
         {
             this.EnsureDataInitCompleted();
