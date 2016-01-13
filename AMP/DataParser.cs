@@ -101,38 +101,30 @@ namespace Anfema.Amp
             pageParsed.collection = pageRaw.collection;
             pageParsed.identifier = pageRaw.identifier;
             pageParsed.parent = pageRaw.parent;
+            pageParsed.locale = pageRaw.locale;
 
-            // Parse all translations
-            for (int i = 0; i < pageRaw.translations.Count; i++)
-            {
-                AmpPageTranslation translation = new AmpPageTranslation();
-
-                // copy untouched parameters
-                translation.locale = pageRaw.translations[i].locale;
 
                 // Parse all content
-                for (int j = 0; j < pageRaw.translations[i].content.Count; j++)
+                for (int j = 0; j < pageRaw.contents.Count; j++)
                 {
-                    AmpPageTranslationContent content = new AmpPageTranslationContent();
+                    AmpPageContent content = new AmpPageContent();
 
                     // copy untouched parameters
-                    content.outlet = pageRaw.translations[i].content[j].outlet;
-                    content.type = pageRaw.translations[i].content[j].type;
-                    content.variation = pageRaw.translations[i].content[j].variation;
+                    content.outlet = pageRaw.contents[j].outlet;
+                    content.type = pageRaw.contents[j].type;
+                    content.variation = pageRaw.contents[j].variation;
 
                     // Parse all children
-                    for (int k = 0; k < pageRaw.translations[i].content[j].children.Count; k++)
+                    for (int k = 0; k < pageRaw.contents[j].children.Count; k++)
                     {
                         // Parse the whole content
-                        AmpPageObservableCollection pageContent = parseContent(pageRaw.translations[i].content[j].children);
+                        AmpPageObservableCollection pageContent = parseContent(pageRaw.contents[j].children);
                         content.children.Add(pageContent);
                     }
 
-                    translation.content.Add(content);
+                    pageParsed.contents.Add(content);
                 }
-
-                pageParsed.translations.Add(translation);
-            }
+           
 
             return pageParsed;
         }

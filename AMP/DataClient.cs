@@ -14,7 +14,10 @@ namespace Anfema.Amp
     public class DataClient
     {
         private string loginAdress = "http://Ampdev2.anfema.com/client/v1/login";
-        
+
+        private string _locale = "?locale=de_DE";
+        //private string _locale = "?locale=en_US";
+
         // Client for all REST communication
         private HttpClient _client;
 
@@ -78,7 +81,7 @@ namespace Anfema.Amp
 
             try
             {
-                response = await _client.GetStringAsync(_loginData.api_url + requestString);
+                response = await _client.GetStringAsync(_loginData.api_url + requestString + _locale);
 
                 return response;
             }
@@ -98,7 +101,7 @@ namespace Anfema.Amp
 
             try
             {
-                response = await _client.GetStringAsync(_loginData.api_url + "pages/" + collectionIdentifier + "/" + pageIdentifier );
+                response = await _client.GetStringAsync(_loginData.api_url + "pages/" + collectionIdentifier + "/" + pageIdentifier + _locale );
             }
 
             catch (HttpRequestException e)

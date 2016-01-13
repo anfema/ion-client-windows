@@ -106,9 +106,8 @@ namespace Anfema.Amp
         {
             this.EnsureDataInitCompleted();
 
-            AmpPage page = _pagesCache.Find(x => x.identifier.Equals(name));
-            AmpPageTranslation pageTranslation = page.translations.Find(x => x.locale.Equals(translation));
-            AmpPageObservableCollection content = pageTranslation.content[0].children[0];
+            AmpPage page = _pagesCache.Find(x => x.identifier.Equals(name) && x.locale.Equals(translation));
+            AmpPageObservableCollection content = page.contents[0].children[0];
 
             if (callback != null)
             {
@@ -144,25 +143,18 @@ namespace Anfema.Amp
 
 
         // Creates a list of all pages and their included translations
+        // Seems to be obsolete during the last changes in the translationshandling of pages and collections
         public List<PageAllTranslationsModel> GetPageTranslations()
         {
             this.EnsureDataInitCompleted();
 
-            var pageTranslations = new List<PageAllTranslationsModel>();
+            List<PageAllTranslationsModel> pageTranslations = new List<PageAllTranslationsModel>();
 
             for (int i = 0; i < _pagesCache.Count; i++)
             {
                 PageAllTranslationsModel ptm = new PageAllTranslationsModel();
                 ptm.name = _pagesCache[i].identifier;
-
-                // Get all possible translations
-                List<string> translations = new List<string>();
-                for (int j = 0; j < _pagesCache[i].translations.Count; j++)
-                {
-                    translations.Add(_pagesCache[i].translations[j].locale);
-                }
-
-                ptm.translations = translations;
+                ptm.translations.Add(_pagesCache[i].locale);
 
                 pageTranslations.Add(ptm);
             }
@@ -194,8 +186,10 @@ namespace Anfema.Amp
         // Gets all pages for a given collection name
         private async Task<List<AmpPage>> getAllPagesOfCollection( string collectionName )
         {
+            // Find the desired collection by its name within the collection cache
             AmpCollection currentCollection = _collectionCache.Find(x => x.identifier.Equals(collectionName));
 
+            // If no collection with the desired name was found return a blank AmpPage to avoid nullpointer exceptions
             if( currentCollection == null)
             {
                 return new List<AmpPage>();

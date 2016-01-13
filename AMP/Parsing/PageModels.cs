@@ -13,6 +13,7 @@ namespace Anfema.Amp.Parsing
         public string variation { get; set; }
         public string outlet { get; set; }
         public string mime_type { get; set; }
+        public bool is_searchable { get; set; }
         public int file_size { get; set; }
         public int width { get; set; }
         public int height { get; set; }
@@ -27,7 +28,6 @@ namespace Anfema.Amp.Parsing
         public int original_file_size { get; set; }
         public string original_checksum { get; set; }
         public string original_file { get; set; }
-        public bool is_searchable { get; set; }
         public List<KeyValuePairRaw> values { get; set; } // special treatment after parsing
         public string value { get; set; }
         public string datetime { get; set; }
@@ -43,6 +43,7 @@ namespace Anfema.Amp.Parsing
         public double? scale { get; set; }
         public string text { get; set; }
         public bool is_multiline { get; set; }
+        public string connection_string { get; set; }
     }
 
     public class ContentRaw
@@ -51,14 +52,8 @@ namespace Anfema.Amp.Parsing
         public string variation { get; set; }
         public string outlet { get; set; }
         public List<ContentNodeRaw> children { get; set; }
-        //public bool is_searchable { get; set; }
     }
 
-    public class TranslationRaw
-    {
-        public string locale { get; set; }
-        public List<ContentRaw> content { get; set; }
-    }
 
     public class AmpPageRaw
     {
@@ -66,8 +61,11 @@ namespace Anfema.Amp.Parsing
         public string identifier { get; set; }
         public string collection { get; set; }
         public DateTime last_changed { get; set; }
-        public List<TranslationRaw> translations { get; set; }
+        public Uri archive { get; set; }
+        public List<ContentRaw> contents { get; set; }
         public List<string> children { get; set; }
+        public string locale { get; set; }
+        public string layout { get; set; }
     }
 
 

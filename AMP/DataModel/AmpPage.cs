@@ -7,12 +7,14 @@ namespace Anfema.Amp.DataModel
         public string parent { get; set; }
         public string identifier { get; set; }
         public string collection { get; set; }
-        public List<AmpPageTranslation> translations { get; set; }
+        public string locale { get; set; }
         public List<string> children { get; set; }
+        public List<AmpPageContent> contents { get; set; }
+
 
         public AmpPage()
         {
-            translations = new List<AmpPageTranslation>();
+            contents = new List<AmpPageContent>();
             children = new List<string>();
         }
     }

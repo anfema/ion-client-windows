@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Anfema.Amp.DataModel
 {
-    public class AmpPageTranslationContent
+    public class AmpPageContent
     {
         public string type { get; set; }
         public string variation { get; set; }
         public string outlet { get; set; }
         public List<AmpPageObservableCollection> children { get; set; }
 
-        public AmpPageTranslationContent()
+        public AmpPageContent()
         {
             children = new List<AmpPageObservableCollection>();
         }
