@@ -19,6 +19,7 @@ namespace Anfema.Amp.DataModel
         public ObservableCollection<AmpMediaContent> mediaContent { get; set; }
         public ObservableCollection<AmpOptionContent> optionContent { get; set; }
         public ObservableCollection<AmpTextContent> textContent { get; set; }
+        public ObservableCollection<AmpConnectionContent> connectionContent { get; set; }
 
 
         public AmpPageObservableCollection()
@@ -32,6 +33,7 @@ namespace Anfema.Amp.DataModel
             mediaContent = new ObservableCollection<AmpMediaContent>();
             optionContent = new ObservableCollection<AmpOptionContent>();
             textContent = new ObservableCollection<AmpTextContent>();
+            connectionContent = new ObservableCollection<AmpConnectionContent>();
         }
     }
 }

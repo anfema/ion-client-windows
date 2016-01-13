@@ -85,6 +85,13 @@ namespace Anfema.Amp
                             allContent.keyValueContent.Add(keyValue);
                             break;
                         }
+                    case "connectioncontent":
+                        {
+                            AmpConnectionContent connectionContent = new AmpConnectionContent();
+                            connectionContent.init(content[i]);
+                            allContent.connectionContent.Add(connectionContent);
+                            break;
+                        }
                 }
             }
 
@@ -104,26 +111,26 @@ namespace Anfema.Amp
             pageParsed.locale = pageRaw.locale;
 
 
-                // Parse all content
-                for (int j = 0; j < pageRaw.contents.Count; j++)
+            // Parse all content
+            for (int j = 0; j < pageRaw.contents.Count; j++)
+            {
+                AmpPageContent content = new AmpPageContent();
+
+                // copy untouched parameters
+                content.outlet = pageRaw.contents[j].outlet;
+                content.type = pageRaw.contents[j].type;
+                content.variation = pageRaw.contents[j].variation;
+
+                // Parse all children
+                for (int k = 0; k < pageRaw.contents[j].children.Count; k++)
                 {
-                    AmpPageContent content = new AmpPageContent();
-
-                    // copy untouched parameters
-                    content.outlet = pageRaw.contents[j].outlet;
-                    content.type = pageRaw.contents[j].type;
-                    content.variation = pageRaw.contents[j].variation;
-
-                    // Parse all children
-                    for (int k = 0; k < pageRaw.contents[j].children.Count; k++)
-                    {
-                        // Parse the whole content
-                        AmpPageObservableCollection pageContent = parseContent(pageRaw.contents[j].children);
-                        content.children.Add(pageContent);
-                    }
-
-                    pageParsed.contents.Add(content);
+                    // Parse the whole content
+                    AmpPageObservableCollection pageContent = parseContent(pageRaw.contents[j].children);
+                    content.children.Add(pageContent);
                 }
+
+                pageParsed.contents.Add(content);
+            }
            
 
             return pageParsed;
