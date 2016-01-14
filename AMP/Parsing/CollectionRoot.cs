@@ -5,7 +5,7 @@ namespace Anfema.Amp.Parsing
 {
     public class CollectionRoot
     {
-        public Meta meta { get; set; }
+        public CollectionMeta meta { get; set; }
         public List<AmpCollection> collection { get; set; }
     }
 }

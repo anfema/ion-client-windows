@@ -55,24 +55,11 @@ namespace AMP_Test
 
         private void getPageNames()
         {
-            List<PageAllTranslationsModel> pages = amp.GetPageTranslations();
-            List<PageTranslationModel> allPages = new List<PageTranslationModel>();
-
-            for (int i = 0; i < pages.Count; i++ )
-            {
-                for( int j=0; j < pages[i].translations.Count; j++ )
-                {
-                    PageTranslationModel ptm = new PageTranslationModel();
-                    ptm.name = pages[i].name;
-                    ptm.translation = pages[i].translations[j];
-
-                    allPages.Add(ptm);
-                }
-            }
+            List<string> pageNames = amp.getPageNames();
 
             this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                allPagesList.DataContext = allPages;
+                allPagesList.DataContext = pageNames;
 
                 // Disable the progress ring
                 allPagesProgressRing.IsActive = false;

@@ -99,7 +99,7 @@ namespace Anfema.Amp
         }
 
 
-        public AmpPage parsePage(AmpPageRaw pageRaw)
+        public AmpPage parsePage(PageRaw pageRaw)
         {
             AmpPage pageParsed = new AmpPage();
 
@@ -138,7 +138,7 @@ namespace Anfema.Amp
 
 
         // Parses a list of raw pages
-        public List<AmpPage> parsePages(List<AmpPageRaw> pagesRaw)
+        public List<AmpPage> parsePages(List<PageRaw> pagesRaw)
         {
             Debug.WriteLine("{0}.{1}: {2}", DateTime.Now.Second, DateTime.Now.Millisecond, "Parsing started");
             List<AmpPage> pagesParseed = new List<AmpPage>();

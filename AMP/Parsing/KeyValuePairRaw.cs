@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Amp.Parsing
 {
-    public class AmpPageAllTranslationsModel
+    public class KeyValuePairRaw
     {
         public string name { get; set; }
-        public List<string> translations { get; set; }
+        public string value { get; set; }
     }
 }

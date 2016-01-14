@@ -33,7 +33,7 @@ namespace AMP_Test
     {
         private AmpPageObservableCollection _allContent = new AmpPageObservableCollection();
 
-        private AmpPageRaw _data;
+        private PageRaw _data;
 
         public AllData()
         {
@@ -54,12 +54,11 @@ namespace AMP_Test
                 // Check for test button
                 if (pressedButton == null)
                 {
-                    showData("page_002", "de_DE");
+                    showData("page_002");
                 }
                 else
                 {
-                    PageTranslationModel ptm = (PageTranslationModel)pressedButton.DataContext;
-                    showData(ptm.name, ptm.translation);
+                    showData((string)pressedButton.DataContext);
                 }
             };
 
@@ -67,13 +66,13 @@ namespace AMP_Test
         }
 
 
-        private async Task showData( string pageName, string translation)
+        private async Task showData( string pageName )
         {
             await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
             {
                 try
                 {
-                    _allContent = Amp.Instance.getPageContent(pageName, translation, null);
+                    _allContent = Amp.Instance.getPageContent(pageName, null);
                     
                     // Set the data context of the lists
                     imageContentList.DataContext = _allContent.imageContent;

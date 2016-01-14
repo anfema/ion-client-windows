@@ -83,30 +83,14 @@ namespace Anfema.Amp
                 _pagesCache = getAllPagesOfCollection(_collectionCache[0].identifier).Result;
             });
         }
-
-
-        // Gets a page with the desired name and all included translations
-        public AmpPage getPageAllTranslations(string name, string translation, Action callback)
-        {
-            this.EnsureDataInitCompleted();
-
-            AmpPage page = _pagesCache.Find(x => x.identifier.Equals(name));
-
-            if (callback != null)
-            {
-                callback();
-            }
-
-            return page;
-        }
-
+        
 
         // Returns the whole data of a desired page already parsed as observable collections
-        public AmpPageObservableCollection getPageContent(string name, string translation, Action callback)
+        public AmpPageObservableCollection getPageContent(string name, Action callback)
         {
             this.EnsureDataInitCompleted();
 
-            AmpPage page = _pagesCache.Find(x => x.identifier.Equals(name) && x.locale.Equals(translation));
+            AmpPage page = _pagesCache.Find(x => x.identifier.Equals(name) );
             AmpPageObservableCollection content = page.contents[0].children[0];
 
             if (callback != null)
@@ -118,49 +102,19 @@ namespace Anfema.Amp
         }
 
 
-        // Returns a list of pagenames from the cached pages
-        public void getPagesNames( string collectionIdentifier, out List<string> pageNames, Action callback)
+        // Returns a list of all page identifiers
+        public List<string> getPageNames()
         {
-            this.EnsureDataInitCompleted();
+            List<string> pageNames = new List<string>();
 
-            pageNames = new List<string>();
-
-            AmpCollection desiredCollection = _collectionCache.Find(x => x.identifier.Equals(collectionIdentifier));
-
-            if( desiredCollection != null )
+            for( int i=0; i< _pagesCache.Count; i++)
             {
-                for (int i = 0; i < desiredCollection.pages.Count; i++)
-                {
-                    pageNames.Add( desiredCollection.pages[i].identifier);
-                }
-            } 
-
-            if (callback != null)
-            {
-                callback();
-            }
-        }
-
-
-        // Creates a list of all pages and their included translations
-        // Seems to be obsolete during the last changes in the translationshandling of pages and collections
-        public List<PageAllTranslationsModel> GetPageTranslations()
-        {
-            this.EnsureDataInitCompleted();
-
-            List<PageAllTranslationsModel> pageTranslations = new List<PageAllTranslationsModel>();
-
-            for (int i = 0; i < _pagesCache.Count; i++)
-            {
-                PageAllTranslationsModel ptm = new PageAllTranslationsModel();
-                ptm.name = _pagesCache[i].identifier;
-                ptm.translations.Add(_pagesCache[i].locale);
-
-                pageTranslations.Add(ptm);
+                pageNames.Add(_pagesCache[i].identifier);
             }
 
-            return pageTranslations;
+            return pageNames;
         }
+
 
         private void EnsureDataInitCompleted()
         {
@@ -195,15 +149,15 @@ namespace Anfema.Amp
                 return new List<AmpPage>();
             }
 
-            List<AmpPageRaw> pagesCacheRaw = new List<AmpPageRaw>();
+            List<PageRaw> pagesCacheRaw = new List<PageRaw>();
 
 
             for ( int i=0; i<currentCollection.pages.Count; i++ )
             {
                 string pageRawContent = await _client.getPageOfCollection(currentCollection.pages[i].identifier, currentCollection.identifier);
-                AmpPageRootRaw ampPageRootRaw = JsonConvert.DeserializeObject<AmpPageRootRaw>(pageRawContent);
+                PageRootRaw ampPageRootRaw = JsonConvert.DeserializeObject<PageRootRaw>(pageRawContent);
 
-                AmpPageRaw ampPageRaw = ampPageRootRaw.page[0];
+                PageRaw ampPageRaw = ampPageRootRaw.page[0];
 
                 pagesCacheRaw.Add(ampPageRaw);
             }

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,40 +43,5 @@ namespace Anfema.Amp.Parsing
         public string text { get; set; }
         public bool is_multiline { get; set; }
         public string connection_string { get; set; }
-    }
-
-    public class ContentRaw
-    {
-        public string type { get; set; }
-        public string variation { get; set; }
-        public string outlet { get; set; }
-        public List<ContentNodeRaw> children { get; set; }
-    }
-
-
-    public class AmpPageRaw
-    {
-        public string parent { get; set; }
-        public string identifier { get; set; }
-        public string collection { get; set; }
-        public DateTime last_changed { get; set; }
-        public Uri archive { get; set; }
-        public List<ContentRaw> contents { get; set; }
-        public List<string> children { get; set; }
-        public string locale { get; set; }
-        public string layout { get; set; }
-    }
-
-
-    public class AmpPageRootRaw
-    {
-        public List<AmpPageRaw> page { get; set; }
-    }
-
-
-    public class KeyValuePairRaw
-    {
-        public string name { get; set; }
-        public string value { get; set; }
     }
 }

@@ -12,13 +12,10 @@
         <DataTemplate x:Name="pageButtonTemplate">
             <Button Click="pageButton_Click"
                     Margin="10, 5, 10, 5"
-                    >      
+                    >
                 <Button.Content>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding name}"
+                    <TextBlock Text="{Binding}"
                                    Padding="0, 0, 10, 0"/>
-                        <TextBlock Text="{Binding translation}"/>
-                    </StackPanel>
                 </Button.Content>
             </Button>
         </DataTemplate>

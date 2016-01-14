@@ -16,7 +16,7 @@ namespace AMP.WP81.TestApp
 
             await Amp.Instance.LoadDataAsync();
 
-            var translations = Amp.Instance.GetPageTranslations();
+            var translations = Amp.Instance.getPageNames();
             Assert.AreEqual(0, translations.Count);
         }
     }

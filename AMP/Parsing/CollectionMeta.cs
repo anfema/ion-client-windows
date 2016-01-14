@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Amp.Parsing
 {
-    public class Meta
+    public class CollectionMeta
     {
         public object previous { get; set; }
         public object next { get; set; }
