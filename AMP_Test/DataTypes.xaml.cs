@@ -29,6 +29,7 @@ namespace AMP_Test
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            /*
             ObservableCollection<DataTypeModel> oc = new ObservableCollection<DataTypeModel>();
 
             Dictionary<string, string> dataTypes = Amp.Instance.ApiCalls;
@@ -39,7 +40,7 @@ namespace AMP_Test
             }
 
             this.DataContext = oc;
-
+            */
             HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
         }
 

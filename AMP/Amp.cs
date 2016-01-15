@@ -12,11 +12,27 @@ namespace Anfema.Amp
 {
     public class Amp
     {
-        private static Amp instance = null;
+        private static Dictionary<AmpConfig, Amp> instances = new Dictionary<AmpConfig, Amp>();
+        private AmpConfig _config;
+
+        public static Amp getInstance( AmpConfig config )
+        {
+            Amp storedClient;
+
+            if( instances.TryGetValue(config, out storedClient ) )
+            {
+                return storedClient;
+            }
+
+
+            Amp amp = new Amp( config );
+            instances.Add(config, amp);
+            return amp;
+        }
 
         // Caches for the data
         private List<AmpPage> _pagesCache = new List<AmpPage>();
-        private List<AmpCollection> _collectionCache = new List<AmpCollection>();
+        private AmpCollection _collectionCache = new AmpCollection();
 
         // Parser for data
         private DataParser _parser = new DataParser();
@@ -24,22 +40,13 @@ namespace Anfema.Amp
 
         private Task initTask;
 
-        public Amp()
+
+        public Amp( AmpConfig config )
         {
+            this._config = config;
         }
 
-        public static Amp Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new Amp();
-                }
 
-                return instance;
-            }
-        }
 
         public Dictionary<string, string> ApiCalls
         {
@@ -77,11 +84,17 @@ namespace Anfema.Amp
                 // Init the collections
                 string collectionsString = _client.getData("collections").Result;
                 CollectionRoot collectionsRoot = JsonConvert.DeserializeObject<CollectionRoot>(collectionsString);
-                _collectionCache = collectionsRoot.collection;
+                _collectionCache = collectionsRoot.collection[0]; // TODO change this for the multiton
 
                 // Load all pages. TODO: only testing purpose
-                _pagesCache = getAllPagesOfCollection(_collectionCache[0].identifier).Result;
+                _pagesCache = getAllPagesOfCollection(_collectionCache.identifier).Result;
             });
+        }
+
+
+        public AmpCollection getCollection()
+        {
+            return _collectionCache;
         }
         
 
@@ -139,12 +152,9 @@ namespace Anfema.Amp
 
         // Gets all pages for a given collection name
         private async Task<List<AmpPage>> getAllPagesOfCollection( string collectionName )
-        {
-            // Find the desired collection by its name within the collection cache
-            AmpCollection currentCollection = _collectionCache.Find(x => x.identifier.Equals(collectionName));
-
+        {            
             // If no collection with the desired name was found return a blank AmpPage to avoid nullpointer exceptions
-            if( currentCollection == null)
+            if( _collectionCache == null)
             {
                 return new List<AmpPage>();
             }
@@ -152,9 +162,9 @@ namespace Anfema.Amp
             List<PageRaw> pagesCacheRaw = new List<PageRaw>();
 
 
-            for ( int i=0; i<currentCollection.pages.Count; i++ )
+            for ( int i=0; i<_collectionCache.pages.Count; i++ )
             {
-                string pageRawContent = await _client.getPageOfCollection(currentCollection.pages[i].identifier, currentCollection.identifier);
+                string pageRawContent = await _client.getPageOfCollection(_collectionCache.pages[i].identifier, _collectionCache.identifier);
                 PageRootRaw ampPageRootRaw = JsonConvert.DeserializeObject<PageRootRaw>(pageRawContent);
 
                 PageRaw ampPageRaw = ampPageRootRaw.page[0];

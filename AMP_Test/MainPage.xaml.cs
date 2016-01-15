@@ -26,13 +26,10 @@ namespace AMP_Test
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private Amp amp;
-
         public MainPage()
         {
             this.InitializeComponent();
             this.NavigationCacheMode = NavigationCacheMode.Required;
-            this.amp = Amp.Instance;
         }
 
         /// <summary>
@@ -43,19 +40,19 @@ namespace AMP_Test
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             // TODO: this is for initializing the singleton parser
-            await amp.LoginAsync("admin@anfe.ma", "test");
+            await Amp.getInstance(AppController.instance.ampConfig).LoginAsync("admin@anfe.ma", "test");
 
             this.allDataButton.IsEnabled = true;
             this.dataTypesButton.IsEnabled = true;
 
-            await amp.LoadDataAsync();
+            await Amp.getInstance(AppController.instance.ampConfig).LoadDataAsync();
 
             this.getPageNames();
         }
 
         private void getPageNames()
         {
-            List<string> pageNames = amp.getPageNames();
+            List<string> pageNames = Amp.getInstance(AppController.instance.ampConfig).getPageNames();
 
             this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {

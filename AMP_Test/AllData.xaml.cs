@@ -33,8 +33,6 @@ namespace AMP_Test
     {
         private AmpPageObservableCollection _allContent = new AmpPageObservableCollection();
 
-        private PageRaw _data;
-
         public AllData()
         {
             this.InitializeComponent();
@@ -72,7 +70,7 @@ namespace AMP_Test
             {
                 try
                 {
-                    _allContent = Amp.Instance.getPageContent(pageName, null);
+                    _allContent = Amp.getInstance(AppController.instance.ampConfig).getPageContent(pageName, null);
                     
                     // Set the data context of the lists
                     imageContentList.DataContext = _allContent.imageContent;
