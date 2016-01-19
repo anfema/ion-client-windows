@@ -4,16 +4,15 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Anfema.Amp
 {
     public class Amp
     {
+        // Dictionary for all the possible instances bound to a specific config
         private static Dictionary<AmpConfig, Amp> instances = new Dictionary<AmpConfig, Amp>();
-        private AmpConfig _config;
 
         public static Amp getInstance( AmpConfig config )
         {
@@ -43,29 +42,11 @@ namespace Anfema.Amp
 
         public Amp( AmpConfig config )
         {
-            this._config = config;
+            _client.configureDataClient(config);
         }
 
 
-
-        public Dictionary<string, string> ApiCalls
-        {
-            get { return _client.ApiCalls; }
-        }
-
-        /// <summary>
-        /// Starts the login process.
-        /// </summary>
-        /// <param name="username">The user name.</param>
-        /// <param name="password">The password.</param>
-        /// <returns>True if the login was successful.</returns>
-        public async Task<bool> LoginAsync(string username, string password)
-        {
-            return await _client.LoginAsync(username, password);
-        }
-
-
-        // Inits the data loading process from the server
+        // Inits the data loading process from the server  TODO: only for testing purpose -> move to desired data class
         public async Task LoadDataAsync()
         {
             await new TaskFactory().StartNew(() =>
@@ -76,6 +57,7 @@ namespace Anfema.Amp
                 Debug.WriteLine("{0}.{1}: {2}", DateTime.Now.Second, DateTime.Now.Millisecond, "LoadDataAsync() end.");
             });
         }
+
 
         private void BeginLoadData()
         {
@@ -92,6 +74,7 @@ namespace Anfema.Amp
         }
 
 
+        // Returns all the cached collections
         public AmpCollection getCollection()
         {
             return _collectionCache;

@@ -1,12 +1,15 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Amp.Authorization;
+using Anfema.Amp.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AMP_Test
 {
+    /*** Simulates a real app that uses the AMP-Client ***/
     public class AppController
     {
         private static AppController _instance;
@@ -28,12 +31,19 @@ namespace AMP_Test
         }
 
 
-        public AppController()
+        public async Task<AmpConfig> loginAsync()
         {
-            _ampConfig = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "test", "");
+            AuthenticationHeaderValue authenticationHeader = await new AmpTokenAuthorization().LoginAsync("admin@anfe.ma", "test", "http://Ampdev2.anfema.com/client/v1/login");
+
+            AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "test", "de_DE", authenticationHeader);
+
+            // Only testing purpose TODO: remove
+            _ampConfig = config;
+
+            return config;
         }
 
-
+        
         public AmpConfig ampConfig
         {
             get

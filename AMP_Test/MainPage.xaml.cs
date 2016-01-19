@@ -1,21 +1,10 @@
 ﻿using Anfema.Amp;
 using Anfema.Amp.DataModel;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -32,6 +21,9 @@ namespace AMP_Test
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
+        // Config file for the current data context
+        AmpConfig _ampConfig;
+
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
         /// </summary>
@@ -39,20 +31,21 @@ namespace AMP_Test
         /// This parameter is typically used to configure the page.</param>
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            // TODO: this is for initializing the singleton parser
-            await Amp.getInstance(AppController.instance.ampConfig).LoginAsync("admin@anfe.ma", "test");
+            // Get all the login informations needed for later communication            
+            _ampConfig = await AppController.instance.loginAsync();
 
             this.allDataButton.IsEnabled = true;
             this.dataTypesButton.IsEnabled = true;
 
-            await Amp.getInstance(AppController.instance.ampConfig).LoadDataAsync();
+            // Debug loading of all the data at startup
+            await Amp.getInstance(_ampConfig).LoadDataAsync();
 
             this.getPageNames();
         }
 
         private void getPageNames()
         {
-            List<string> pageNames = Amp.getInstance(AppController.instance.ampConfig).getPageNames();
+            List<string> pageNames = Amp.getInstance(_ampConfig).getPageNames();
 
             this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {

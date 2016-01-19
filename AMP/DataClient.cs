@@ -1,76 +1,37 @@
 ﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Parsing;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Anfema.Amp
 {
     public class DataClient
     {
-        private string loginAdress = "http://Ampdev2.anfema.com/client/v1/login";
-
-        private string _locale = "?locale=de_DE";
-        //private string _locale = "?locale=en_US";
-
         // Client for all REST communication
         private HttpClient _client;
 
         // Holds the neccessary data for data retrieval
-        private Login _loginData;
-        
-        /// <summary>
-        /// The possible api calls
-        /// </summary>
-        public Dictionary<string, string> ApiCalls { get; private set; }
-        
-        // login to get access token
-        public async Task<bool> LoginAsync(string username, string password)
+        private AmpConfig _config;        
+     
+
+        // Configures the data client with the parameters included in the config file
+        public bool configureDataClient( AmpConfig config )
         {
             try
             {
-                // Temporary httpClient for the login process
-                HttpClient loginClient = new HttpClient();
-
-                // Generate POST request
-                Dictionary<string, string> request = new Dictionary<string, string>();
-                request.Add("username", username);
-                request.Add("password", password);
-
-                FormUrlEncodedContent requestContent = new FormUrlEncodedContent(request);
-
-                // Post request to server
-                HttpResponseMessage response = await loginClient.PostAsync(new Uri(this.loginAdress), requestContent);
-
-                // Process and return the acces token
-                string jsonResult = response.Content.ReadAsStringAsync().Result;
-
-                // Generate the model and try to parse the answer from the server
-                LoginRootObject lro = new LoginRootObject();
-
-                _loginData = JsonConvert.DeserializeObject<LoginRootObject>(jsonResult).login;
-
-                // TODO remove because of strange Amp behaviour
-                _loginData.api_url = "http://Ampdev2.anfema.com/client/v1/";
-
-                // Create the httpClient with a special header
+                _config = config;
                 _client = new HttpClient();
-                _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", _loginData.token);
-
-                // Init possible API calls
-                this.ApiCalls = JsonConvert.DeserializeObject<Dictionary<string, string>>(await getData(""));
+                _client.DefaultRequestHeaders.Authorization = _config.authenticationHeader;
 
                 return true;
             }
-            catch(Exception e)
+            catch( Exception e)
             {
+                Debug.WriteLine("Error in configuring the data client: " + e.Message);
                 return false;
-            }            
+            }
         }
 
 
@@ -81,7 +42,7 @@ namespace Anfema.Amp
 
             try
             {
-                response = await _client.GetStringAsync(_loginData.api_url + requestString + _locale);
+                response = await _client.GetStringAsync(_config.baseUrl + requestString + "?locale=" + _config.locale);
 
                 return response;
             }
@@ -101,7 +62,7 @@ namespace Anfema.Amp
 
             try
             {
-                response = await _client.GetStringAsync(_loginData.api_url + "pages/" + collectionIdentifier + "/" + pageIdentifier + _locale );
+                response = await _client.GetStringAsync(_config.baseUrl + "pages/" + collectionIdentifier + "/" + pageIdentifier + "?locale=" + _config.locale );
             }
 
             catch (HttpRequestException e)

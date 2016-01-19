@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http.Headers;
 
 namespace Anfema.Amp.DataModel
 {
@@ -10,14 +6,16 @@ namespace Anfema.Amp.DataModel
     {
         public string baseUrl { get; set; }
         public string collectionIdentifier { get; set; }
-        public string authorizationHeaderValue { get; set; }
+        public AuthenticationHeaderValue authenticationHeader { get; set; }
+        public string locale { get; set; }
 
 
-        public AmpConfig( string baseUrl, string collectionIdentifier, string authorizationHeaderValue )
+        public AmpConfig( string baseUrl, string collectionIdentifier, string locale, AuthenticationHeaderValue authenticationHeader)
         {
             this.baseUrl = baseUrl;
             this.collectionIdentifier = collectionIdentifier;
-            this.authorizationHeaderValue = authorizationHeaderValue;
+            this.locale = locale;
+            this.authenticationHeader = authenticationHeader;
         }
     }
 }
