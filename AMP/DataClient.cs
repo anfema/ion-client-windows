@@ -1,4 +1,6 @@
 ﻿using Anfema.Amp.DataModel;
+using Anfema.Amp.Parsing;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.Net.Http;
@@ -16,27 +18,31 @@ namespace Anfema.Amp
         private AmpConfig _config;        
      
 
-        // Configures the data client with the parameters included in the config file
-        public bool configureDataClient( AmpConfig config )
+        /// <summary>
+        /// Constructor with config file for initialization
+        /// </summary>
+        /// <param name="config"></param>
+        public DataClient( AmpConfig config )
         {
             try
             {
                 _config = config;
                 _client = new HttpClient();
                 _client.DefaultRequestHeaders.Authorization = _config.authenticationHeader;
-
-                return true;
             }
-            catch( Exception e)
+            catch (Exception e)
             {
                 Debug.WriteLine("Error in configuring the data client: " + e.Message);
-                return false;
             }
         }
 
 
-        // Gets data for specific data content
-        public async Task<string> getData(string requestString)
+        /// <summary>
+        /// Gets data for specific data content
+        /// </summary>
+        /// <param name="requestString"></param>
+        /// <returns>String recieved from the server</returns>
+        public async Task<string> getDataAsync(string requestString)
         {
             string response = "";
 
@@ -55,22 +61,30 @@ namespace Anfema.Amp
         }
 
 
-        // Gets a complete page in raw json format
-        public async Task<string> getPageOfCollection( string pageIdentifier, string collectionIdentifier )
+        /// <summary>
+        /// Get a collection for a given identifier
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns>AmpCollection with the desired identifier</returns>
+        public async Task<AmpCollection> getCollectionAsync( string collectionIdentifier )
         {
-            string response = "";
+            string collectionsString = await getDataAsync("collections/" + collectionIdentifier);
+            CollectionRoot collectionsRoot = JsonConvert.DeserializeObject<CollectionRoot>(collectionsString);
+            return collectionsRoot.collection[0];
+        }
 
-            try
-            {
-                response = await _client.GetStringAsync(_config.baseUrl + "pages/" + collectionIdentifier + "/" + pageIdentifier + "?locale=" + _config.locale );
-            }
 
-            catch (HttpRequestException e)
-            {
-                Debug.WriteLine("getData exception: " + e.Message);
-            }
+        /// <summary>
+        /// Used to get a page with a given identifier
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <returns>Already parsed AmpPage</returns>
+        public async Task<AmpPage> getPageAsync( string identifier )
+        {
+            string pageString = await _client.GetStringAsync(_config.baseUrl + "pages/" + _config.collectionIdentifier + "/" + identifier + "?locale=" + _config.locale);
+            PageRootRaw pageRootRaw = JsonConvert.DeserializeObject<PageRootRaw>(pageString);            
 
-            return response;
+            return DataParser.parsePage(pageRootRaw.page[0]);
         }
     }
 }

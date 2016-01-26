@@ -1,6 +1,7 @@
 ﻿using Anfema.Amp;
 using Anfema.Amp.DataModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -37,24 +38,20 @@ namespace AMP_Test
             this.allDataButton.IsEnabled = true;
             this.dataTypesButton.IsEnabled = true;
 
-            // Debug loading of all the data at startup
-            await Amp.getInstance(_ampConfig).LoadDataAsync();
-
-            this.getPageNames();
+            await this.getPageNames();
         }
 
-        private void getPageNames()
+        private async Task<bool> getPageNames()
         {
-            List<string> pageNames = Amp.getInstance(_ampConfig).getPageNames();
+            List<string> pageNames = await Amp.getInstance(_ampConfig).getAllPageIdentifierAsync();
 
-            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                allPagesList.DataContext = pageNames;
+            allPagesList.DataContext = pageNames;
 
-                // Disable the progress ring
-                allPagesProgressRing.IsActive = false;
-                allPagesProgressRing.Visibility = Visibility.Collapsed;
-            });
+            // Disable the progress ring
+            allPagesProgressRing.IsActive = false;
+            allPagesProgressRing.Visibility = Visibility.Collapsed;
+
+            return true;
         }
 
 

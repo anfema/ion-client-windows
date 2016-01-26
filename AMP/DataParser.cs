@@ -1,20 +1,19 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Parsing;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Anfema.Amp
 {
-    public class DataParser
+    public static class DataParser
     {
-        // Parses the content from the generic data type to a more specific type
-        public AmpPageObservableCollection parseContent( List<ContentNodeRaw> content )
+        /// <summary>
+        /// Parses the content from the generic data type to a more specific type
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns>A Object that contains all data in observable collections</returns>
+        public static AmpPageObservableCollection parseContent( List<ContentNodeRaw> content )
         {
             AmpPageObservableCollection allContent = new AmpPageObservableCollection();
 
@@ -99,7 +98,12 @@ namespace Anfema.Amp
         }
 
 
-        public AmpPage parsePage(PageRaw pageRaw)
+        /// <summary>
+        /// Parses a given raw json to a AmpPage
+        /// </summary>
+        /// <param name="pageRaw"></param>
+        /// <returns>AmpPage without the generic data types</returns>
+        public static AmpPage parsePage(PageRaw pageRaw)
         {
             AmpPage pageParsed = new AmpPage();
 
@@ -109,8 +113,7 @@ namespace Anfema.Amp
             pageParsed.identifier = pageRaw.identifier;
             pageParsed.parent = pageRaw.parent;
             pageParsed.locale = pageRaw.locale;
-
-
+            
             // Parse all content
             for (int j = 0; j < pageRaw.contents.Count; j++)
             {
@@ -130,28 +133,9 @@ namespace Anfema.Amp
                 }
 
                 pageParsed.contents.Add(content);
-            }
-           
+            }           
 
             return pageParsed;
-        }
-
-
-        // Parses a list of raw pages
-        public List<AmpPage> parsePages(List<PageRaw> pagesRaw)
-        {
-            Debug.WriteLine("{0}.{1}: {2}", DateTime.Now.Second, DateTime.Now.Millisecond, "Parsing started");
-            List<AmpPage> pagesParseed = new List<AmpPage>();
-
-            for (int i = 0; i < pagesRaw.Count; i++)
-            {
-                AmpPage pageParsed = parsePage(pagesRaw[i]);
-
-                pagesParseed.Add(pageParsed);
-            }
-
-            Debug.WriteLine("{0}.{1}: {2}", DateTime.Now.Second, DateTime.Now.Millisecond, "Parsing finished");
-            return pagesParseed;
         }
     }
 }

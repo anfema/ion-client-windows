@@ -66,11 +66,11 @@ namespace AMP_Test
 
         private async Task showData( string pageName )
         {
-            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-            {
+            //await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            //{
                 try
                 {
-                    _allContent = Amp.getInstance(AppController.instance.ampConfig).getPageContent(pageName, null);
+                    _allContent = await Amp.getInstance(AppController.instance.ampConfig).getPageContentAsync(pageName, null);
                     
                     // Set the data context of the lists
                     imageContentList.DataContext = _allContent.imageContent;
@@ -91,7 +91,7 @@ namespace AMP_Test
                 setDataLoaded();
 
                 initPage();
-            });
+            //});
         }
 
 

@@ -16,6 +16,8 @@ namespace AMP_Test
 
         private AmpConfig _ampConfig;
 
+        private bool _loggedIn;
+
         public static AppController instance
         {
             get
@@ -31,16 +33,29 @@ namespace AMP_Test
         }
 
 
+        public AppController()
+        {
+            _loggedIn = false;
+        }
+
+
+
+
         public async Task<AmpConfig> loginAsync()
         {
-            AuthenticationHeaderValue authenticationHeader = await new AmpTokenAuthorization().LoginAsync("admin@anfe.ma", "test", "http://Ampdev2.anfema.com/client/v1/login");
+            if (!_loggedIn)
+            {
+                AuthenticationHeaderValue authenticationHeader = await new AmpTokenAuthorization().LoginAsync("admin@anfe.ma", "test", "http://Ampdev2.anfema.com/client/v1/login");
 
-            AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "test", "de_DE", authenticationHeader);
+                AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "test", "de_DE", authenticationHeader);
 
-            // Only testing purpose TODO: remove
-            _ampConfig = config;
+                // Only testing purpose TODO: remove
+                _ampConfig = config;
+                _loggedIn = true;
+                return config;
+            }
 
-            return config;
+            return _ampConfig;
         }
 
         
