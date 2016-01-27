@@ -124,13 +124,9 @@ namespace Anfema.Amp
                 content.type = pageRaw.contents[j].type;
                 content.variation = pageRaw.contents[j].variation;
 
-                // Parse all children
-                for (int k = 0; k < pageRaw.contents[j].children.Count; k++)
-                {
-                    // Parse the whole content
-                    AmpPageObservableCollection pageContent = parseContent(pageRaw.contents[j].children);
-                    content.children.Add(pageContent);
-                }
+                // Parse the whole content
+                AmpPageObservableCollection pageContent = parseContent(pageRaw.contents[j].children);
+                content.children.Add(pageContent);
 
                 pageParsed.contents.Add(content);
             }           

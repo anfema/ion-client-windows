@@ -55,7 +55,7 @@ namespace Anfema.Amp
         public async Task<AmpPageObservableCollection> getPageContentAsync(string name, Action callback)
         {
             AmpPage page = await _pages.getPageAsync(name);
-            AmpPageObservableCollection content = page.contents[0].children[0];
+            AmpPageObservableCollection content = page.contents[0].children[0]; // TODO: check for trouble this hardcoded indices could result in
 
             if (callback != null)
             {
