@@ -70,8 +70,10 @@ namespace AMP_Test
             //{
                 try
                 {
-                    _allContent = await Amp.getInstance(AppController.instance.ampConfig).getPageContentAsync(pageName, null);
-                    
+                    AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
+
+                    _allContent = page.contents[0].children[0];
+
                     // Set the data context of the lists
                     imageContentList.DataContext = _allContent.imageContent;
                     textContentList.DataContext = _allContent.textContent;

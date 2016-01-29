@@ -47,22 +47,21 @@ namespace Anfema.Amp
 
 
         /// <summary>
-        /// Returns the whole data of a desired page already parsed as observable collections
+        /// Returns a whole AmpPage with the desired name and calls the given callback method after retrieving the page
         /// </summary>
         /// <param name="name"></param>
         /// <param name="callback"></param>
-        /// <returns>Observable collection with the content of the page</returns>
-        public async Task<AmpPageObservableCollection> getPageContentAsync(string name, Action callback)
+        /// <returns>AmpPage with the desired name</returns>
+        public async Task<AmpPage> getPageAsync( string name, Action callback )
         {
             AmpPage page = await _pages.getPageAsync(name);
-            AmpPageObservableCollection content = page.contents[0].children[0]; // TODO: check for trouble this hardcoded indices could result in
 
-            if (callback != null)
+            if( callback != null )
             {
                 callback();
             }
 
-            return content;
+            return page;
         }
 
 
