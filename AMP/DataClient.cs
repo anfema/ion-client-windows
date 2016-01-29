@@ -48,7 +48,8 @@ namespace Anfema.Amp
 
             try
             {
-                response = await _client.GetStringAsync(_config.baseUrl + requestString + "?locale=" + _config.locale);
+                //response = await _client.GetStringAsync(_config.baseUrl + requestString + "?locale=" + _config.locale);
+                response = await _client.GetStringAsync(_config.baseUrl +  _config.locale + "/" + requestString);
 
                 return response;
             }
@@ -68,7 +69,7 @@ namespace Anfema.Amp
         /// <returns>AmpCollection with the desired identifier</returns>
         public async Task<AmpCollection> getCollectionAsync( string collectionIdentifier )
         {
-            string collectionsString = await getDataAsync("collections/" + collectionIdentifier);
+            string collectionsString = await getDataAsync(collectionIdentifier);
             CollectionRoot collectionsRoot = JsonConvert.DeserializeObject<CollectionRoot>(collectionsString);
             return collectionsRoot.collection[0];
         }
@@ -81,7 +82,7 @@ namespace Anfema.Amp
         /// <returns>Already parsed AmpPage</returns>
         public async Task<AmpPage> getPageAsync( string identifier )
         {
-            string pageString = await _client.GetStringAsync(_config.baseUrl + "pages/" + _config.collectionIdentifier + "/" + identifier + "?locale=" + _config.locale);
+            string pageString = await _client.GetStringAsync(_config.baseUrl + _config.locale + "/" + _config.collectionIdentifier + "/" + identifier );
             PageRootRaw pageRootRaw = JsonConvert.DeserializeObject<PageRootRaw>(pageString);            
 
             return DataParser.parsePage(pageRootRaw.page[0]);
