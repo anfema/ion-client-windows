@@ -1,5 +1,6 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Parsing;
+using Anfema.Amp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,17 +47,16 @@ namespace Anfema.Amp.Pages
                 return _collectionCache;
             }
 
-            try
+            if (NetworkUtils.isOnline())
             {
                 // Try fetching the collection from the server
-                _collectionCache = await _dataClient.getCollectionAsync(_config.collectionIdentifier);
+                _collectionCache = await getCollectionFromServerAsync(_config.collectionIdentifier);
                 return _collectionCache;
             }
-
-            catch( Exception e)
+            else
             {
-                Debug.WriteLine("Error retreiving collection data: " + e.Message);
-                return new AmpCollection(); // TODO remove the empty class here
+                Debug.WriteLine("Error getting collection " + _config.collectionIdentifier + " from server or cache.");
+                return null;
             }
         }
 
@@ -76,21 +76,26 @@ namespace Anfema.Amp.Pages
                 return page;
             }
 
-            try
+            // Page is not in cache and device is online
+            if (NetworkUtils.isOnline())
             {
                 // Retrieve the page from the server
-                page = await _dataClient.getPageAsync(pageIdentifier);
+                page = await getPageFromServerAsync( pageIdentifier );
 
-                // Add page to cache
-                _pagesCache.Add(page);
+                // Add page to cache, if it is not null
+                if (page != null)
+                {
+                    _pagesCache.Add(page);
+                }
 
                 return page;
             }
-            catch( Exception e)
+            else
             {
-                Debug.WriteLine("Error getting page " + pageIdentifier + " from server! " + e.Message);
-                throw;
-            }           
+                // Device is not online and page not in cache
+                Debug.WriteLine("Error getting page " + pageIdentifier + " from cache or server");
+                return null;
+            }       
         }
 
 
@@ -102,16 +107,8 @@ namespace Anfema.Amp.Pages
         { 
             if(_collectionCache == null)
             {
-                try
-                {
-                    // Get collection from server
-                    _collectionCache = await getCollectionAsync();
-                }
-                catch(Exception e)
-                {
-                    Debug.WriteLine("Error getting collection from server! " + e.Message);
-                    throw;
-                }
+                // Get collection from server
+                _collectionCache = await getCollectionAsync();
             }
 
             List<string> allPageIdentifier = new List<string>();
@@ -122,6 +119,47 @@ namespace Anfema.Amp.Pages
             }
 
             return allPageIdentifier;
+        }
+
+
+        /// <summary>
+        /// Gets a page directly from the server
+        /// </summary>
+        /// <param name="pageIdentifier"></param>
+        /// <returns></returns>
+        private async Task<AmpPage> getPageFromServerAsync(string pageIdentifier)
+        {
+            try
+            {
+                // Retrieve the page from the server
+                AmpPage page = await _dataClient.getPageAsync(pageIdentifier);
+                return page;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error getting page " + pageIdentifier + " from server! " + e.Message);
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// Gets a collection from the server
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns></returns>
+        private async Task<AmpCollection> getCollectionFromServerAsync( string collectionIdentifier )
+        {
+            try
+            {
+                AmpCollection collection = await _dataClient.getCollectionAsync( collectionIdentifier);
+                return collection;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error retreiving collection data: " + e.Message);
+                return null;
+            }
         }
     }
 }
