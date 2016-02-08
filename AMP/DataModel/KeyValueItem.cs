@@ -1,4 +1,5 @@
 ﻿using Anfema.Amp.Parsing;
+using Newtonsoft.Json;
 using System;
 using System.Text.RegularExpressions;
 
@@ -6,31 +7,19 @@ namespace Anfema.Amp.DataModel
 {
     public class KeyValueItem
     {
-        private string _name;
-        private ValueType _type;
-        private Object _value;
+        public string name { get; set; }
+        public ValueType type { get; set; }
+        public Object value { get; set; }
+
 
         public KeyValueItem(KeyValuePairRaw kvp)
         {
-            _type = getValueType(kvp.value);
-            _name = kvp.name;
-            _value = kvp.value;
-        }
-        
-        public string name
-        {
-            get { return _name; }
+            type = getValueType(kvp.value);
+            name = kvp.name;
+            value = kvp.value;
         }
 
-        public ValueType type
-        {
-            get { return _type; }
-        }
-        
-        public Object value
-        {
-            get { return _value; }
-        }
+
         
         // Trys to detect the value type of the given string. This is not the ideal, but there is actually no other way to get this question solved
         private ValueType getValueType(string property)

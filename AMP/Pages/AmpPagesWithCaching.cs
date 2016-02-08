@@ -27,7 +27,7 @@ namespace Anfema.Amp.Pages
         /// <param name="config"></param>
         public AmpPagesWithCaching( AmpConfig config )
         {
-            this._config = config;
+            _config = config;
             _dataClient = new DataClient(config);
 
             // Init pages cache
@@ -41,17 +41,21 @@ namespace Anfema.Amp.Pages
         /// <returns>The collection of this pages</returns>
         public async Task<AmpCollection> getCollectionAsync()
         {
-            if( _collectionCache != null )
+            // Try to get the collection from cache
+            AmpCollection collection = await getCollectionFromCache(_config.collectionIdentifier);
+
+            // TODO: check outdated collections
+            if (collection != null)
             {
-                // Collection in cache
-                return _collectionCache;
+                return collection;
             }
 
             if (NetworkUtils.isOnline())
             {
                 // Try fetching the collection from the server
-                _collectionCache = await getCollectionFromServerAsync(_config.collectionIdentifier);
-                return _collectionCache;
+                collection = await getCollectionFromServerAsync(_config.collectionIdentifier);
+
+                return collection;
             }
             else
             {
@@ -68,7 +72,8 @@ namespace Anfema.Amp.Pages
         /// <returns>Already parsed AmpPage</returns>
         public async Task<AmpPage> getPageAsync(string pageIdentifier)
         {
-            AmpPage page = _pagesCache.Find( x => x.identifier.Equals( pageIdentifier) );
+            // Try to get page from cache
+            AmpPage page = await getPageFromCache(pageIdentifier);
 
             if( page != null )
             {
@@ -81,12 +86,6 @@ namespace Anfema.Amp.Pages
             {
                 // Retrieve the page from the server
                 page = await getPageFromServerAsync( pageIdentifier );
-
-                // Add page to cache, if it is not null
-                if (page != null)
-                {
-                    _pagesCache.Add(page);
-                }
 
                 return page;
             }
@@ -133,6 +132,17 @@ namespace Anfema.Amp.Pages
             {
                 // Retrieve the page from the server
                 AmpPage page = await _dataClient.getPageAsync(pageIdentifier);
+
+                // Add page to cache, if it is not null
+                if (page != null)
+                {
+                    // Memory cache
+                    _pagesCache.Add(page);
+
+                    // Local storage cache
+                    await StorageUtils.savePageToIsolatedStorage(page);
+                }
+
                 return page;
             }
             catch (Exception e)
@@ -152,7 +162,15 @@ namespace Anfema.Amp.Pages
         {
             try
             {
+                // Retrive collecion from server
                 AmpCollection collection = await _dataClient.getCollectionAsync( collectionIdentifier);
+
+                // Add collection to cache
+                _collectionCache = collection;
+
+                // Save collection to isolated storage
+                await StorageUtils.saveCollectionToIsolatedStorage(collection);
+
                 return collection;
             }
             catch (Exception e)
@@ -160,6 +178,64 @@ namespace Anfema.Amp.Pages
                 Debug.WriteLine("Error retreiving collection data: " + e.Message);
                 return null;
             }
+        }
+
+
+        /// <summary>
+        /// Gets a collection from the cache 
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns></returns>
+        private async Task<AmpCollection> getCollectionFromCache( string collectionIdentifier )
+        {
+            if( _collectionCache != null )
+            {
+                // Memory cache
+                return _collectionCache;
+            }
+            else
+            {
+                // Local cache
+                AmpCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
+
+                // Add collection to memory cache
+                if( collection != null )
+                {
+                    _collectionCache = collection;
+                }
+
+
+                return collection;
+            }
+        }
+
+
+        /// <summary>
+        /// Get a desired page from the cache
+        /// </summary>
+        /// <param name="pageIdentifier"></param>
+        /// <returns></returns>
+        private async Task<AmpPage> getPageFromCache( string pageIdentifier )
+        {
+            // Try to get page from memory cache
+            AmpPage page = _pagesCache.Find(x => x.identifier.Equals(pageIdentifier));
+
+            if (page != null)
+            {
+                // Page in memory cache
+                return page;
+            }
+
+            // Try to load page from local storage
+            page = await StorageUtils.loadPageFromIsolatedStorage(_config.collectionIdentifier, _config.locale, pageIdentifier);
+
+            // Add page to memory cache
+            if( page != null )
+            {
+                _pagesCache.Add(page);
+            }
+
+            return page;
         }
     }
 }

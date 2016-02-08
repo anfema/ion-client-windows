@@ -12,7 +12,6 @@ namespace Anfema.Amp.DataModel
         public string connection_string { get; set; }
 
 
-
         public override void init(ContentNodeRaw contentNode)
         {
             base.init(contentNode);
