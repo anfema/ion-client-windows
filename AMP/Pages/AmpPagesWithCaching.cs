@@ -1,4 +1,5 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Amp.Caching;
+using Anfema.Amp.DataModel;
 using Anfema.Amp.Parsing;
 using Anfema.Amp.Utils;
 using System;
@@ -21,6 +22,9 @@ namespace Anfema.Amp.Pages
         private DataClient _dataClient;
 
 
+        private static int COLLECTION_NOT_MODIFIED = 304;
+
+
         /// <summary>
         /// Constructor with configuration file for initialization
         /// </summary>
@@ -41,6 +45,9 @@ namespace Anfema.Amp.Pages
         /// <returns>The collection of this pages</returns>
         public async Task<AmpCollection> getCollectionAsync()
         {
+            string collectionURL = PagesURLs.getCollectionURL(_config);
+            //CollectionCacheIndex cacheIndex = CollectionCacheIndex.
+
             // Try to get the collection from cache
             AmpCollection collection = await getCollectionFromCache(_config.collectionIdentifier);
 

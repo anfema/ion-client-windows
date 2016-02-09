@@ -1,4 +1,5 @@
 ﻿using Anfema.Amp.DataModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,45 +11,31 @@ namespace Anfema.Amp.Caching
 {
     public class CollectionCacheIndex : CacheIndex
     {
+        public DateTime lastUpdated { get; set; }
+        public string lastModified { get; set; }
 
-        private DateTime _lastUpdated;
-
-        private string _lastModified;
 
         public CollectionCacheIndex( string filename, DateTime lastUpdated, string lastModified ) : base(filename)
         {
-            _lastUpdated = lastUpdated;
-            _lastModified = lastModified;
+            this.lastUpdated = lastUpdated;
+            this.lastModified = lastModified;
         }
 
         // TODO: implement requestURL constructor
 
 
-        public DateTime lastUpdated
-        {
-            get
-            {
-                return _lastUpdated;
-            }
-
-            set
-            {
-                _lastUpdated = value;
-            }
-        }
-
-        
         public bool isOutdated( AmpConfig config )
         {
-            return _lastUpdated < (DateTime.Now.AddMinutes(-config.minutesUntilCollectionRefresh));
+            return lastUpdated < (DateTime.Now.AddMinutes(-config.minutesUntilCollectionRefresh));
         }
 
 
+        [JsonIgnore]
         public DateTime? lastModifiedDate
         {
             get
             {
-                if(_lastModified == null)
+                if(lastModified == null)
                 {
                     Debug.WriteLine("Last modified: string is null");
                     return null;
@@ -56,29 +43,22 @@ namespace Anfema.Amp.Caching
 
                 try
                 {
-                    DateTime lastModifiedDate = DateTime.Parse(_lastModified);
-                    Debug.WriteLine("Last modified: Succesfully parsed " + _lastModified);
+                    DateTime lastModifiedDate = DateTime.Parse(lastModified);
+                    Debug.WriteLine("Last modified: Succesfully parsed " + lastModified);
                     return lastModifiedDate;
                 }
                 catch( Exception e)
                 {
-                    Debug.WriteLine("Last modified: Parse error for " + _lastModified);
+                    Debug.WriteLine("Last modified: Parse error for " + lastModified);
                     return null;
                 }
             }
         }
 
 
-        public string lastModified
+        public static async Task<CollectionCacheIndex> retrieve( string requestURL, string collectionIdentifier )
         {
-            get
-            {
-                return _lastModified;
-            }
-            set
-            {
-                _lastModified = value;
-            }
+            return await CacheIndexStore.retrieve<CollectionCacheIndex>(requestURL, collectionIdentifier);
         }
 
 

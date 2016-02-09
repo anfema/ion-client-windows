@@ -8,32 +8,19 @@ namespace Anfema.Amp.Caching
 {
     public abstract class CacheIndex
     {
-        private string _filename;
+        public string filename { get; set; }
+
 
         public CacheIndex( string filename)
         {
-            this._filename = filename;
+            this.filename = filename;
         }
         
 
         // Use MD5 of request uri as filename
         public CacheIndex( Uri requestUrl )
         {
-            _filename = FilePaths.getFileName(requestUrl.AbsoluteUri);
-        }
-
-
-        public string getFilename
-        {
-            get
-            {
-                return _filename;
-            }
-
-            set
-            {
-                _filename = value;
-            }
+            filename = FilePaths.getFileName(requestUrl.AbsoluteUri);
         }
     }
 }

@@ -16,6 +16,36 @@ namespace Anfema.Amp.Utils
         private static StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
 
 
+
+        public static async Task<string> loadJsonFromIsolatedStorage( string requestURL )
+        {
+            StorageFile file = await _localFolder.GetFileAsync(requestURL);
+            string content = await FileIO.ReadTextAsync(file);
+
+            return content;
+        }
+
+
+        public static async Task<bool> saveJsonToIsolatedStorage( string requestURL, string jsonFile )
+        {
+            // TODO: Check if the path exists
+            StorageFile file = await _localFolder.GetFileAsync(requestURL);
+            await FileIO.WriteTextAsync(file, jsonFile);
+
+            return true;
+        }
+
+
+        public static async Task<bool> deleteFolderInIsolatedStorage( string folderName )
+        {
+            StorageFolder folder = await _localFolder.GetFolderAsync(folderName);
+            await folder.DeleteAsync();
+
+            return true;
+        }
+
+
+
         public static async Task<bool> saveCollectionToIsolatedStorage( AmpCollection collection )
         {
             // Create folder or use existing folder
