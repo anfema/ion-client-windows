@@ -25,6 +25,9 @@ namespace Anfema.Amp.Pages
         private static int COLLECTION_NOT_MODIFIED = 304;
 
 
+        private MemoryCache _memoryCache;
+
+
         /// <summary>
         /// Constructor with configuration file for initialization
         /// </summary>
@@ -46,8 +49,42 @@ namespace Anfema.Amp.Pages
         public async Task<AmpCollection> getCollectionAsync()
         {
             string collectionURL = PagesURLs.getCollectionURL(_config);
-            //CollectionCacheIndex cacheIndex = CollectionCacheIndex.
+            CollectionCacheIndex cacheIndex = await CollectionCacheIndex.retrieve(collectionURL, _config.collectionIdentifier);
 
+            bool currentCacheEntry = cacheIndex != null && !cacheIndex.isOutdated(_config);
+            bool networkConnected = NetworkUtils.isOnline();
+
+            
+            if( currentCacheEntry)
+            {
+                // retrieve current version from cache
+                return await getCollectionFromCache(cacheIndex, false);
+            }
+            else
+            {
+                if( networkConnected )
+                {
+                    // download collection
+                    return await getCollectionFromServerAsync(cacheIndex, false);
+                }
+                else
+                {
+                    if( cacheIndex != null )
+                    {
+                        // no network: use potential old version from cache
+                        return await getCollectionFromCache(cacheIndex, false);
+                    }
+                    else
+                    {
+                        // Collection can neither be downloaded nor be found in cache
+                        return null;
+                    }
+                }
+            }
+
+
+
+            /*
             // Try to get the collection from cache
             AmpCollection collection = await getCollectionFromCache(_config.collectionIdentifier);
 
@@ -68,7 +105,7 @@ namespace Anfema.Amp.Pages
             {
                 Debug.WriteLine("Error getting collection " + _config.collectionIdentifier + " from server or cache.");
                 return null;
-            }
+            }*/
         }
 
 
@@ -165,12 +202,14 @@ namespace Anfema.Amp.Pages
         /// </summary>
         /// <param name="collectionIdentifier"></param>
         /// <returns></returns>
-        private async Task<AmpCollection> getCollectionFromServerAsync( string collectionIdentifier )
+        private async Task<AmpCollection> getCollectionFromServerAsync( CollectionCacheIndex cacheIndex, bool cacheAsBackup )
         {
+            string lastModified = cacheIndex != null ? cacheIndex.lastModified : null;
+            
             try
             {
                 // Retrive collecion from server
-                AmpCollection collection = await _dataClient.getCollectionAsync( collectionIdentifier);
+                AmpCollection collection = await _dataClient.getCollectionAsync( _config.collectionIdentifier);
 
                 // Add collection to cache
                 _collectionCache = collection;
@@ -193,27 +232,36 @@ namespace Anfema.Amp.Pages
         /// </summary>
         /// <param name="collectionIdentifier"></param>
         /// <returns></returns>
-        private async Task<AmpCollection> getCollectionFromCache( string collectionIdentifier )
+        private async Task<AmpCollection> getCollectionFromCache( CollectionCacheIndex cacheIndex, bool serverCallAsBackup )
         {
-            if( _collectionCache != null )
+            string collectionURL = PagesURLs.getCollectionURL(_config);
+
+            // retrieve from memory cache
+            AmpCollection collection = _memoryCache.collection;
+
+            if( collection != null )
             {
-                // Memory cache
-                return _collectionCache;
+                Debug.WriteLine("Memory cache lookup");
+                return collection;
             }
-            else
+
+            // try to load collection from isolated storage
+            try
             {
-                // Local cache
-                AmpCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
+                collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
 
                 // Add collection to memory cache
-                if( collection != null )
+                if (collection != null)
                 {
                     _collectionCache = collection;
                 }
-
-
-                return collection;
             }
+            catch( Exception e)
+            {
+                Debug.WriteLine("Error getting collection from isolated storage.");
+            }
+
+            return collection;
         }
 
 

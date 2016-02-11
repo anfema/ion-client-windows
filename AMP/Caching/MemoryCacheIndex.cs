@@ -18,7 +18,8 @@ namespace Anfema.Amp.Caching
         // TODO: keep it synchronized!
         public static T get<T>( string requestUrl, string collectionIdentifier ) where T : CacheIndex
         {
-            Dictionary<string, CacheIndex> memoryCacheIndex = _memoryCacheIndices[collectionIdentifier];
+            Dictionary<string, CacheIndex> memoryCacheIndex = null;
+            _memoryCacheIndices.TryGetValue(collectionIdentifier, out memoryCacheIndex);
 
             if( memoryCacheIndex == null )
             {

@@ -26,8 +26,15 @@ namespace Anfema.Amp.Caching
             // check isolated storage
             Debug.WriteLine("Index lookup " + requestUrl + " from isolated storage");
 
-            string json = await StorageUtils.loadJsonFromIsolatedStorage(requestUrl);
-            index = JsonConvert.DeserializeObject<T>(json);
+            try
+            {
+                string json = await StorageUtils.loadJsonFromIsolatedStorage(requestUrl);
+                index = JsonConvert.DeserializeObject<T>(json);
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine("Index lookup " + requestUrl + " is not in isolated storage");
+            }
 
             // Save to memory cache, if index is not null
             if( index != null )
