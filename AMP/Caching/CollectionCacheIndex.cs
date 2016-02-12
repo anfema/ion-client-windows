@@ -1,4 +1,6 @@
 ﻿using Anfema.Amp.DataModel;
+using Anfema.Amp.Pages;
+using Anfema.Amp.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -61,6 +63,13 @@ namespace Anfema.Amp.Caching
             return await CacheIndexStore.retrieve<CollectionCacheIndex>(requestURL, collectionIdentifier);
         }
 
+
+        public static void save( AmpConfig config, string lastModified )
+        {
+            string collectionURL = PagesURLs.getCollectionURL(config);
+            CollectionCacheIndex cacheIndex = new CollectionCacheIndex(collectionURL, DateTimeUtils.now(), lastModified);
+            CacheIndexStore.save<CollectionCacheIndex>(collectionURL, cacheIndex, config);
+        }
 
     }
 }

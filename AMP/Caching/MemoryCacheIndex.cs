@@ -33,7 +33,9 @@ namespace Anfema.Amp.Caching
         // TODO: ensure that this is all synchronized
         public static void put<T>( string requestURL, string collectionIdentifier, T index ) where T : CacheIndex
         {
-            Dictionary<string, CacheIndex> memoryCacheIndex = _memoryCacheIndices[collectionIdentifier];
+
+            Dictionary<string, CacheIndex> memoryCacheIndex;
+            _memoryCacheIndices.TryGetValue(collectionIdentifier, out memoryCacheIndex);
 
             if( memoryCacheIndex == null )
             {

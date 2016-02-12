@@ -217,6 +217,9 @@ namespace Anfema.Amp.Pages
                 // Save collection to isolated storage
                 await StorageUtils.saveCollectionToIsolatedStorage(collection);
 
+                // save cacheIndex
+                saveCollectionCacheIndex("last modified");  // TODO: insert right time
+
                 return collection;
             }
             catch (Exception e)
@@ -291,6 +294,13 @@ namespace Anfema.Amp.Pages
             }
 
             return page;
+        }
+
+
+
+        private void saveCollectionCacheIndex( string lastModified )
+        {
+            CollectionCacheIndex.save(_config, lastModified);
         }
     }
 }
