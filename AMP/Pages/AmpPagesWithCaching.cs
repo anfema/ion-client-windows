@@ -14,18 +14,15 @@ namespace Anfema.Amp.Pages
         // Config associated with this collection of pages
         private AmpConfig _config;
 
-        // Data saved in memory, will be replaced by real caching in the future TODO: implement caching
-        private List<AmpPage> _pagesCache;
-        private AmpCollection _collectionCache;
-
         // Data client that will be used to get the data from the server
         private DataClient _dataClient;
 
 
         private static int COLLECTION_NOT_MODIFIED = 304;
 
-
+        // Different caching methods
         private MemoryCache _memoryCache;
+        private IsolatedStorageCache _isolatedStorageCache;
 
 
         /// <summary>
@@ -35,10 +32,15 @@ namespace Anfema.Amp.Pages
         public AmpPagesWithCaching( AmpConfig config )
         {
             _config = config;
+
+            // Init the data client
             _dataClient = new DataClient(config);
 
-            // Init pages cache
-            _pagesCache = new List<AmpPage>();
+            // Init memory cache
+            _memoryCache = new MemoryCache(100);
+
+            // Init the isolated storage cache
+            _isolatedStorageCache = new IsolatedStorageCache(config);
         }
 
 
@@ -81,31 +83,6 @@ namespace Anfema.Amp.Pages
                     }
                 }
             }
-
-
-
-            /*
-            // Try to get the collection from cache
-            AmpCollection collection = await getCollectionFromCache(_config.collectionIdentifier);
-
-            // TODO: check outdated collections
-            if (collection != null)
-            {
-                return collection;
-            }
-
-            if (NetworkUtils.isOnline())
-            {
-                // Try fetching the collection from the server
-                collection = await getCollectionFromServerAsync(_config.collectionIdentifier);
-
-                return collection;
-            }
-            else
-            {
-                Debug.WriteLine("Error getting collection " + _config.collectionIdentifier + " from server or cache.");
-                return null;
-            }*/
         }
 
 
@@ -147,18 +124,18 @@ namespace Anfema.Amp.Pages
         /// </summary>
         /// <returns>List if page identifier</returns>
         public async Task<List<string>> getAllPagesIdentifierAsync()
-        { 
-            if(_collectionCache == null)
+        {
+            if( _memoryCache.collection == null)
             {
                 // Get collection from server
-                _collectionCache = await getCollectionAsync();
+                _memoryCache.collection = await getCollectionAsync();
             }
 
             List<string> allPageIdentifier = new List<string>();
 
-            for(int i=0; i<_collectionCache.pages.Count; i++)
+            for(int i=0; i<_memoryCache.collection.pages.Count; i++)
             {
-                allPageIdentifier.Add(_collectionCache.pages[i].identifier);
+                allPageIdentifier.Add(_memoryCache.collection.pages[i].identifier);
             }
 
             return allPageIdentifier;
@@ -181,7 +158,7 @@ namespace Anfema.Amp.Pages
                 if (page != null)
                 {
                     // Memory cache
-                    _pagesCache.Add(page);
+                    _memoryCache.savePage(page, _config);
 
                     // Local storage cache
                     await StorageUtils.savePageToIsolatedStorage(page);
@@ -211,10 +188,10 @@ namespace Anfema.Amp.Pages
                 // Retrive collecion from server
                 AmpCollection collection = await _dataClient.getCollectionAsync( _config.collectionIdentifier);
 
-                // Add collection to cache
-                _collectionCache = collection;
+                // Add collection to memory cache
+                _memoryCache.collection = collection;
 
-                // Save collection to isolated storage
+                // Save collection to isolated storage  TODO: change this to isolated storage caching
                 await StorageUtils.saveCollectionToIsolatedStorage(collection);
 
                 // save cacheIndex
@@ -256,7 +233,7 @@ namespace Anfema.Amp.Pages
                 // Add collection to memory cache
                 if (collection != null)
                 {
-                    _collectionCache = collection;
+                    _memoryCache.collection = collection;
                 }
             }
             catch( Exception e)
@@ -276,7 +253,7 @@ namespace Anfema.Amp.Pages
         private async Task<AmpPage> getPageFromCache( string pageIdentifier )
         {
             // Try to get page from memory cache
-            AmpPage page = _pagesCache.Find(x => x.identifier.Equals(pageIdentifier));
+            AmpPage page = _memoryCache.getPage( pageIdentifier, _config );
 
             if (page != null)
             {
@@ -290,7 +267,7 @@ namespace Anfema.Amp.Pages
             // Add page to memory cache
             if( page != null )
             {
-                _pagesCache.Add(page);
+                _memoryCache.savePage(page, _config);
             }
 
             return page;

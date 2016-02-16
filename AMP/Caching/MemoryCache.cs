@@ -11,7 +11,7 @@ namespace Anfema.Amp.Caching
 {
     public class MemoryCache
     {
-        private static int _pageMemoryCacheSize = 100;
+        private static int _pageMemoryCacheSize;
         
         public AmpCollection collection { get; set; }
 
@@ -24,8 +24,8 @@ namespace Anfema.Amp.Caching
             _pageMemoryCache = new Dictionary<string, AmpPage>(); 
         }
 
-
-        public AmpPage getPage( string pageURL )
+        
+        private AmpPage getPage( string pageURL )
         {
             AmpPage page = null;
             _pageMemoryCache.TryGetValue(pageURL, out page);

@@ -88,6 +88,7 @@
     <Compile Include="Caching\CacheIndexStore.cs" />
     <Compile Include="Caching\CollectionCacheIndex.cs" />
     <Compile Include="Caching\FilePaths.cs" />
+    <Compile Include="Caching\MemoryCache.cs" />
     <Compile Include="Caching\MemoryCacheIndex.cs" />
     <Compile Include="DataClient.cs" />
     <Compile Include="DataModel\AmpConfig.cs" />
