@@ -22,7 +22,6 @@ namespace Anfema.Amp.Pages
 
         // Different caching methods
         private MemoryCache _memoryCache;
-        private IsolatedStorageCache _isolatedStorageCache;
 
 
         /// <summary>
@@ -38,9 +37,6 @@ namespace Anfema.Amp.Pages
 
             // Init memory cache
             _memoryCache = new MemoryCache(100);
-
-            // Init the isolated storage cache
-            _isolatedStorageCache = new IsolatedStorageCache(config);
         }
 
 
@@ -93,6 +89,9 @@ namespace Anfema.Amp.Pages
         /// <returns>Already parsed AmpPage</returns>
         public async Task<AmpPage> getPageAsync(string pageIdentifier)
         {
+            string pageURL = PagesURLs.getPageURL(_config, pageIdentifier);
+
+
             // Try to get page from cache
             AmpPage page = await getPageFromCache(pageIdentifier);
 

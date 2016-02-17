@@ -1,4 +1,5 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Amp.Caching;
+using Anfema.Amp.DataModel;
 using Anfema.Amp.Parsing;
 using Newtonsoft.Json;
 using System;
@@ -13,9 +14,14 @@ namespace Anfema.Amp.Utils
 {
     public class StorageUtils
     {
+        private static string CACHE_FOLDER_IDENTIFIER = "cache_indices";
+
+
+
+
         private static StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
 
-
+        private static string CACHE_INDICES_FILENAME = "cacheIndices.json";
 
         public static async Task<string> loadJsonFromIsolatedStorage( string requestURL )
         {
@@ -29,7 +35,7 @@ namespace Anfema.Amp.Utils
         public static async Task<bool> saveJsonToIsolatedStorage( string requestURL, string jsonFile )
         {
             // TODO: Check if the path exists
-            StorageFile file = await _localFolder.GetFileAsync(requestURL);
+            StorageFile file = await _localFolder.CreateFileAsync(requestURL + ".json", CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(file, jsonFile);
 
             return true;
@@ -52,7 +58,7 @@ namespace Anfema.Amp.Utils
             StorageFolder folder = await _localFolder.CreateFolderAsync(collection.identifier, CreationCollisionOption.OpenIfExists);
 
             // Create file or use existing file
-            StorageFile file = await folder.CreateFileAsync(collection.identifier + ".json", CreationCollisionOption.OpenIfExists);
+            StorageFile file = await folder.CreateFileAsync(collection.identifier + ".json", CreationCollisionOption.ReplaceExisting);
 
             // Serialize collection
             string collectionSerialized = JsonConvert.SerializeObject(collection);
@@ -96,7 +102,7 @@ namespace Anfema.Amp.Utils
             StorageFolder localeFolder = await collectionFolder.CreateFolderAsync(page.locale, CreationCollisionOption.OpenIfExists);
 
             // Create file or use existing file
-            StorageFile file = await localeFolder.CreateFileAsync(page.identifier + ".json", CreationCollisionOption.OpenIfExists);
+            StorageFile file = await localeFolder.CreateFileAsync(page.identifier + ".json", CreationCollisionOption.ReplaceExisting);
 
             // Serialize collection
             string collectionSerialized = JsonConvert.SerializeObject(page);
@@ -127,6 +133,114 @@ namespace Anfema.Amp.Utils
             catch (Exception e)
             {
                 Debug.WriteLine("Error loading page " + collectionIdentifier + " from isolated storeage");
+                return null;
+            }
+        }
+
+        /*
+        /// <summary>
+        /// Trys to load the indices dictionary for the given collection from isolated storage
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns></returns>
+        public static async Task<Dictionary<string, string>> loadIndices( string collectionIdentifier )
+        {
+            try
+            {
+                StorageFolder folder = await _localFolder.GetFolderAsync(collectionIdentifier);
+                StorageFile file = await folder.GetFileAsync(CACHE_INDICES_FILENAME);
+
+                string content = await FileIO.ReadTextAsync(file);
+
+                Dictionary<string, string> indices = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
+
+                return indices;
+            }
+
+            catch( Exception e )
+            {
+                Debug.WriteLine("Error loading indices from isolated storage");
+                return null;
+            }
+        }
+        
+
+        /// <summary>
+        /// Saves the indices dictionary to the folder of the collection
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <param name="indices"></param>
+        /// <returns></returns>
+        public static async Task<bool> saveIndices( string collectionIdentifier, Dictionary<string, string> indices )
+        {
+            // Create folder or use existing folder
+            StorageFolder folder = await _localFolder.CreateFolderAsync(collectionIdentifier, CreationCollisionOption.OpenIfExists);
+
+            // Create file or use existing file
+            StorageFile file = await folder.CreateFileAsync(CACHE_INDICES_FILENAME, CreationCollisionOption.ReplaceExisting);
+
+            // Serialize indices dictionary
+            string collectionSerialized = JsonConvert.SerializeObject(indices);
+
+            // Write serialzed indices dictionray
+            await FileIO.WriteTextAsync(file, collectionSerialized);
+            
+            return true;
+        }*/
+
+
+
+        public static async Task<bool> saveIndex<T>( string requestURL, T cacheIndex, string collectionIdentifier ) where T : CacheIndex
+        {
+            try
+            {
+                // Create folder or use existing folder
+                StorageFolder collectionFolder = await _localFolder.CreateFolderAsync(collectionIdentifier, CreationCollisionOption.OpenIfExists);
+                StorageFolder cacheFolder = await collectionFolder.CreateFolderAsync(CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists);
+
+                // Create file or use existing file
+                StorageFile file = await cacheFolder.CreateFileAsync( FilePaths.getFileName(requestURL) + ".json", CreationCollisionOption.ReplaceExisting);
+
+                // Serialize cache índex
+                string cacheIndexSerialized = JsonConvert.SerializeObject(cacheIndex);
+
+                // Write serialzed collection to file
+                await FileIO.WriteTextAsync(file, cacheIndexSerialized);
+            }
+
+            catch( Exception e )
+            {
+                Debug.WriteLine("Error saving cacheIndex to isolated storage");
+            }
+
+            return true;
+        }
+
+
+
+        public static async Task<T> getIndex<T>(string requestURL, string collectionIdentifier) where T : CacheIndex
+        {
+            try
+            {
+                // Create folder or use existing folder
+                StorageFolder collectionFolder = await _localFolder.CreateFolderAsync(collectionIdentifier, CreationCollisionOption.OpenIfExists);
+                StorageFolder cacheFolder = await collectionFolder.CreateFolderAsync(CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists);
+
+                // Create file or use existing file
+                StorageFile file = await cacheFolder.GetFileAsync(FilePaths.getFileName(requestURL) + ".json");
+
+                // Read content of the file
+                string content = await FileIO.ReadTextAsync(file);
+
+                // Deserialize cache index
+                T cacheIndex = JsonConvert.DeserializeObject<T>(content);
+
+                return cacheIndex;
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error saving cacheIndex to isolated storage");
                 return null;
             }
         }

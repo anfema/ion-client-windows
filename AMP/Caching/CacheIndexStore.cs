@@ -14,7 +14,6 @@ namespace Anfema.Amp.Caching
     {        
         public static async Task<T> retrieve<T>( string requestUrl, string collectionIdentifier ) where T : CacheIndex
         {
-
             T index = MemoryCacheIndex.get<T>(requestUrl, collectionIdentifier);
 
             if( index != null )
@@ -28,8 +27,7 @@ namespace Anfema.Amp.Caching
 
             try
             {
-                string json = await StorageUtils.loadJsonFromIsolatedStorage(requestUrl);
-                index = JsonConvert.DeserializeObject<T>(json);
+                index = await StorageUtils.getIndex<T>(requestUrl, collectionIdentifier);
             }
             catch(Exception e)
             {
@@ -41,7 +39,6 @@ namespace Anfema.Amp.Caching
             {
                 MemoryCacheIndex.put(requestUrl, collectionIdentifier, index);
             }
-
 
             return index;
         }
@@ -55,7 +52,7 @@ namespace Anfema.Amp.Caching
                 MemoryCacheIndex.put<T>(requestURL, config.collectionIdentifier, cacheIndex);
 
                 // save to isolated storage
-                await StorageUtils.saveJsonToIsolatedStorage(requestURL, JsonConvert.SerializeObject(cacheIndex));
+                await StorageUtils.saveIndex(requestURL, cacheIndex, config.collectionIdentifier);
             }
             catch( Exception e)
             {
@@ -72,7 +69,14 @@ namespace Anfema.Amp.Caching
             MemoryCacheIndex.clear(collectionIdentifier);
 
             // Clear isolated storage cache
-            await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier + "/" + locale);
+            if (locale == null)
+            {
+                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier);
+            }
+            else
+            {
+                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier + "/" + locale);
+            }
 
             return true;
         }
