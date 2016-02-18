@@ -30,7 +30,7 @@ namespace Anfema.Amp.Caching
             }
 
             // Convert the hash to a string (for display).
-            string strHashBase64 = CryptographicBuffer.EncodeToBase64String(buffHash);
+            string strHashBase64 = CryptographicBuffer.EncodeToHexString(buffHash);
 
             // Return the encoded string
             return strHashBase64;

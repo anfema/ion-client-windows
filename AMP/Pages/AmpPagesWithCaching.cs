@@ -90,8 +90,30 @@ namespace Anfema.Amp.Pages
         public async Task<AmpPage> getPageAsync(string pageIdentifier)
         {
             string pageURL = PagesURLs.getPageURL(_config, pageIdentifier);
+            PageCacheIndex pageCacheIndex = await PageCacheIndex.retrieve(pageURL, _config.collectionIdentifier);
+            bool isNetworkConnected = NetworkUtils.isOnline();
+
+            if( pageCacheIndex == null )
+            {
+                if( isNetworkConnected )
+                {
+                    return await getPageFromServerAsync(pageIdentifier);
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
 
 
+            AmpCollection collection = await getCollectionAsync();
+
+
+            return await getPageFromCache(pageIdentifier);
+
+
+            /*
             // Try to get page from cache
             AmpPage page = await getPageFromCache(pageIdentifier);
 
@@ -114,7 +136,7 @@ namespace Anfema.Amp.Pages
                 // Device is not online and page not in cache
                 Debug.WriteLine("Error getting page " + pageIdentifier + " from cache or server");
                 return null;
-            }       
+            }       */
         }
 
 
@@ -161,6 +183,9 @@ namespace Anfema.Amp.Pages
 
                     // Local storage cache
                     await StorageUtils.savePageToIsolatedStorage(page);
+
+                    // Save page cache index
+                    await PageCacheIndex.save(page, _config);
                 }
 
                 return page;

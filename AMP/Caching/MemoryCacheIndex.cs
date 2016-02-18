@@ -26,7 +26,10 @@ namespace Anfema.Amp.Caching
                 return null;
             }
 
-            return ( T ) (memoryCacheIndex[requestUrl]);
+            CacheIndex cacheIndex;
+            memoryCacheIndex.TryGetValue(requestUrl, out cacheIndex);
+
+            return (T) cacheIndex;
         }
 
 

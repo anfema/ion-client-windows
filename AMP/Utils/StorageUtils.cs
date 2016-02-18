@@ -199,7 +199,8 @@ namespace Anfema.Amp.Utils
                 StorageFolder cacheFolder = await collectionFolder.CreateFolderAsync(CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists);
 
                 // Create file or use existing file
-                StorageFile file = await cacheFolder.CreateFileAsync( FilePaths.getFileName(requestURL) + ".json", CreationCollisionOption.ReplaceExisting);
+                string filename = FilePaths.getFileName(requestURL) + ".json";
+                StorageFile file = await cacheFolder.CreateFileAsync( filename, CreationCollisionOption.ReplaceExisting);
 
                 // Serialize cache índex
                 string cacheIndexSerialized = JsonConvert.SerializeObject(cacheIndex);

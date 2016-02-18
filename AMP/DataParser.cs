@@ -113,6 +113,7 @@ namespace Anfema.Amp
             pageParsed.identifier = pageRaw.identifier;
             pageParsed.parent = pageRaw.parent;
             pageParsed.locale = pageRaw.locale;
+            pageParsed.last_changed = pageRaw.last_changed;
             
             // Parse all content
             for (int j = 0; j < pageRaw.contents.Count; j++)
