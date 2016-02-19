@@ -36,7 +36,6 @@ namespace Anfema.Amp.Caching
         // TODO: ensure that this is all synchronized
         public static void put<T>( string requestURL, string collectionIdentifier, T index ) where T : CacheIndex
         {
-
             Dictionary<string, CacheIndex> memoryCacheIndex;
             _memoryCacheIndices.TryGetValue(collectionIdentifier, out memoryCacheIndex);
 
@@ -44,6 +43,12 @@ namespace Anfema.Amp.Caching
             {
                 memoryCacheIndex = new Dictionary<string, CacheIndex>(); // no size defined as in Android pendant
                 _memoryCacheIndices.Add(collectionIdentifier, memoryCacheIndex);
+            }
+
+            // Remove a eventually existing, old key
+            if( memoryCacheIndex.ContainsKey( requestURL ) )
+            {
+                memoryCacheIndex.Remove(requestURL);
             }
 
             memoryCacheIndex.Add(requestURL, index);

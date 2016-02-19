@@ -106,11 +106,33 @@ namespace Anfema.Amp.Pages
 
             }
 
-
+            // Get collection
             AmpCollection collection = await getCollectionAsync();
 
+            // Get last changed of the page from collection
+            DateTime pageLastChanged = collection.getPageLastChanged( pageIdentifier );
 
-            return await getPageFromCache(pageIdentifier);
+            // Estimate, if the page is outdated or not
+            bool isOutdated = pageCacheIndex.isOutdated( pageLastChanged );
+
+            if( !isOutdated )
+            {
+                return await getPageFromCache(pageIdentifier);
+            }
+            else
+            {
+                if( isNetworkConnected )
+                {
+                    // Download page from server
+                    return await getPageFromServerAsync(pageIdentifier);
+                }
+                else
+                {
+                    // get old version from cache
+                    return await getPageFromCache(pageIdentifier);
+                }
+            }
+
 
 
             /*

@@ -1,9 +1,6 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Pages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Anfema.Amp.Caching
@@ -15,7 +12,7 @@ namespace Anfema.Amp.Caching
 
         public PageCacheIndex( string filename, DateTime lastChanged ) : base( filename )
         {
-            lastChanged = lastChanged;
+            this.lastChanged = lastChanged;
         }
 
         
