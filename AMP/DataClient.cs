@@ -87,5 +87,16 @@ namespace Anfema.Amp
 
             return DataParser.parsePage(pageRootRaw.page[0]);
         }
+
+
+        /*
+        public async Task<AmpCollection> getCollectionAsync( string identifier, DateTime lastModified )
+        {
+            string requestString = _config.baseUrl + _config.locale + "/" + _config.collectionIdentifier;
+            HttpResponseMessage response = await _client.GetAsync(requestString);
+
+            return new AmpCollection();
+
+        }*/
     }
 }

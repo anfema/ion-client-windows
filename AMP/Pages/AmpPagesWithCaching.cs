@@ -132,33 +132,6 @@ namespace Anfema.Amp.Pages
                     return await getPageFromCache(pageIdentifier);
                 }
             }
-
-
-
-            /*
-            // Try to get page from cache
-            AmpPage page = await getPageFromCache(pageIdentifier);
-
-            if( page != null )
-            {
-                // Page in cache
-                return page;
-            }
-
-            // Page is not in cache and device is online
-            if (NetworkUtils.isOnline())
-            {
-                // Retrieve the page from the server
-                page = await getPageFromServerAsync( pageIdentifier );
-
-                return page;
-            }
-            else
-            {
-                // Device is not online and page not in cache
-                Debug.WriteLine("Error getting page " + pageIdentifier + " from cache or server");
-                return null;
-            }       */
         }
 
 
@@ -237,11 +210,11 @@ namespace Anfema.Amp.Pages
                 // Add collection to memory cache
                 _memoryCache.collection = collection;
 
-                // Save collection to isolated storage  TODO: change this to isolated storage caching
+                // Save collection to isolated storage
                 await StorageUtils.saveCollectionToIsolatedStorage(collection);
 
                 // save cacheIndex
-                saveCollectionCacheIndex("last modified");  // TODO: insert right time
+                saveCollectionCacheIndex("last modified");  // TODO: insert last modified date from server call here
 
                 return collection;
             }
