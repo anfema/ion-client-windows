@@ -1,17 +1,21 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Utils;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Anfema.Amp.Caching
 {
     public class CacheIndexStore
-    {        
+    {
+        /// <summary>
+        /// Used to retrieve a class that inherits from CacheIndex
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="requestUrl"></param>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns>First it tries to get a index from memoryCache, then from fileCache and after that returns null, if no index is found</returns>
         public static async Task<T> retrieve<T>( string requestUrl, string collectionIdentifier ) where T : CacheIndex
         {
             T index = MemoryCacheIndex.get<T>(requestUrl, collectionIdentifier);
@@ -44,6 +48,14 @@ namespace Anfema.Amp.Caching
         }
 
 
+        /// <summary>
+        /// Saves a index to memory and isolated storage cache
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="requestURL"></param>
+        /// <param name="cacheIndex"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public static async Task<bool> save<T>( string requestURL, T cacheIndex, AmpConfig config ) where T : CacheIndex
         {
             try
@@ -63,6 +75,12 @@ namespace Anfema.Amp.Caching
         }
 
 
+        /// <summary>
+        /// Clears the memory and file cache for all indices
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <param name="locale"></param>
+        /// <returns></returns>
         public static async Task<bool> clear( string collectionIdentifier, string locale )
         {
             // Clear memory cache

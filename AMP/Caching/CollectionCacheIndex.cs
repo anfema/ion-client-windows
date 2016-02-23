@@ -3,10 +3,7 @@ using Anfema.Amp.Pages;
 using Anfema.Amp.Utils;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Anfema.Amp.Caching
@@ -23,9 +20,12 @@ namespace Anfema.Amp.Caching
             this.lastModified = lastModified;
         }
 
-        // TODO: implement requestURL constructor
 
-
+        /// <summary>
+        /// Checks if this object is older than the given DateTime
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public bool isOutdated( AmpConfig config )
         {
             return lastUpdated < (DateTime.Now.AddMinutes(-config.minutesUntilCollectionRefresh));
@@ -56,18 +56,31 @@ namespace Anfema.Amp.Caching
         }
 
 
+        /// <summary>
+        /// Retrieves a collectionCacheIndex from cache
+        /// </summary>
+        /// <param name="requestURL"></param>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns>collectionCacheIndex or null, if the index isn't found</returns>
         public static async Task<CollectionCacheIndex> retrieve( string requestURL, string collectionIdentifier )
         {
             return await CacheIndexStore.retrieve<CollectionCacheIndex>(requestURL, collectionIdentifier);
         }
 
 
-        public static void save( AmpConfig config, DateTime lastModified )
+        /// <summary>
+        /// Saves a collectionCacheIndex to cache
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="lastModified"></param>
+        /// <returns></returns>
+        public static async Task<bool> save( AmpConfig config, DateTime lastModified )
         {
             string collectionURL = PagesURLs.getCollectionURL(config);
             CollectionCacheIndex cacheIndex = new CollectionCacheIndex(collectionURL, DateTimeUtils.now(), lastModified);
-            CacheIndexStore.save<CollectionCacheIndex>(collectionURL, cacheIndex, config);
-        }
+            await CacheIndexStore.save<CollectionCacheIndex>(collectionURL, cacheIndex, config);
 
+            return true;
+        }
     }
 }

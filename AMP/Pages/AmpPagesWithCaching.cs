@@ -221,7 +221,7 @@ namespace Anfema.Amp.Pages
                     await StorageUtils.saveCollectionToIsolatedStorage(collection);
 
                     // save cacheIndex
-                    saveCollectionCacheIndex(collection.last_changed);  // TODO: insert last modified date from server call here
+                    await saveCollectionCacheIndex(collection.last_changed);  // TODO: insert last modified date from server call here
 
                     return collection;
                 }
@@ -311,9 +311,11 @@ namespace Anfema.Amp.Pages
         /// Saves the collection cache index
         /// </summary>
         /// <param name="lastModified"></param>
-        private void saveCollectionCacheIndex( DateTime lastModified )
+        private async Task<bool> saveCollectionCacheIndex( DateTime lastModified )
         {
-            CollectionCacheIndex.save(_config, lastModified);
+            await CollectionCacheIndex.save(_config, lastModified);
+
+            return true;
         }
     }
 }
