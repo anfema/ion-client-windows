@@ -22,7 +22,7 @@ namespace AMP_Test
         {
             get
             {
-                if (_instance != null)
+                if ( _instance != null )
                 {
                     return _instance;
                 }
@@ -37,17 +37,27 @@ namespace AMP_Test
         {
             _loggedIn = false;
         }
-
-
-
+        
 
         public async Task<AmpConfig> loginAsync()
         {
-            if (!_loggedIn)
+            if ( !_loggedIn )
             {
-                AuthenticationHeaderValue authenticationHeader = await new AmpTokenAuthorization().LoginAsync("admin@anfe.ma", "test", "http://Ampdev2.anfema.com/client/v1/login");
+                String collectionIdentifier = "test";
 
-                AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "de_DE", "test", authenticationHeader, 120, 100, false);
+                AuthenticationHeaderValue authorizationHeader = CollectionAuthStore.Get( collectionIdentifier );
+
+                if ( authorizationHeader == null )
+                {
+                    authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "admin@anfe.ma", "test", "http://Ampdev2.anfema.com/client/v1/login" );
+                    // Or using BasicAuth
+                    //AuthenticationHeaderValue authenticationHeader = BasicAuth.GetAuthHeaderValue("admin@anfe.ma", "test");
+                }
+
+                // Store authorization header
+                CollectionAuthStore.Set( collectionIdentifier, authorizationHeader );
+
+                AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "de_DE", collectionIdentifier, authorizationHeader, 120, 100, false);
 
                 // Only testing purpose TODO: remove
                 _ampConfig = config;
@@ -58,7 +68,7 @@ namespace AMP_Test
             return _ampConfig;
         }
 
-        
+
         public AmpConfig ampConfig
         {
             get

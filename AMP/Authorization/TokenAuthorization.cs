@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Anfema.Amp.Authorization
 {
-    public class AmpTokenAuthorization : AmpLoginAPI
+    public class TokenAuthorization
     {
         // login to get access token
-        public async Task<AuthenticationHeaderValue> LoginAsync(string username, string password, string loginAdress)
+        public static async Task<AuthenticationHeaderValue> GetAuthHeaderValue(string username, string password, string loginAdress)
         {
             try
             {
@@ -39,9 +39,6 @@ namespace Anfema.Amp.Authorization
                 LoginRootObject lro = new LoginRootObject();
 
                 loginData = JsonConvert.DeserializeObject<LoginRootObject>(jsonResult).login;
-
-                // TODO remove because of strange Amp behaviour
-                loginData.api_url = "http://Ampdev2.anfema.com/client/v1/";
 
                 // Create the http authentication header
                 return new AuthenticationHeaderValue("Token", loginData.token);
