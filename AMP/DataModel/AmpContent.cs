@@ -11,15 +11,21 @@ namespace Anfema.Amp.DataModel
         private string _outlet;
         private bool _isSearchable;
         private int _position;
-        private string _type;   
-   
+        private string _type;
+
+
+        public string variation { get; set; }
+        public string outlet { get; set; }
+        public bool isSearchable { get; set; }
+        public int position { get; set; }
+        public string type { get; set; }
 
         public virtual void init( ContentNodeRaw contentNode )
         {
-            _variation = contentNode.variation;
-            _outlet = contentNode.outlet;
-            _isSearchable = contentNode.is_searchable;
-            _type = contentNode.type;
+            variation = contentNode.variation;
+            outlet = contentNode.outlet;
+            isSearchable = contentNode.is_searchable;
+            type = contentNode.type;
             //_position = contentNode.position;  TODO:  not implemented in Amp yet
         }
     }

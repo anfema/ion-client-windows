@@ -1,73 +1,70 @@
 ﻿using Anfema.Amp.Parsing;
+using Newtonsoft.Json;
 using System;
 
 namespace Anfema.Amp.DataModel
 {
     public class AmpMediaContent : AmpContent
     {
-        private string _mimeType;
-        private string _originalMimeType;
-        private string _fileURL;
-        private string _originalFileURL;
-        private int _width;
-        private int _height;
-        private int _originalWidth;
-        private int _originalHeight;
-        private int _fileSize;
-        private int _originalFileSize;
-        private string _checksum;
-        private string _originalChecksum;
-        private int _lenght;
-        private int _originalLength;
-        
+        public string mimeType { get; set; }
+        public string originalMimeType { get; set; }
+        public string fileURL { get; set; }
+        public string originalFileURL { get; set; }
+        public int width { get; set; }
+        public int height { get; set; }
+        public int originalWidth { get; set; }
+        public int originalHeight { get; set; }
+        public int fileSize { get; set; }
+        public int originalFileSize { get; set; }
+        public string checksum { get; set; }
+        public string originalChecksum { get; set; }
+        public int length { get; set; }
+        public int originalLength { get; set; }
+
+
         public override void init(ContentNodeRaw contentNode)
         {
             base.init(contentNode);
 
-            _mimeType = contentNode.mime_type;
-            _originalMimeType = contentNode.original_mime_type;
-            _fileURL = contentNode.file;
-            _originalFileURL = contentNode.original_file;
-            _width = contentNode.width;
-            _height = contentNode.height;
-            _originalWidth = contentNode.original_width;
-            _originalHeight = contentNode.original_height;
-            _fileSize = contentNode.file_size;
-            _originalFileSize = contentNode.original_file_size;
-            _checksum = contentNode.checksum;
-            _originalChecksum = contentNode.original_checksum;
-            _lenght = contentNode.length;
-            _originalLength = contentNode.original_length;
-        }
-        
-        // Returns the mime type   TODO: currently some failsave stuff because of a Amp error
-        public string mimeType
-        {
-            get
+            // TODO: this must be done because of a bug in AMP!!
+            if( contentNode.mime_type == null)
             {
-                if (_mimeType == null)
-                {
-                    return _originalMimeType;
-                }
-                else
-                {
-                    return _mimeType;
-                }
+                mimeType = contentNode.original_mime_type;
             }
-        }
+            else
+            {
+                mimeType = contentNode.mime_type;
+            }
+            //mimeType = contentNode.mime_type;
+            originalMimeType = contentNode.original_mime_type;
+            fileURL = contentNode.file;
+            originalFileURL = contentNode.original_file;
+            width = contentNode.width;
+            height = contentNode.height;
+            originalWidth = contentNode.original_width;
+            originalHeight = contentNode.original_height;
+            fileSize = contentNode.file_size;
+            originalFileSize = contentNode.original_file_size;
+            checksum = contentNode.checksum;
+            originalChecksum = contentNode.original_checksum;
+            length = contentNode.length;
+            originalLength = contentNode.original_length;
+        }        
+
         
         // Returns the media uri   TODO: currently some failsave stuff because of a Amp error
+        [JsonIgnore]
         public Uri mediaURI
         {
             get
             {
-                if (_fileURL == null)
+                if (fileURL == null)
                 {
-                    return new Uri(_originalFileURL);
+                    return new Uri(originalFileURL);
                 }
                 else
                 {
-                    return new Uri(_fileURL);
+                    return new Uri(fileURL);
                 }
             }
         }

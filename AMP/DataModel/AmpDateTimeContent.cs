@@ -9,20 +9,14 @@ namespace Anfema.Amp.DataModel
 {
     public class AmpDateTimeContent : AmpContent
     {
-        private DateTime _dateTime;
+        public DateTime dateTime { get; set; }
 
 
         public override void init(ContentNodeRaw contentNode)
         {
             base.init(contentNode);
 
-            _dateTime = DateTime.ParseExact( contentNode.datetime, "yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture );
-        }
-
-        // Returns the stored dateTime
-        public DateTime dateTime
-        {
-            get { return _dateTime; }
+            dateTime = DateTime.ParseExact( contentNode.datetime, "yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture );
         }
     }
 }

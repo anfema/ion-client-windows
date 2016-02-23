@@ -9,20 +9,13 @@ namespace Anfema.Amp.DataModel
 {
     public class AmpFlagContent : AmpContent
     {
-        private bool _enabled;
-
+        public bool enabled { get; set; }
 
         public override void init(ContentNodeRaw contentNode)
         {
             base.init(contentNode);
 
-            _enabled = contentNode.is_enabled.GetValueOrDefault( false ); // gets the value or false, if the value isn't set
-        }
-
-
-        public bool enabled
-        {
-            get { return _enabled; }
+            enabled = contentNode.is_enabled.GetValueOrDefault( false ); // gets the value or false, if the value isn't set
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Anfema.Amp.Parsing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,29 +10,25 @@ namespace Anfema.Amp.DataModel
 {
     public class AmpTextContent : AmpContent
     {
-        private string _mimeType;
-        private bool _multiLine;
-        private string _text;
+        public string mimeType { get; set; }
+        public bool multiLine { get; set; }
+        public string text { get; set; }
+
 
         public override void init(ContentNodeRaw contentNode)
         {
             base.init(contentNode);
 
-            _mimeType = contentNode.mime_type;
-            _multiLine = contentNode.is_multiline;
-            _text = contentNode.text;
+            mimeType = contentNode.mime_type;
+            multiLine = contentNode.is_multiline;
+            text = contentNode.text;
         }
 
 
-        public string text
-        {
-            get { return _text; }
-        }
-
-
+        [JsonIgnore]
         public bool isMultiLine
         {
-            get { return _multiLine; }
+            get { return multiLine; }
         }
     }
 }

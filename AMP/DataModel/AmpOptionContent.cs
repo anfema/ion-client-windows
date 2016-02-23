@@ -1,21 +1,24 @@
 ﻿using Anfema.Amp.Parsing;
+using Newtonsoft.Json;
 
 namespace Anfema.Amp.DataModel
 {
     public class AmpOptionContent : AmpContent
     {
-        private string _value;
+        public string value { get; set; }
 
         public override void init(ContentNodeRaw contentNode)
         {
             base.init(contentNode);
 
-            _value = contentNode.value;
+            value = contentNode.value;
         }
         
+
+        [JsonIgnore]
         public string selectedOption
         {
-            get { return _value; }
+            get { return value; }
         }
     }
 }

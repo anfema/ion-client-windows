@@ -40,8 +40,8 @@ namespace Anfema.Amp.Authorization
 
                 loginData = JsonConvert.DeserializeObject<LoginRootObject>(jsonResult).login;
 
-                // TODO remove because of strange Amp behaviour
-                loginData.api_url = "http://Ampdev2.anfema.com/client/v1/";
+                // Add the used API version if the client
+                loginData.api_url += "client/v1/";
 
                 // Create the http authentication header
                 return new AuthenticationHeaderValue("Token", loginData.token);

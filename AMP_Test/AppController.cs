@@ -47,7 +47,7 @@ namespace AMP_Test
             {
                 AuthenticationHeaderValue authenticationHeader = await new AmpTokenAuthorization().LoginAsync("admin@anfe.ma", "test", "http://Ampdev2.anfema.com/client/v1/login");
 
-                AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "de_DE", "test", authenticationHeader, 120, 100, false);
+                AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "de_DE", "test", authenticationHeader, 5, 100, false);
 
                 // Only testing purpose TODO: remove
                 _ampConfig = config;
