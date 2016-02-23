@@ -17,7 +17,25 @@ namespace Anfema.Amp.Utils
         private static string CACHE_FOLDER_IDENTIFIER = "cache_indices";
         private static StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
         private static string CACHE_INDICES_FILENAME = "cacheIndices.json";
+        
+        private static Windows.Storage.ApplicationDataContainer _settings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
+        public static void SetValue<T>( String key, T value )
+        {
+            // Save value to app storage
+            _settings.Values[key] = value;
+        }
+
+        public static T GetValue<T>( String key )
+        {
+            // Retrieve value from app storage
+            if ( _settings.Values.Keys.Contains( key ) )
+            {
+                return ( T ) _settings.Values[key];
+            }
+
+            return default( T );
+        }
 
         /// <summary>
         /// Deletes a whole folder in the isolated storage of the device
