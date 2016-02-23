@@ -15,33 +15,15 @@ namespace Anfema.Amp.Utils
     public class StorageUtils
     {
         private static string CACHE_FOLDER_IDENTIFIER = "cache_indices";
-
-
-
-
         private static StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
-
         private static string CACHE_INDICES_FILENAME = "cacheIndices.json";
 
-        public static async Task<string> loadJsonFromIsolatedStorage( string requestURL )
-        {
-            StorageFile file = await _localFolder.GetFileAsync(requestURL);
-            string content = await FileIO.ReadTextAsync(file);
 
-            return content;
-        }
-
-
-        public static async Task<bool> saveJsonToIsolatedStorage( string requestURL, string jsonFile )
-        {
-            // TODO: Check if the path exists
-            StorageFile file = await _localFolder.CreateFileAsync(requestURL + ".json", CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteTextAsync(file, jsonFile);
-
-            return true;
-        }
-
-
+        /// <summary>
+        /// Deletes a whole folder in the isolated storage of the device
+        /// </summary>
+        /// <param name="folderName"></param>
+        /// <returns></returns>
         public static async Task<bool> deleteFolderInIsolatedStorage( string folderName )
         {
             StorageFolder folder = await _localFolder.GetFolderAsync(folderName);
@@ -51,7 +33,11 @@ namespace Anfema.Amp.Utils
         }
 
 
-
+        /// <summary>
+        /// Saves a collection to the isolated storage of the device
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         public static async Task<bool> saveCollectionToIsolatedStorage( AmpCollection collection )
         {
             // Create folder or use existing folder
@@ -70,6 +56,11 @@ namespace Anfema.Amp.Utils
         }
 
 
+        /// <summary>
+        /// Loads a collection from the isolated storage folder of the device
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns>The collection or null, if the collection isn't found</returns>
         public static async Task<AmpCollection> loadCollectionFromIsolatedStorage( string collectionIdentifier )
         {
             try
@@ -92,7 +83,11 @@ namespace Anfema.Amp.Utils
         }
 
 
-
+        /// <summary>
+        /// Saves a page to the isolated storage folder of the device
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public static async Task<bool> savePageToIsolatedStorage(AmpPage page)
         {
             // Create folder for collection or use existing folder
@@ -114,7 +109,13 @@ namespace Anfema.Amp.Utils
         }
 
 
-
+        /// <summary>
+        /// Loads a page from the isolated storage of the device
+        /// </summary>
+        /// <param name="collectionIdentifier"></param>
+        /// <param name="locale"></param>
+        /// <param name="pageIdentifier"></param>
+        /// <returns>The desired page or null, if the page wasn't found in the isolated folder</returns>
         public static async Task<AmpPage> loadPageFromIsolatedStorage( string collectionIdentifier, string locale, string pageIdentifier )
         {
             try
@@ -137,59 +138,15 @@ namespace Anfema.Amp.Utils
             }
         }
 
-        /*
-        /// <summary>
-        /// Trys to load the indices dictionary for the given collection from isolated storage
-        /// </summary>
-        /// <param name="collectionIdentifier"></param>
-        /// <returns></returns>
-        public static async Task<Dictionary<string, string>> loadIndices( string collectionIdentifier )
-        {
-            try
-            {
-                StorageFolder folder = await _localFolder.GetFolderAsync(collectionIdentifier);
-                StorageFile file = await folder.GetFileAsync(CACHE_INDICES_FILENAME);
-
-                string content = await FileIO.ReadTextAsync(file);
-
-                Dictionary<string, string> indices = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
-
-                return indices;
-            }
-
-            catch( Exception e )
-            {
-                Debug.WriteLine("Error loading indices from isolated storage");
-                return null;
-            }
-        }
-        
 
         /// <summary>
-        /// Saves the indices dictionary to the folder of the collection
+        /// Saves a index file to the isolated storage on the device
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="requestURL"></param>
+        /// <param name="cacheIndex"></param>
         /// <param name="collectionIdentifier"></param>
-        /// <param name="indices"></param>
         /// <returns></returns>
-        public static async Task<bool> saveIndices( string collectionIdentifier, Dictionary<string, string> indices )
-        {
-            // Create folder or use existing folder
-            StorageFolder folder = await _localFolder.CreateFolderAsync(collectionIdentifier, CreationCollisionOption.OpenIfExists);
-
-            // Create file or use existing file
-            StorageFile file = await folder.CreateFileAsync(CACHE_INDICES_FILENAME, CreationCollisionOption.ReplaceExisting);
-
-            // Serialize indices dictionary
-            string collectionSerialized = JsonConvert.SerializeObject(indices);
-
-            // Write serialzed indices dictionray
-            await FileIO.WriteTextAsync(file, collectionSerialized);
-            
-            return true;
-        }*/
-
-
-
         public static async Task<bool> saveIndex<T>( string requestURL, T cacheIndex, string collectionIdentifier ) where T : CacheIndex
         {
             try
@@ -218,7 +175,13 @@ namespace Anfema.Amp.Utils
         }
 
 
-
+        /// <summary>
+        /// Gets a index from isolated storage of the device. Returns null, if the index isn't found
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="requestURL"></param>
+        /// <param name="collectionIdentifier"></param>
+        /// <returns>The index file or null, if the index file isn't found</returns>
         public static async Task<T> getIndex<T>(string requestURL, string collectionIdentifier) where T : CacheIndex
         {
             try

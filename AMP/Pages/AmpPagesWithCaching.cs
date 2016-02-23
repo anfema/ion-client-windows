@@ -5,6 +5,7 @@ using Anfema.Amp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Anfema.Amp.Pages
@@ -16,7 +17,6 @@ namespace Anfema.Amp.Pages
 
         // Data client that will be used to get the data from the server
         private DataClient _dataClient;
-
 
         private static int COLLECTION_NOT_MODIFIED = 304;
 
@@ -168,7 +168,8 @@ namespace Anfema.Amp.Pages
             try
             {
                 // Retrieve the page from the server
-                AmpPage page = await _dataClient.getPageAsync(pageIdentifier);
+                HttpResponseMessage response = await _dataClient.getPageAsync(pageIdentifier);
+                AmpPage page = await DataParser.parsePage(response);
 
                 // Add page to cache, if it is not null
                 if (page != null)
@@ -200,23 +201,36 @@ namespace Anfema.Amp.Pages
         /// <returns></returns>
         private async Task<AmpCollection> getCollectionFromServerAsync( CollectionCacheIndex cacheIndex, bool cacheAsBackup )
         {
-            string lastModified = cacheIndex != null ? cacheIndex.lastModified : null;
+            DateTime lastModified = cacheIndex != null ? cacheIndex.lastModified : DateTime.MinValue;
             
             try
             {
-                // Retrive collecion from server
-                AmpCollection collection = await _dataClient.getCollectionAsync( _config.collectionIdentifier);
+                // Retrive collecion from server and parse it
+                HttpResponseMessage response = await _dataClient.getCollectionAsync( _config.collectionIdentifier, cacheIndex != null ? cacheIndex.lastModifiedDate : DateTime.MinValue);
 
-                // Add collection to memory cache
-                _memoryCache.collection = collection;
+                // Only parse the answer if it is not newer than the cached version
+                if (! (response.StatusCode == System.Net.HttpStatusCode.NotModified ) )
+                {
+                    // Parse collection
+                    AmpCollection collection = await DataParser.parseCollection(response);
 
-                // Save collection to isolated storage
-                await StorageUtils.saveCollectionToIsolatedStorage(collection);
+                    // Add collection to memory cache
+                    _memoryCache.collection = collection;
 
-                // save cacheIndex
-                saveCollectionCacheIndex("last modified");  // TODO: insert last modified date from server call here
+                    // Save collection to isolated storage
+                    await StorageUtils.saveCollectionToIsolatedStorage(collection);
 
-                return collection;
+                    // save cacheIndex
+                    saveCollectionCacheIndex(collection.last_changed);  // TODO: insert last modified date from server call here
+
+                    return collection;
+                }
+                else
+                {
+                    return _memoryCache.collection;
+                }
+
+
             }
             catch (Exception e)
             {
@@ -293,8 +307,11 @@ namespace Anfema.Amp.Pages
         }
 
 
-
-        private void saveCollectionCacheIndex( string lastModified )
+        /// <summary>
+        /// Saves the collection cache index
+        /// </summary>
+        /// <param name="lastModified"></param>
+        private void saveCollectionCacheIndex( DateTime lastModified )
         {
             CollectionCacheIndex.save(_config, lastModified);
         }

@@ -10,6 +10,7 @@ namespace Anfema.Amp.Parsing
         public string fts_db { get; set; }
         public string archive { get; set; }
         public List<CollectionPage> pages { get; set; }
+        public DateTime last_changed { get; set; }
 
 
         public DateTime getPageLastChanged( string pageIdentifier )

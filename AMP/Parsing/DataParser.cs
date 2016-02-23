@@ -2,9 +2,10 @@
 using Anfema.Amp.Parsing;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-
-namespace Anfema.Amp
+namespace Anfema.Amp.Parsing
 {
     public static class DataParser
     {
@@ -13,7 +14,7 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="content"></param>
         /// <returns>A Object that contains all data in observable collections</returns>
-        public static AmpPageObservableCollection parseContent( List<ContentNodeRaw> content )
+        private static AmpPageObservableCollection parseContent( List<ContentNodeRaw> content )
         {
             AmpPageObservableCollection allContent = new AmpPageObservableCollection();
 
@@ -103,8 +104,14 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="pageRaw"></param>
         /// <returns>AmpPage without the generic data types</returns>
-        public static AmpPage parsePage(PageRaw pageRaw)
+        public static async Task<AmpPage> parsePage(HttpResponseMessage response)
         {
+            // Extract the json string from the content of the response message
+            string responseString = await response.Content.ReadAsStringAsync();
+
+            // Parse the page to a raw page container
+            PageRaw pageRaw = JsonConvert.DeserializeObject<PageRootRaw>( responseString ).page[0];
+
             AmpPage pageParsed = new AmpPage();
 
             // Copy entries that don't have to be modified
@@ -133,6 +140,17 @@ namespace Anfema.Amp
             }           
 
             return pageParsed;
+        }
+
+
+        /// <summary>
+        /// Parses the content of a HttpResponseMessage as a collection and returns the first collection in the array
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static async Task<AmpCollection> parseCollection( HttpResponseMessage response )
+        {
+            return JsonConvert.DeserializeObject<CollectionRoot>( await response.Content.ReadAsStringAsync() ).collection[0];
         }
     }
 }

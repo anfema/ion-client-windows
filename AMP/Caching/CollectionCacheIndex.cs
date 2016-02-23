@@ -14,10 +14,10 @@ namespace Anfema.Amp.Caching
     public class CollectionCacheIndex : CacheIndex
     {
         public DateTime lastUpdated { get; set; }
-        public string lastModified { get; set; }
+        public DateTime lastModified { get; set; }
 
 
-        public CollectionCacheIndex( string filename, DateTime lastUpdated, string lastModified ) : base(filename)
+        public CollectionCacheIndex( string filename, DateTime lastUpdated, DateTime lastModified ) : base(filename)
         {
             this.lastUpdated = lastUpdated;
             this.lastModified = lastModified;
@@ -33,26 +33,24 @@ namespace Anfema.Amp.Caching
 
 
         [JsonIgnore]
-        public DateTime? lastModifiedDate
+        public DateTime lastModifiedDate
         {
             get
             {
                 if(lastModified == null)
                 {
                     Debug.WriteLine("Last modified: string is null");
-                    return null;
+                    return DateTime.MinValue;
                 }
 
                 try
                 {
-                    DateTime lastModifiedDate = DateTime.Parse(lastModified);
-                    Debug.WriteLine("Last modified: Succesfully parsed " + lastModified);
-                    return lastModifiedDate;
+                    return lastModified;
                 }
                 catch( Exception e)
                 {
                     Debug.WriteLine("Last modified: Parse error for " + lastModified);
-                    return null;
+                    return DateTime.MinValue;
                 }
             }
         }
@@ -64,7 +62,7 @@ namespace Anfema.Amp.Caching
         }
 
 
-        public static void save( AmpConfig config, string lastModified )
+        public static void save( AmpConfig config, DateTime lastModified )
         {
             string collectionURL = PagesURLs.getCollectionURL(config);
             CollectionCacheIndex cacheIndex = new CollectionCacheIndex(collectionURL, DateTimeUtils.now(), lastModified);
