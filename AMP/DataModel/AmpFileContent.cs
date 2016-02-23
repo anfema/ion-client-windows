@@ -1,4 +1,5 @@
 ﻿using Anfema.Amp.Parsing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,15 +13,16 @@ namespace Anfema.Amp.DataModel
 {
     public class AmpFileContent : AmpContent, INotifyPropertyChanged
     {
-        private string _mimeType;
-        private string _name;
-        private int _file_size;
-        private string _checksum;
-        private string _fileURL;
+        public string mimeType { get; set; }
+        public string name { get; set; }
+        public int file_size { get; set; }
+        public string checksum { get; set; }
+        public string fileURL { get; set; }
 
-
+        [JsonIgnore]
         private object _fileContent;
 
+        [JsonIgnore]
         private bool _fileFetched = false;
 
         // Declare the PropertyChanged event.
@@ -31,39 +33,15 @@ namespace Anfema.Amp.DataModel
         {
             base.init(contentNode);
 
-            _mimeType = contentNode.mime_type;
-            _name = contentNode.name;
-            _file_size = contentNode.file_size;
-            _checksum = contentNode.checksum;
-            _fileURL = contentNode.file;
+            mimeType = contentNode.mime_type;
+            name = contentNode.name;
+            file_size = contentNode.file_size;
+            checksum = contentNode.checksum;
+            fileURL = contentNode.file;
         }
 
 
-        public string fileURL
-        {
-            get { return _fileURL; }
-        }
-
-        public string mimeType
-        {
-            get { return _mimeType; }
-        }
-
-        public string name
-        {
-            get { return _name; }
-        }
-
-        public string checksum
-        {
-            get { return _checksum; }
-        }
-
-        public int fileSize
-        {
-            get { return _file_size; }
-        }
-
+        [JsonIgnore]
         public object file
         {
             get
@@ -84,10 +62,10 @@ namespace Anfema.Amp.DataModel
         {
             // Generate new httpClient to retrieve the file
             HttpClient http = new System.Net.Http.HttpClient();
-            HttpResponseMessage response = await http.GetAsync( new Uri( _fileURL ) );
+            HttpResponseMessage response = await http.GetAsync( new Uri( fileURL ) );
 
             // Handle different file types
-            switch(_mimeType)
+            switch(mimeType)
             {
                 case "text/plain":
                     {

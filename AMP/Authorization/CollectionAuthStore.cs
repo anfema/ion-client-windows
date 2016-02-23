@@ -1,4 +1,4 @@
-﻿using Anfema.Amp.Util;
+﻿using Anfema.Amp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
@@ -24,8 +24,8 @@ namespace Anfema.Amp.Authorization
             }
 
             // Try to get authentication header from app storage
-            String scheme = KeyValueStorage.Get<String>( collectionIdentifier + "_scheme" );
-            String parameter = KeyValueStorage.Get<String>( collectionIdentifier + "_parameter" );
+            String scheme = StorageUtils.GetValue<String>( collectionIdentifier + "_scheme" );
+            String parameter = StorageUtils.GetValue<String>( collectionIdentifier + "_parameter" );
 
             if ( scheme == null || parameter == null )
             {
@@ -52,8 +52,8 @@ namespace Anfema.Amp.Authorization
             authenticationHeaders[collectionIdentifier] = authenticationHeaderValue;
 
             // Save to app storage
-            KeyValueStorage.Set( collectionIdentifier + "_scheme", authenticationHeaderValue.Scheme );
-            KeyValueStorage.Set( collectionIdentifier + "_parameter", authenticationHeaderValue.Parameter );
+            StorageUtils.SetValue( collectionIdentifier + "_scheme", authenticationHeaderValue.Scheme );
+            StorageUtils.SetValue( collectionIdentifier + "_parameter", authenticationHeaderValue.Parameter );
         }
 
         public static void Set( String collectionIdentifier, String username, String password )

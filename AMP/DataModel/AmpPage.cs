@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Anfema.Amp.DataModel
 {
@@ -10,6 +11,7 @@ namespace Anfema.Amp.DataModel
         public string locale { get; set; }
         public List<string> children { get; set; }
         public List<AmpPageContent> contents { get; set; }
+        public DateTime last_changed { get; set; }
 
 
         public AmpPage()
