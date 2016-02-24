@@ -34,7 +34,7 @@ namespace Anfema.Amp.Pages
             _dataClient = new DataClient(config);
 
             // Init memory cache
-            _memoryCache = new MemoryCache(100);
+            _memoryCache = new MemoryCache(100000000);
         }
 
 

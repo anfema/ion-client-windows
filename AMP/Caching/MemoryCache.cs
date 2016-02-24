@@ -1,36 +1,33 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Pages;
 using Anfema.Amp.Parsing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Anfema.Amp.Caching
 {
     public class MemoryCache
     {
         // Defines the maximum elements in cache. TODO: make this affect the cache size!
-        private static int _pageMemoryCacheSize;
+        private static long _pageMemoryCacheSize;
         
         // Holds the cached collection
         public AmpCollection collection { get; set; }
 
         // Holds all cached pages
-        private Dictionary<string, AmpPage> _pageMemoryCache;
+        private LRUCache<string, AmpPage> _pageMemoryCache;
 
 
         /// <summary>
         /// Inits the memory cache with a given size
         /// </summary>
         /// <param name="pageMemoryCacheSize"></param>
-        public MemoryCache( int pageMemoryCacheSize)
+        public MemoryCache( long pageMemoryCacheSize)
         {
             _pageMemoryCacheSize = pageMemoryCacheSize;
             collection = null;
-            _pageMemoryCache = new Dictionary<string, AmpPage>(); 
+            _pageMemoryCache = new LRUCache<string, AmpPage>(pageMemoryCacheSize);
         }
+
 
         /// <summary>
         /// Returns a page from the memory cache with the desired URL. If the page is not in cache, then null will be returned
@@ -39,8 +36,7 @@ namespace Anfema.Amp.Caching
         /// <returns></returns>
         private AmpPage getPage( string pageURL )
         {
-            AmpPage page = null;
-            _pageMemoryCache.TryGetValue(pageURL, out page);
+            AmpPage page = _pageMemoryCache.get(pageURL);
             return page;
         }
 
@@ -54,7 +50,6 @@ namespace Anfema.Amp.Caching
         public AmpPage getPage( string pageIdentifier , AmpConfig config )
         {
             string pageUrl = PagesURLs.getPageURL(config, pageIdentifier);
-
             return getPage(pageUrl);
         }
 
@@ -67,17 +62,16 @@ namespace Anfema.Amp.Caching
         public void savePage( AmpPage page, AmpConfig config )
         {
             string pageUrl = PagesURLs.getPageURL(config, page.identifier);
-            _pageMemoryCache.Add(pageUrl, page);
+            _pageMemoryCache.add(pageUrl, page);
         }
-
-
+        
 
         /// <summary>
         /// Clears the whole memory cache
         /// </summary>
         public void clearPageMemomryCache()
         {
-            _pageMemoryCache.Clear();
+            _pageMemoryCache.clear();
         }
     }
 }

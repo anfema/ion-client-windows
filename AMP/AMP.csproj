@@ -89,6 +89,8 @@
     <Compile Include="Caching\CacheIndexStore.cs" />
     <Compile Include="Caching\CollectionCacheIndex.cs" />
     <Compile Include="Caching\FilePaths.cs" />
+    <Compile Include="Caching\LRUCache.cs" />
+    <Compile Include="Caching\LRUCacheItem.cs" />
     <Compile Include="Caching\MemoryCache.cs" />
     <Compile Include="Caching\MemoryCacheIndex.cs" />
     <Compile Include="Caching\PageCacheIndex.cs" />
