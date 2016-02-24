@@ -221,13 +221,31 @@ namespace Anfema.Amp.Pages
                     await StorageUtils.saveCollectionToIsolatedStorage(collection);
 
                     // save cacheIndex
-                    await saveCollectionCacheIndex(collection.last_changed);  // TODO: insert last modified date from server call here
+                    await saveCollectionCacheIndex(collection.last_changed);
 
                     return collection;
                 }
                 else
                 {
-                    return _memoryCache.collection;
+                    // Collection in the server is the same as stored already in isolated storage cache
+                    try
+                    {
+                        // Get collection from isolated storage
+                        AmpCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
+
+                        // Add collection to memory cache
+                        if (collection != null)
+                        {
+                            _memoryCache.collection = collection;
+                        }
+
+                        return collection;
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Error getting collection from isolated storage.");
+                        return null;
+                    }
                 }
 
 
