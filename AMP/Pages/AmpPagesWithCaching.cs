@@ -18,8 +18,6 @@ namespace Anfema.Amp.Pages
         // Data client that will be used to get the data from the server
         private DataClient _dataClient;
 
-        private static int COLLECTION_NOT_MODIFIED = 304;
-
         // Different caching methods
         private MemoryCache _memoryCache;
 
@@ -49,6 +47,7 @@ namespace Anfema.Amp.Pages
             string collectionURL = PagesURLs.getCollectionURL(_config);
             CollectionCacheIndex cacheIndex = await CollectionCacheIndex.retrieve(collectionURL, _config.collectionIdentifier);
 
+            // Check if there is a not outdated cacheIndex avialible
             bool currentCacheEntry = cacheIndex != null && !cacheIndex.isOutdated(_config);
             bool networkConnected = NetworkUtils.isOnline();
 
@@ -62,7 +61,7 @@ namespace Anfema.Amp.Pages
             {
                 if( networkConnected )
                 {
-                    // download collection
+                    // download collection or check for modifications
                     return await getCollectionFromServerAsync(cacheIndex, false);
                 }
                 else
@@ -201,12 +200,12 @@ namespace Anfema.Amp.Pages
         /// <returns></returns>
         private async Task<AmpCollection> getCollectionFromServerAsync( CollectionCacheIndex cacheIndex, bool cacheAsBackup )
         {
-            DateTime lastModified = cacheIndex != null ? cacheIndex.lastModified : DateTime.MinValue;
+            //DateTime lastModified = cacheIndex != null ? cacheIndex.lastModified : DateTime.MinValue;
             
             try
             {
                 // Retrive collecion from server and parse it
-                HttpResponseMessage response = await _dataClient.getCollectionAsync( _config.collectionIdentifier, cacheIndex != null ? cacheIndex.lastModifiedDate : DateTime.MinValue);
+                HttpResponseMessage response = await _dataClient.getCollectionAsync( _config.collectionIdentifier, cacheIndex != null ? cacheIndex.lastModified : DateTime.MinValue);
 
                 // Only parse the answer if it is not newer than the cached version
                 if (! (response.StatusCode == System.Net.HttpStatusCode.NotModified ) )
@@ -228,23 +227,36 @@ namespace Anfema.Amp.Pages
                 else
                 {
                     // Collection in the server is the same as stored already in isolated storage cache
-                    try
+                    if (_memoryCache.collection == null)
                     {
-                        // Get collection from isolated storage
-                        AmpCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
-
-                        // Add collection to memory cache
-                        if (collection != null)
+                        // Only load collection from isolated storage cache, if the memory cache has no collection cached
+                        try
                         {
-                            _memoryCache.collection = collection;
-                        }
+                            // Get collection from isolated storage
+                            AmpCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
 
-                        return collection;
+                            // Add collection to memory cache
+                            if (collection != null)
+                            {
+                                _memoryCache.collection = collection;
+                            }
+
+                            // change the last-mofied date in the cacheIndex to now
+                            await saveCollectionCacheIndex(collection.last_changed);
+
+                            return collection;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine("Error getting collection from isolated storage.");
+                            return null;
+                        }
                     }
-                    catch (Exception e)
+                    else
                     {
-                        Debug.WriteLine("Error getting collection from isolated storage.");
-                        return null;
+                        // change the last-mofied date in the cacheIndex to now
+                        await saveCollectionCacheIndex(_memoryCache.collection.last_changed);
+                        return _memoryCache.collection;
                     }
                 }
 
