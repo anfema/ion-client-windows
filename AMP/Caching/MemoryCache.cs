@@ -7,7 +7,7 @@ namespace Anfema.Amp.Caching
 {
     public class MemoryCache
     {
-        // Defines the maximum elements in cache. TODO: make this affect the cache size!
+        // Defines the maximum elements in cache
         private static long _pageMemoryCacheSize;
         
         // Holds the cached collection

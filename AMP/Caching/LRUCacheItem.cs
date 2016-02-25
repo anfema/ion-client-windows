@@ -19,6 +19,7 @@ namespace Anfema.Amp.Caching
             key = k;
             value = v;
 
+            // Approximate the size of the object in Bytes
             string valSerialized = JsonConvert.SerializeObject(v);
             sizeInByte = valSerialized.Length * sizeof(Char);
         }

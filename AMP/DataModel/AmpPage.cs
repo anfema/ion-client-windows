@@ -12,6 +12,8 @@ namespace Anfema.Amp.DataModel
         public List<string> children { get; set; }
         public List<AmpPageContent> contents { get; set; }
         public DateTime last_changed { get; set; }
+        public int position { get; set; }
+        public Uri archive { get; set; }
 
 
         public AmpPage()
