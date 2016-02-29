@@ -120,7 +120,7 @@
                         <RowDefinition Height="8*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Image Source="{Binding imageURI}"
+                    <Image Source="{Binding bitmap}"
                            Grid.Row="0"
                            HorizontalAlignment="Center"/>
                     

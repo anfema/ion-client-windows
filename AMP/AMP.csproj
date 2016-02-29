@@ -80,14 +80,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Amp.cs" />
-    <Compile Include="Archive\AmpArchiveDownload.cs" />
-    <Compile Include="Archive\IAmpArchive.cs" />
     <Compile Include="Authorization\BasicAuth.cs" />
     <Compile Include="Authorization\CollectionAuthStore.cs" />
     <Compile Include="Authorization\TokenAuthorization.cs" />
     <Compile Include="Caching\CacheIndex.cs" />
     <Compile Include="Caching\CacheIndexStore.cs" />
     <Compile Include="Caching\CollectionCacheIndex.cs" />
+    <Compile Include="Caching\FileCacheIndex.cs" />
     <Compile Include="Caching\FilePaths.cs" />
     <Compile Include="Caching\MemoryCache.cs" />
     <Compile Include="Caching\MemoryCacheIndex.cs" />
@@ -113,6 +112,7 @@
     <Compile Include="DataModel\AmpTextContent.cs" />
     <Compile Include="DataModel\ValueType.cs" />
     <Compile Include="DataModel\AmpCollection.cs" />
+    <Compile Include="mediafiles\AmpFilesWithCaching.cs" />
     <Compile Include="Pages\IAmpPages.cs" />
     <Compile Include="Pages\AmpPagesWithCaching.cs" />
     <Compile Include="Pages\PagesURLs.cs" />
@@ -128,8 +128,11 @@
     <Compile Include="Parsing\ContentRaw.cs" />
     <Compile Include="Parsing\KeyValuePairRaw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\AsyncLock.cs" />
     <Compile Include="Utils\DataClient.cs" />
     <Compile Include="Utils\DateTimeUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
+    <Compile Include="Utils\HashUtils.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />
     <Compile Include="Utils\StorageUtils.cs" />
   </ItemGroup>

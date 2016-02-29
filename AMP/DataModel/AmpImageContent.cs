@@ -1,6 +1,9 @@
-﻿using Anfema.Amp.Parsing;
-using Newtonsoft.Json;
+﻿using Anfema.Amp.mediafiles;
+using Anfema.Amp.Parsing;
 using System;
+using System.IO;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Anfema.Amp.DataModel
 {
@@ -19,8 +22,7 @@ namespace Anfema.Amp.DataModel
         public int translationX { get; set; }
         public int translationY { get; set; }
         public double scale { get; set; }
-
-
+        
         public override void init(ContentNodeRaw contentNode)
         {
             base.init(contentNode);
@@ -40,14 +42,16 @@ namespace Anfema.Amp.DataModel
             translationY = contentNode.translation_y.GetValueOrDefault( 0 );
         }
 
-
-        [JsonIgnore]
-        public Uri imageUri
+        public async Task<BitmapImage> getBitmap(AmpFilesWithCaching ampFilesWithCaching)
         {
-            get
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.DecodePixelWidth = this.width;
+            bitmap.DecodePixelHeight = this.height;
+            using ( MemoryStream data = await ampFilesWithCaching.Request( this.imageURL, null ) )
             {
-                return new Uri(imageURL);
+                await bitmap.SetSourceAsync( data.AsRandomAccessStream() );
             }
+            return bitmap;
         }
     }
 }
