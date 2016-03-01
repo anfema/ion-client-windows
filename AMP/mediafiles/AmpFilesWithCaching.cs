@@ -114,7 +114,7 @@ namespace Anfema.Amp.mediafiles
             {
                 // check with collection's last_modified (previewPage.last_changed would be slightly more precise)
                 CollectionCacheIndex collectionCacheIndex = await CollectionCacheIndex.retrieve( _config );
-                DateTime collectionLastModified = collectionCacheIndex == null ? default( DateTime )  : collectionCacheIndex.lastModifiedDate;
+                DateTime collectionLastModified = collectionCacheIndex == null ? default( DateTime )  : collectionCacheIndex.lastModified;
                 return collectionLastModified != null && fileCacheIndex.lastUpdated != null && !( collectionLastModified.CompareTo( fileCacheIndex.lastUpdated ) > 0 );
             }
         }
