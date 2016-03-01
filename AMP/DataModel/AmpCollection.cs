@@ -7,8 +7,8 @@ namespace Anfema.Amp.Parsing
     {
         public string identifier { get; set; }
         public string default_locale { get; set; }
-        public string fts_db { get; set; }
-        public string archive { get; set; }
+        public Uri fts_db { get; set; }
+        public Uri archive { get; set; }
         public List<CollectionPage> pages { get; set; }
         public DateTime last_changed { get; set; }
 

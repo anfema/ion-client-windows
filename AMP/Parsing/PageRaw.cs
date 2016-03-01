@@ -17,5 +17,6 @@ namespace Anfema.Amp.Parsing
         public List<string> children { get; set; }
         public string locale { get; set; }
         public string layout { get; set; }
+        public int position { get; set; }
     }
 }

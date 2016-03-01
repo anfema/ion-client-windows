@@ -1,7 +1,6 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Pages;
 using Anfema.Amp.Utils;
-using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -10,8 +9,8 @@ namespace Anfema.Amp.Caching
 {
     public class CollectionCacheIndex : CacheIndex
     {
-        public DateTime lastUpdated { get; set; }
-        public DateTime lastModified { get; set; }
+        public DateTime lastUpdated { get; set; }  // Used to store the last time, the collection was checked for modification
+        public DateTime lastModified { get; set; } // Used to store the last modification time of the collection of the server
 
 
         public CollectionCacheIndex( string filename, DateTime lastUpdated, DateTime lastModified ) : base(filename)
@@ -28,10 +27,10 @@ namespace Anfema.Amp.Caching
         /// <returns></returns>
         public bool isOutdated( AmpConfig config )
         {
-            return lastUpdated < (DateTime.Now.AddMinutes(-config.minutesUntilCollectionRefresh));
+            return lastUpdated < (DateTime.Now.ToUniversalTime().AddMinutes(-config.minutesUntilCollectionRefresh));
         }
 
-
+        /*
         [JsonIgnore]
         public DateTime lastModifiedDate
         {
@@ -53,7 +52,7 @@ namespace Anfema.Amp.Caching
                     return DateTime.MinValue;
                 }
             }
-        }
+        }*/
 
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace Anfema.Amp.Caching
         public static async Task<bool> save( AmpConfig config, DateTime lastModified )
         {
             string collectionURL = PagesURLs.getCollectionURL(config);
-            CollectionCacheIndex cacheIndex = new CollectionCacheIndex(collectionURL, DateTimeUtils.now(), lastModified);
+            CollectionCacheIndex cacheIndex = new CollectionCacheIndex(collectionURL, DateTimeUtils.now().ToUniversalTime(), lastModified);
             await CacheIndexStore.save<CollectionCacheIndex>(collectionURL, cacheIndex, config);
 
             return true;

@@ -78,8 +78,18 @@ namespace Anfema.Amp.Utils
         {
             try
             {
+                // Construct request string
                 string requestString = _config.baseUrl + _config.locale + "/" + _config.collectionIdentifier;
+
+                // Add the last-modified-header
+                _client.DefaultRequestHeaders.Add("If-Modified-Since", lastModified.ToString("r") );
+
+                // Recieve the response
                 HttpResponseMessage response = await _client.GetAsync(requestString);
+
+                // Remove the last-modified-header
+                _client.DefaultRequestHeaders.Remove("If-Modified-Since");
+
                 return response;
             }
 
