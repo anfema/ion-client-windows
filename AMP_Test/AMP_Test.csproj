@@ -95,7 +95,6 @@
     <Compile Include="DataTypes.xaml.cs">
       <DependentUpon>DataTypes.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageDataProvider.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

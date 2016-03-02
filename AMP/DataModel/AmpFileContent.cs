@@ -50,7 +50,10 @@ namespace Anfema.Amp.DataModel
                 if (!_fileFetched)
                 {
                     // Get the file with NO await. The file property will be automatically be updated with the propertyChenged event
-                    getFileFromServer();
+                    if ( this.fileURL != null )
+                    {
+                        getFileFromServer();
+                    }
                 }
                 return _fileContent;
             }

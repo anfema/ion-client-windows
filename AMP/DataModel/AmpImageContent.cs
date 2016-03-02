@@ -22,6 +22,8 @@ namespace Anfema.Amp.DataModel
         public int translationX { get; set; }
         public int translationY { get; set; }
         public double scale { get; set; }
+
+        public BitmapImage bitmap { get; set; }
         
         public override void init(ContentNodeRaw contentNode)
         {
@@ -42,16 +44,20 @@ namespace Anfema.Amp.DataModel
             translationY = contentNode.translation_y.GetValueOrDefault( 0 );
         }
 
-        public async Task<BitmapImage> getBitmap(AmpFilesWithCaching ampFilesWithCaching)
+        public async Task<bool> createBitmap( AmpFilesWithCaching ampFilesWithCaching )
         {
-            BitmapImage bitmap = new BitmapImage();
+            bitmap = new BitmapImage();
             bitmap.DecodePixelWidth = this.width;
             bitmap.DecodePixelHeight = this.height;
+            if ( this.imageURL == null )
+            {
+                return false;
+            }
             using ( MemoryStream data = await ampFilesWithCaching.Request( this.imageURL, null ) )
             {
                 await bitmap.SetSourceAsync( data.AsRandomAccessStream() );
             }
-            return bitmap;
+            return true;
         }
     }
 }

@@ -10,6 +10,8 @@ namespace Anfema.Amp.Caching
     {
         public string filename { get; set; }
         
+        public CacheIndex(){}
+
         public CacheIndex( string filename)
         {
             this.filename = filename;

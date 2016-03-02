@@ -16,7 +16,10 @@ namespace Anfema.Amp.DataModel
         {
             base.init(contentNode);
 
-            dateTime = DateTime.ParseExact( contentNode.datetime, "yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture );
+            if ( contentNode.datetime != null )
+            {
+                dateTime = DateTime.ParseExact( contentNode.datetime, "yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture );
+            }
         }
     }
 }

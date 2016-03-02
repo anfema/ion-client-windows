@@ -47,13 +47,13 @@ namespace AMP_Test
         {
             if ( !_loggedIn )
             {
-                String collectionIdentifier = "test";
+                String collectionIdentifier = "seoul-november-2014";
 
                 AuthenticationHeaderValue authorizationHeader = CollectionAuthStore.Get( collectionIdentifier );
 
                 if ( authorizationHeader == null )
                 {
-                    authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "admin@anfe.ma", "test", "http://Ampdev2.anfema.com/client/v1/login" );
+                    authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "admin@anfe.ma", "test", "http://bireise-dev.anfema.com/client/v1/login" );
                     // Or using BasicAuth
                     //AuthenticationHeaderValue authenticationHeader = BasicAuth.GetAuthHeaderValue("admin@anfe.ma", "test");
                 }
@@ -61,7 +61,7 @@ namespace AMP_Test
                 // Store authorization header
                 CollectionAuthStore.Set( collectionIdentifier, authorizationHeader );
 
-                AmpConfig config = new AmpConfig("http://Ampdev2.anfema.com/client/v1/", "de_DE", collectionIdentifier, authorizationHeader, 120, 100, false);
+                AmpConfig config = new AmpConfig("http://bireise-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, authorizationHeader, 120, 100, false);
                 _ampFilesWithCaching = new AmpFilesWithCaching( config );
 
                 // Only testing purpose TODO: remove

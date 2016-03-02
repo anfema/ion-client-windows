@@ -14,7 +14,7 @@ namespace Anfema.Amp.Caching
         public String checksum { get; set; }
         
         public DateTime lastUpdated { get; set; }
-
+        
         public FileCacheIndex( String filename, String checksum, DateTime lastUpdated ) : base( filename )
         {
             this.checksum = checksum;
