@@ -31,11 +31,25 @@ namespace Anfema.Amp.mediafiles
             }
         }
 
+        /// <summary>
+        /// Request file from url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="checksum"></param>
+        /// <returns></returns>
         public async Task<MemoryStream> Request( String url, String checksum )
         {
             return await Request( url, checksum, false, null );
         }
 
+        /// <summary>
+        /// Request file from url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="checksum"></param>
+        /// <param name="ignoreCaching"></param>
+        /// <param name="inTargetFile"></param>
+        /// <returns></returns>
         public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching, String inTargetFile )
         {
             String targetFile = GetTargetFilePath( url, inTargetFile );

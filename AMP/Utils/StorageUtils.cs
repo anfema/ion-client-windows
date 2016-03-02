@@ -20,15 +20,25 @@ namespace Anfema.Amp.Utils
         
         private static Windows.Storage.ApplicationDataContainer _settings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
+        /// <summary>
+        /// Save primitive value to app storage
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public static void SetValue<T>( String key, T value )
         {
-            // Save value to app storage
             _settings.Values[key] = value;
         }
 
+        /// <summary>
+        /// Retrieve primitive value from app storage
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static T GetValue<T>( String key )
         {
-            // Retrieve value from app storage
             if ( _settings.Values.Keys.Contains( key ) )
             {
                 return ( T ) _settings.Values[key];

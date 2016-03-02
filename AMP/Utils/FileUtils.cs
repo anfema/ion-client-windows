@@ -55,6 +55,12 @@ namespace Anfema.Amp.Utils
             }
         }
 
+        /// <summary>
+        /// Write MemoryStream to file
+        /// </summary>
+        /// <param name="inputStream"></param>
+        /// <param name="targetFilePath"></param>
+        /// <returns></returns>
         public static async Task<bool> WriteToFile( MemoryStream inputStream, String targetFilePath )
         {
             using ( await ObtainLock( targetFilePath ).LockAsync() )
@@ -69,6 +75,12 @@ namespace Anfema.Amp.Utils
             return true;
         }
 
+
+        /// <summary>
+        /// Read file into MemoryStream
+        /// </summary>
+        /// <param name="targetFilePath"></param>
+        /// <returns></returns>
         public static async Task<MemoryStream> ReadFromFile( String targetFilePath )
         {
             MemoryStream outputStream = new MemoryStream();
@@ -85,6 +97,11 @@ namespace Anfema.Amp.Utils
             return outputStream;
         }
 
+        /// <summary>
+        /// Write string to file
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="targetFilePath"></param>
         public static async void WriteTextToFile( String text, String targetFilePath )
         {
             using ( await ObtainLock( targetFilePath ).LockAsync() )
@@ -95,6 +112,11 @@ namespace Anfema.Amp.Utils
             ReleaseLock( targetFilePath );
         }
 
+        /// <summary>
+        /// Read file into string
+        /// </summary>
+        /// <param name="targetFilePath"></param>
+        /// <returns></returns>
         public static async Task<String> ReadTextFromFile( String targetFilePath )
         {
             String value = String.Empty;
@@ -109,6 +131,11 @@ namespace Anfema.Amp.Utils
 
         // TODO: Implement missing functions: move, reset, createDir, deleteRecursive
 
+        /// <summary>
+        /// Check if file exists
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public async static Task<bool> Exists( String filePath )
         {
             bool fileExists = true;
