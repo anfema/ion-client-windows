@@ -66,6 +66,12 @@ namespace Anfema.Amp.Caching
             return await CacheIndexStore.retrieve<CollectionCacheIndex>(requestURL, collectionIdentifier);
         }
 
+        public static async Task<CollectionCacheIndex> retrieve( AmpConfig config )
+        {
+            String requestUrl = PagesURLs.getCollectionURL( config );
+            return await CacheIndexStore.retrieve<CollectionCacheIndex>( requestUrl, config.collectionIdentifier );
+        }
+
 
         /// <summary>
         /// Saves a collectionCacheIndex to cache

@@ -74,6 +74,11 @@ namespace AMP_Test
 
                     _allContent = page.contents[0].children[0];
 
+                    foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
+                    {
+                        await ampImageContent.createBitmap( AppController.instance.ampFilesWithCaching );
+                    }
+
                     // Set the data context of the lists
                     imageContentList.DataContext = _allContent.imageContent;
                     textContentList.DataContext = _allContent.textContent;
@@ -253,7 +258,7 @@ namespace AMP_Test
             AmpMediaContent mc = (AmpMediaContent)me.DataContext;
 
             // This is the fallback in case the media file is simply an image
-            if( mc.mimeType.Contains( "image/" ) )
+            if( mc.mimeType.Contains( "image/" ) && mc.mediaURI != null )
             {
                 // Set image and set it visible
                 Image image = getSibling<Image>(me, "mediaContentImage");

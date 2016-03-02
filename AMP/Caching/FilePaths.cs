@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Anfema.Amp.DataModel;
+using Anfema.Amp.Utils;
+using System;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
@@ -9,31 +11,59 @@ namespace Anfema.Amp.Caching
 {
     public class FilePaths
     {
-        public static string getFileName( string url )
+        /// <summary>
+        /// Get filename for a url as its MD5 hash
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static string GetFileName( string url )
         {
-            // Define MD5 as algorithm
-            string strAlgName = HashAlgorithmNames.Md5;
+            return HashUtils.GetMD5Hash( url );
+        }
+        
+        /// <summary>
+        /// Get local file cache path for media url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static String GetMediaFilePath( String url, AmpConfig config )
+        {
+            return GetMediaFilePath( url, config, false );
+        }
 
-            // Convert the message string to binary data.
-            IBuffer buffUtf8Msg = CryptographicBuffer.ConvertStringToBinary(url, BinaryStringEncoding.Utf8);
+        /// <summary>
+        /// Get local file cache path for media url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="config"></param>
+        /// <param name="tempCollectionFolder"></param>
+        /// <returns></returns>
+        public static String GetMediaFilePath( String url, AmpConfig config, bool tempCollectionFolder )
+        {
+            String mediaFolderPath = GetMediaFolderPath( config, tempCollectionFolder );
+            String filename = GetFileName( url );
+            return mediaFolderPath + filename;
+        }
 
-            // Create a HashAlgorithmProvider object.
-            HashAlgorithmProvider objAlgProv = HashAlgorithmProvider.OpenAlgorithm(strAlgName);
+        /// <summary>
+        /// Get local file cache folder path for an amp configuration/collection
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="tempCollectionFolder"></param>
+        /// <returns></returns>
+        public static String GetMediaFolderPath( AmpConfig config, bool tempCollectionFolder )
+        {
+            return config.collectionIdentifier + FileUtils.SLASH + AppendTemp( "media", tempCollectionFolder );
+        }
 
-            // Hash the message.
-            IBuffer buffHash = objAlgProv.HashData(buffUtf8Msg);
-
-            // Verify that the hash length equals the length specified for the algorithm.
-            if (buffHash.Length != objAlgProv.HashLength)
+        private static String AppendTemp( String path, bool appendTemp )
+        {
+            if ( appendTemp )
             {
-                throw new Exception("FilePaths: There was an error creating the hash");
+                path += "_temp";
             }
-
-            // Convert the hash to a string (for display).
-            string strHashBase64 = CryptographicBuffer.EncodeToHexString(buffHash);
-
-            // Return the encoded string
-            return strHashBase64;
+            return path;
         }
     }
 }

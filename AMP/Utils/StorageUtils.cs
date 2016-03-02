@@ -20,15 +20,25 @@ namespace Anfema.Amp.Utils
         
         private static Windows.Storage.ApplicationDataContainer _settings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
+        /// <summary>
+        /// Save primitive value to app storage
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
         public static void SetValue<T>( String key, T value )
         {
-            // Save value to app storage
             _settings.Values[key] = value;
         }
 
+        /// <summary>
+        /// Retrieve primitive value from app storage
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static T GetValue<T>( String key )
         {
-            // Retrieve value from app storage
             if ( _settings.Values.Keys.Contains( key ) )
             {
                 return ( T ) _settings.Values[key];
@@ -174,7 +184,7 @@ namespace Anfema.Amp.Utils
                 StorageFolder cacheFolder = await collectionFolder.CreateFolderAsync(CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists);
 
                 // Create file or use existing file
-                string filename = FilePaths.getFileName(requestURL) + ".json";
+                string filename = FilePaths.GetFileName(requestURL) + ".json";
                 StorageFile file = await cacheFolder.CreateFileAsync( filename, CreationCollisionOption.ReplaceExisting);
 
                 // Serialize cache índex
@@ -209,7 +219,7 @@ namespace Anfema.Amp.Utils
                 StorageFolder cacheFolder = await collectionFolder.CreateFolderAsync(CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists);
 
                 // Create file or use existing file
-                StorageFile file = await cacheFolder.GetFileAsync(FilePaths.getFileName(requestURL) + ".json");
+                StorageFile file = await cacheFolder.GetFileAsync(FilePaths.GetFileName(requestURL) + ".json");
 
                 // Read content of the file
                 string content = await FileIO.ReadTextAsync(file);

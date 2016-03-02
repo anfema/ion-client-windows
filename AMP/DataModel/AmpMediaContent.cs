@@ -60,7 +60,11 @@ namespace Anfema.Amp.DataModel
             {
                 if (fileURL == null)
                 {
-                    return new Uri(originalFileURL);
+                    if ( originalFileURL != null )
+                    {
+                        return new Uri( originalFileURL );
+                    }
+                    else return null;
                 }
                 else
                 {
