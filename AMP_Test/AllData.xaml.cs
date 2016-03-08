@@ -1,5 +1,6 @@
 ﻿using Anfema.Amp;
 using Anfema.Amp.DataModel;
+using Anfema.Amp.FullTextSearch;
 using Anfema.Amp.Parsing;
 using Newtonsoft.Json;
 using System;
@@ -73,11 +74,14 @@ namespace AMP_Test
                     AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
 
                     _allContent = page.contents[0].children[0];
-
+                
                     foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
                     {
-                        await ampImageContent.createBitmap( AppController.instance.ampFilesWithCaching );
+                        await ampImageContent.createBitmap( Amp.getInstance( AppController.instance.ampConfig ).AmpFiles() );
                     }
+
+                    //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
+                    //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE", null);
 
                     // Set the data context of the lists
                     imageContentList.DataContext = _allContent.imageContent;

@@ -12,5 +12,6 @@ namespace Anfema.Amp.Pages
     {
         Task<AmpCollection> getCollectionAsync();
         Task<AmpPage> getPageAsync(string pageIdentifier);
+        Task<List<string>> getAllPagesIdentifierAsync();
     }
 }

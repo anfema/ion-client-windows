@@ -3,6 +3,7 @@ using Anfema.Amp.Parsing;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -98,6 +99,15 @@ namespace Anfema.Amp.Utils
                 Debug.WriteLine("Error getting collection from server: " + e.Message);
                 return null;
             }                
+        }
+
+        public async Task<MemoryStream> PerformRequest( Uri uri )
+        {
+            Stream stream = await _client.GetStreamAsync( uri );
+            var memStream = new MemoryStream();
+            await stream.CopyToAsync( memStream );
+            memStream.Position = 0;
+            return memStream;
         }
     }
 }

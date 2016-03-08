@@ -11,6 +11,8 @@ namespace Anfema.Amp.Caching
 {
     public class FilePaths
     {
+        private static readonly String _ftsDbFolderPath = "ftsDbs";
+
         /// <summary>
         /// Get filename for a url as its MD5 hash
         /// </summary>
@@ -64,6 +66,12 @@ namespace Anfema.Amp.Caching
                 path += "_temp";
             }
             return path;
+        }
+
+        public static String GetFtsDbFilePath( String collectionIdentifier )
+        {
+            //return _ftsDbFolderPath + FileUtils.SLASH + "fts_" + collectionIdentifier + ".sqlite";
+            return "test.db";
         }
     }
 }
