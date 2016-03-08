@@ -44,7 +44,7 @@ namespace Anfema.Amp.DataModel
             translationY = contentNode.translation_y.GetValueOrDefault( 0 );
         }
 
-        public async Task<bool> createBitmap( IAmpFiles ampFiles )
+        public async Task<bool> createBitmap( Amp amp )
         {
             bitmap = new BitmapImage();
             bitmap.DecodePixelWidth = this.width;
@@ -53,7 +53,7 @@ namespace Anfema.Amp.DataModel
             {
                 return false;
             }
-            using ( MemoryStream data = await ampFiles.Request( this.imageURL, null ) )
+            using ( MemoryStream data = await amp.Request( this.imageURL, null ) )
             {
                 await bitmap.SetSourceAsync( data.AsRandomAccessStream() );
             }

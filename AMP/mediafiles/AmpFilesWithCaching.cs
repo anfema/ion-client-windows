@@ -28,18 +28,7 @@ namespace Anfema.Amp.MediaFiles
             // Init the data client
             _dataClient = new DataClient( config );
         }
-
-        /// <summary>
-        /// Request file from url
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="checksum"></param>
-        /// <returns></returns>
-        public async Task<MemoryStream> Request( String url, String checksum )
-        {
-            return await Request( url, checksum, false, null );
-        }
-
+        
         /// <summary>
         /// Request file from url
         /// </summary>
@@ -48,9 +37,9 @@ namespace Anfema.Amp.MediaFiles
         /// <param name="ignoreCaching"></param>
         /// <param name="inTargetFile"></param>
         /// <returns></returns>
-        public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching, String inTargetFile )
+        public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching )
         {
-            String targetFile = GetTargetFilePath( url, inTargetFile );
+            String targetFile = FilePaths.GetMediaFilePath( url, _config );
             if ( ignoreCaching )
             {
                 return await _dataClient.PerformRequest( new Uri( url ) );
@@ -89,15 +78,6 @@ namespace Anfema.Amp.MediaFiles
             {
                 throw new Exception( "Media file " + url + " is not in cache and no internet connection is available." );
             }
-        }
-        
-        private String GetTargetFilePath( String url, String targetFile )
-        {
-            if ( targetFile == null )
-            {
-                targetFile = FilePaths.GetMediaFilePath( url, _config );
-            }
-            return targetFile;
         }
 
         private async Task<bool> IsFileUpToDate( String url, String checksum )

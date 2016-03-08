@@ -4,6 +4,7 @@ using Anfema.Amp.MediaFiles;
 using Anfema.Amp.Pages;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 
@@ -80,19 +81,22 @@ namespace Anfema.Amp
             return await _ampPages.getAllPagesIdentifierAsync();
         }
 
-        public IAmpFiles AmpFiles()
+
+        public async Task<String> DownloadSearchDatabase()
         {
-            return _ampFiles;
+            return await _ampFts.DownloadSearchDatabase();
         }
 
-        public Task<String> DownloadSearchDatabase()
+
+        public async Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null )
         {
-            return _ampFts.DownloadSearchDatabase();
+            return await _ampFts.FullTextSearch( searchTerm, locale, pageLayout);
         }
 
-        public Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout )
+
+        public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching = false )
         {
-            return _ampFts.FullTextSearch( searchTerm, locale, pageLayout );
+            return await _ampFiles.Request( url, checksum, ignoreCaching );
         }
     }
 }

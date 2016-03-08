@@ -77,8 +77,7 @@ namespace Anfema.Amp.FullTextSearch
                 args.Add( searchTerm );
             }
 
-            bool layoutFilter = pageLayout != null;
-            if ( layoutFilter )
+            if ( pageLayout != null )
             {
                 if ( searchTermFilter )
                 {

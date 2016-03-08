@@ -10,6 +10,6 @@ namespace Anfema.Amp.FullTextSearch
     public interface IAmpFts
     {
         Task<String> DownloadSearchDatabase();
-        Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout );
+        Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null );
     }
 }
