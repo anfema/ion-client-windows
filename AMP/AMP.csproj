@@ -117,7 +117,11 @@
     <Compile Include="DataModel\AmpTextContent.cs" />
     <Compile Include="DataModel\ValueType.cs" />
     <Compile Include="DataModel\AmpCollection.cs" />
-    <Compile Include="mediafiles\AmpFilesWithCaching.cs" />
+    <Compile Include="FullTextSearch\AmpFtsImpl.cs" />
+    <Compile Include="FullTextSearch\IAmpFts.cs" />
+    <Compile Include="FullTextSearch\SearchResult.cs" />
+    <Compile Include="MediaFiles\AmpFilesWithCaching.cs" />
+    <Compile Include="MediaFiles\IAmpFiles.cs" />
     <Compile Include="Pages\IAmpPages.cs" />
     <Compile Include="Pages\AmpPagesWithCaching.cs" />
     <Compile Include="Pages\PagesURLs.cs" />
@@ -143,8 +147,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <PRIResource Include="Resources.resw" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.11.1">
+      <Name>SQLite for Universal Windows Platform</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

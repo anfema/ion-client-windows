@@ -1,4 +1,6 @@
 ﻿using Anfema.Amp.DataModel;
+using Anfema.Amp.FullTextSearch;
+using Anfema.Amp.MediaFiles;
 using Anfema.Amp.Pages;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,9 @@ namespace Anfema.Amp
         private static Dictionary<AmpConfig, Amp> instances = new Dictionary<AmpConfig, Amp>();
         
         /// Organizes all the data handling for pages and collections
-        AmpPagesWithCaching _pages;
+        private IAmpPages _ampPages;
+        private IAmpFiles _ampFiles;
+        private IAmpFts _ampFts;
 
 
         /// <summary>
@@ -42,7 +46,9 @@ namespace Anfema.Amp
         /// <param name="config"></param>
         public Amp( AmpConfig config )
         {
-            _pages = new AmpPagesWithCaching(config);
+            _ampPages = new AmpPagesWithCaching(config);
+            _ampFiles = new AmpFilesWithCaching( config );
+            _ampFts = new AmpFtsImpl( _ampPages, _ampFiles, config );
         }
 
 
@@ -54,7 +60,7 @@ namespace Anfema.Amp
         /// <returns>AmpPage with the desired name</returns>
         public async Task<AmpPage> getPageAsync( string name, Action callback )
         {
-            AmpPage page = await _pages.getPageAsync(name);
+            AmpPage page = await _ampPages.getPageAsync(name);
 
             if( callback != null )
             {
@@ -71,7 +77,22 @@ namespace Anfema.Amp
         /// <returns>List of identifier</returns>
         public async Task<List<string>> getAllPageIdentifierAsync()
         {
-            return await _pages.getAllPagesIdentifierAsync();
+            return await _ampPages.getAllPagesIdentifierAsync();
+        }
+
+        public IAmpFiles AmpFiles()
+        {
+            return _ampFiles;
+        }
+
+        public Task<String> DownloadSearchDatabase()
+        {
+            return _ampFts.DownloadSearchDatabase();
+        }
+
+        public Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout )
+        {
+            return _ampFts.FullTextSearch( searchTerm, locale, pageLayout );
         }
     }
 }

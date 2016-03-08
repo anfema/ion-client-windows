@@ -1,5 +1,6 @@
 ﻿using Anfema.Amp.Caching;
 using Anfema.Amp.DataModel;
+using Anfema.Amp.MediaFiles;
 using Anfema.Amp.Utils;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,22 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.mediafiles
+namespace Anfema.Amp.MediaFiles
 {
-    public class AmpFilesWithCaching
+    public class AmpFilesWithCaching : IAmpFiles
     {
+        // Config associated with this collection of pages
         private AmpConfig _config;
-        private HttpClient _client = new HttpClient();
+
+        // Data client that will be used to get the data from the server
+        private DataClient _dataClient;
 
         public AmpFilesWithCaching( AmpConfig config )
         {
-            try
-            {
-                _config = config;
-                _client = new HttpClient();
-                _client.DefaultRequestHeaders.Authorization = _config.authenticationHeader;
-            }
-            catch ( Exception e )
-            {
-                Debug.WriteLine( "Error in configuring the mediafile client: " + e.Message );
-            }
+            _config = config;
+
+            // Init the data client
+            _dataClient = new DataClient( config );
         }
 
         /// <summary>
@@ -55,7 +53,7 @@ namespace Anfema.Amp.mediafiles
             String targetFile = GetTargetFilePath( url, inTargetFile );
             if ( ignoreCaching )
             {
-                return await PerformRequest( url );
+                return await _dataClient.PerformRequest( new Uri( url ) );
             }
 
             // fetch file from local storage or download it?
@@ -67,7 +65,7 @@ namespace Anfema.Amp.mediafiles
             else if ( NetworkUtils.isOnline() )
             {
                 // download media file
-                MemoryStream responseStream = await PerformRequest( url );
+                MemoryStream responseStream = await _dataClient.PerformRequest( new Uri( url ) );
 
                 // save data to file
                 using ( MemoryStream saveStream = new MemoryStream() )
@@ -92,16 +90,7 @@ namespace Anfema.Amp.mediafiles
                 throw new Exception( "Media file " + url + " is not in cache and no internet connection is available." );
             }
         }
-
-        private async Task<MemoryStream> PerformRequest( String url )
-        {
-            Stream stream = await _client.GetStreamAsync( url );
-            var memStream = new MemoryStream();
-            await stream.CopyToAsync( memStream );
-            memStream.Position = 0;
-            return memStream;
-        }
-
+        
         private String GetTargetFilePath( String url, String targetFile )
         {
             if ( targetFile == null )
