@@ -1,5 +1,4 @@
-﻿using Anfema.Amp.MediaFiles;
-using Anfema.Amp.Parsing;
+﻿using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -9,40 +8,45 @@ namespace Anfema.Amp.DataModel
 {
     public class AmpImageContent : AmpContent
     {
+        [JsonProperty("mime_type")]
         public string mimeType { get; set; }
+
+        [JsonProperty("image")]
         public string imageURL { get; set; }
+
+        [JsonProperty("file_size")]
+        public int fileSize { get; set; }
+
+        [JsonProperty("original_mime_type")]
+        public string originalMimeType { get; set; }
+
+        [JsonProperty("original_image")]
+        public string originalImageURL { get; set; }
+
+        [JsonProperty("original_width")]
+        public int originalWidth { get; set; }
+
+        [JsonProperty("original_height")]
+        public int originalHeight { get; set; }
+
+        [JsonProperty("original_file_size")]
+        public int originalFileSize { get; set; }
+
+        [JsonProperty("translation_x")]
+        public int translationX { get; set; }
+
+        [JsonProperty("translation_y")]
+        public int translationY { get; set; }
+
+        [JsonProperty("original_checksum")]
+        public string originalChecksum { get; set; }
+
         public int width { get; set; }
         public int height { get; set; }
-        public int fileSize { get; set; }
-        public string originalMimeType { get; set; }
-        public string originalImageURL { get; set; }
-        public int originalWidth { get; set; }
-        public int originalHeight { get; set; }
-        public int originalFileSize { get; set; }
-        public int translationX { get; set; }
-        public int translationY { get; set; }
         public double scale { get; set; }
 
         public BitmapImage bitmap { get; set; }
         
-        public override void init(ContentNodeRaw contentNode)
-        {
-            base.init(contentNode);
-
-            mimeType = contentNode.mime_type;
-            originalMimeType = contentNode.original_mime_type;
-            imageURL = contentNode.image;
-            originalImageURL = contentNode.original_image;
-            width = contentNode.width;
-            height = contentNode.height;
-            originalWidth = contentNode.original_width;
-            originalHeight = contentNode.original_height;
-            fileSize = contentNode.file_size;
-            originalFileSize = contentNode.original_file_size;
-            scale = contentNode.scale.GetValueOrDefault(1.0);
-            translationX = contentNode.translation_x.GetValueOrDefault( 0 );
-            translationY = contentNode.translation_y.GetValueOrDefault( 0 );
-        }
 
         public async Task<bool> createBitmap( Amp amp )
         {

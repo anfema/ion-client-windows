@@ -34,7 +34,7 @@ namespace Anfema.Amp.Pages
             _dataClient = new DataClient(config);
 
             // Init memory cache
-            _memoryCache = new MemoryCache(100000000);
+            _memoryCache = new MemoryCache(16000000);
         }
 
 
@@ -259,8 +259,6 @@ namespace Anfema.Amp.Pages
                         return _memoryCache.collection;
                     }
                 }
-
-
             }
             catch (Exception e)
             {

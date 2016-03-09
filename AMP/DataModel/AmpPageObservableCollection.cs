@@ -15,7 +15,6 @@ namespace Anfema.Amp.DataModel
         public ObservableCollection<AmpFileContent> fileContent { get; set; }
         public ObservableCollection<AmpFlagContent> flagContent { get; set; }
         public ObservableCollection<AmpImageContent> imageContent { get; set; }
-        public ObservableCollection<AmpKeyValueContent> keyValueContent { get; set; }
         public ObservableCollection<AmpMediaContent> mediaContent { get; set; }
         public ObservableCollection<AmpOptionContent> optionContent { get; set; }
         public ObservableCollection<AmpTextContent> textContent { get; set; }
@@ -29,7 +28,6 @@ namespace Anfema.Amp.DataModel
             fileContent = new ObservableCollection<AmpFileContent>();
             flagContent = new ObservableCollection<AmpFlagContent>();
             imageContent = new ObservableCollection<AmpImageContent>();
-            keyValueContent = new ObservableCollection<AmpKeyValueContent>();
             mediaContent = new ObservableCollection<AmpMediaContent>();
             optionContent = new ObservableCollection<AmpOptionContent>();
             textContent = new ObservableCollection<AmpTextContent>();

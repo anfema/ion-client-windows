@@ -1,14 +1,18 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Parsing;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Anfema.Amp.Parsing
 {
     public static class DataParser
-    {
+    {/*
         /// <summary>
         /// Parses the content from the generic data type to a more specific type
         /// </summary>
@@ -20,6 +24,13 @@ namespace Anfema.Amp.Parsing
 
             for( int i=0; i<content.Count; i++ )
             {
+                // Check if the current content node "is_available"
+                if( !content[i].is_available )
+                {
+                    AmpContent contentNode = new AmpContent();
+                    contentNode.init(content[i]);
+                }
+
                 switch( content[i].type )
                 {
                     case "textcontent":
@@ -97,6 +108,7 @@ namespace Anfema.Amp.Parsing
 
             return allContent;
         }
+        */
 
 
         /// <summary>
@@ -110,20 +122,26 @@ namespace Anfema.Amp.Parsing
             string responseString = await response.Content.ReadAsStringAsync();
 
             // Parse the page to a raw page container
-            PageRaw pageRaw = JsonConvert.DeserializeObject<PageRootRaw>( responseString ).page[0];
-
             AmpPage pageParsed = new AmpPage();
 
-            // Copy entries that don't have to be modified
-            pageParsed.children = pageRaw.children;
-            pageParsed.collection = pageRaw.collection;
-            pageParsed.identifier = pageRaw.identifier;
-            pageParsed.parent = pageRaw.parent;
-            pageParsed.locale = pageRaw.locale;
-            pageParsed.last_changed = pageRaw.last_changed;
-            pageParsed.position = pageRaw.position;
-            pageParsed.archive = pageRaw.archive;
+            try
+            {
+                AMPPageRoot pageParsedNew = JsonConvert.DeserializeObject<AMPPageRoot>(responseString);
+                pageParsed = pageParsedNew.page[0];
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error deserializing page json: " + e.Message);
+            }
+
+
+            PageRaw pageRaw = JsonConvert.DeserializeObject<PageRootRaw>( responseString ).page[0];
+
+
             
+            // Copy entries that don't have to be modified
+
+            /*
             // Parse all content
             for (int j = 0; j < pageRaw.contents.Count; j++)
             {
@@ -139,8 +157,8 @@ namespace Anfema.Amp.Parsing
                 content.children.Add(pageContent);
 
                 pageParsed.contents.Add(content);
-            }           
-
+            }       */    
+            
             return pageParsed;
         }
 
@@ -153,6 +171,82 @@ namespace Anfema.Amp.Parsing
         public static async Task<AmpCollection> parseCollection( HttpResponseMessage response )
         {
             return JsonConvert.DeserializeObject<CollectionRoot>( await response.Content.ReadAsStringAsync() ).collection[0];
+        }
+    }
+
+
+
+    public class AmpContentConverter : Newtonsoft.Json.Converters.CustomCreationConverter<AmpContent>
+    {
+        public override AmpContent Create(Type objectType)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected AmpContent Create(Type objectType, JObject jObject)
+        {
+            string objectTypeString = (string) jObject.Property("type");
+
+            switch(objectTypeString)
+            {
+                case "textcontent":
+                    {
+                        return new AmpTextContent();
+                    }
+                case "imagecontent":
+                    {
+                        return new AmpImageContent();
+                    }
+                case "colorcontent":
+                    {
+                        return new AmpColorContent();
+                    }
+                case "datetimecontent":
+                    {
+                        return new AmpDateTimeContent();
+                    }
+                case "filecontent":
+                    {
+                        return new AmpFileContent();
+                    }
+                case "flagcontent":
+                    {
+                        return new AmpFlagContent();
+                    }
+                case "mediacontent":
+                    {
+                        return new AmpMediaContent();
+                    }
+                case "optioncontent":
+                    {
+                        return new AmpOptionContent();
+                    }
+                case "numbercontent":
+                    {
+                        return new AmpNumberContent();
+                    }
+                case "connectioncontent":
+                    {
+                        return new AmpConnectionContent();
+                    }
+            }
+            return null;
+            //throw new ApplicationException(string.Format("The datetype " + objectTypeString + " is not defined.");
+        }
+
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            // Load JObject from stream
+            JObject jObject = JObject.Load(reader);
+
+            // Create target object based on JObject
+            var target = Create(objectType, jObject);
+
+            // Populate the object properties
+            serializer.Populate(jObject.CreateReader(), target);
+
+            return target;
         }
     }
 }

@@ -11,8 +11,7 @@ namespace Anfema.Amp.DataModel
         public int minutesUntilCollectionRefresh { get; set; }
         public int pagesMemCacheSize { get; set; }
         public bool archiveDownloads { get; set; }
-
-
+        
 
         public AmpConfig( string baseUrl, string locale, string collectionIdentifier, AuthenticationHeaderValue authenticationHeader, int minutesUntilCollectionRefresh, int pagesMemCacheSize, bool archiveDownloads)
         {

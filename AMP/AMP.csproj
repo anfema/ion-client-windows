@@ -97,6 +97,7 @@
     <Compile Include="Caching\MemoryCacheIndex.cs" />
     <Compile Include="Caching\PageCacheIndex.cs" />
     <Compile Include="DataModel\AmpConfig.cs" />
+    <Compile Include="DataModel\AmpNumberContent.cs" />
     <Compile Include="DataModel\AmpPage.cs" />
     <Compile Include="DataModel\AmpColor.cs" />
     <Compile Include="DataModel\AmpContent.cs" />
@@ -107,8 +108,6 @@
     <Compile Include="DataModel\AmpFileContent.cs" />
     <Compile Include="DataModel\AmpFlagContent.cs" />
     <Compile Include="DataModel\AmpImageContent.cs" />
-    <Compile Include="DataModel\AmpKeyValueContent.cs" />
-    <Compile Include="DataModel\KeyValueItem.cs" />
     <Compile Include="DataModel\Login.cs" />
     <Compile Include="DataModel\LoginDataModel.cs" />
     <Compile Include="DataModel\LoginRootObject.cs" />

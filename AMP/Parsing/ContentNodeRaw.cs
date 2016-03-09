@@ -43,5 +43,6 @@ namespace Anfema.Amp.Parsing
         public string text { get; set; }
         public bool is_multiline { get; set; }
         public string connection_string { get; set; }
+        public bool is_available { get; set; }
     }
 }
