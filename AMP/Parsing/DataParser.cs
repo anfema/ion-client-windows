@@ -135,30 +135,6 @@ namespace Anfema.Amp.Parsing
             }
 
 
-            PageRaw pageRaw = JsonConvert.DeserializeObject<PageRootRaw>( responseString ).page[0];
-
-
-            
-            // Copy entries that don't have to be modified
-
-            /*
-            // Parse all content
-            for (int j = 0; j < pageRaw.contents.Count; j++)
-            {
-                AmpPageContent content = new AmpPageContent();
-
-                // copy untouched parameters
-                content.outlet = pageRaw.contents[j].outlet;
-                content.type = pageRaw.contents[j].type;
-                content.variation = pageRaw.contents[j].variation;
-
-                // Parse the whole content
-                AmpPageObservableCollection pageContent = parseContent(pageRaw.contents[j].children);
-                content.children.Add(pageContent);
-
-                pageParsed.contents.Add(content);
-            }       */    
-            
             return pageParsed;
         }
 

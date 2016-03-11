@@ -73,7 +73,7 @@ namespace AMP_Test
                 {
                     AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
 
-                    _allContent = page.contents[0].children[0];
+                    _allContent = page.content[0].children[0];
                 
                     foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
                     {
@@ -92,7 +92,6 @@ namespace AMP_Test
                 mediaContentList.DataContext = _allContent.mediaContent;
                 dateTimeContentList.DataContext = _allContent.dateTimeContent;
                 optionContentList.DataContext = _allContent.optionContent;
-                keyValueContentList.DataContext = _allContent.keyValueContent;
                 }
                 catch (Exception exception)
                 {

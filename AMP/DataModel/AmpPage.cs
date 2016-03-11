@@ -19,8 +19,7 @@ namespace Anfema.Amp.DataModel
         public DateTime last_changed { get; set; }
         public int position { get; set; }
         public Uri archive { get; set; }
-        
-        // TODO: include missing properties (layout, position)
+        public string layout { get; set; }
 
 
 
@@ -29,20 +28,15 @@ namespace Anfema.Amp.DataModel
             content = new List<AmpPageContent>();
             children = new List<string>();
         }
-    }
 
 
-    public class ContainerContent
-    {
-        public string type { get; set; }
-        public string variation { get; set; }
-        public string outlet { get; set; }
-        public List<AmpContent> children { get; set; }
-    }
-
-
-    public class AMPPageRoot
-    {
-        public List<AmpPage> page { get; set; }
+        /// <summary>
+        /// Used to get the complete content of a page
+        /// </summary>
+        /// <returns>List of AmpContent</returns>
+        public List<AmpContent> getContent()
+        {
+            return contents[0].children;
+        }
     }
 }
