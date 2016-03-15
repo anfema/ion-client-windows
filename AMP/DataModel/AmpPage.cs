@@ -12,10 +12,7 @@ namespace Anfema.Amp.DataModel
         public string collection { get; set; }
         public string locale { get; set; }
         public List<string> children { get; set; }
-
         public List<ContainerContent> contents { get; set; }
-
-        public List<AmpPageContent> content { get; set; }
         public DateTime last_changed { get; set; }
         public int position { get; set; }
         public Uri archive { get; set; }
@@ -25,7 +22,6 @@ namespace Anfema.Amp.DataModel
 
         public AmpPage()
         {
-            content = new List<AmpPageContent>();
             children = new List<string>();
         }
 

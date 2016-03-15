@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+
 
 namespace Anfema.Amp.DataModel
 {
@@ -19,6 +15,7 @@ namespace Anfema.Amp.DataModel
         public ObservableCollection<AmpOptionContent> optionContent { get; set; }
         public ObservableCollection<AmpTextContent> textContent { get; set; }
         public ObservableCollection<AmpConnectionContent> connectionContent { get; set; }
+        public ObservableCollection<AmpNumberContent> numberContent { get; set; }
 
 
         public AmpPageObservableCollection()
@@ -32,6 +29,7 @@ namespace Anfema.Amp.DataModel
             optionContent = new ObservableCollection<AmpOptionContent>();
             textContent = new ObservableCollection<AmpTextContent>();
             connectionContent = new ObservableCollection<AmpConnectionContent>();
+            numberContent = new ObservableCollection<AmpNumberContent>();
         }
     }
 }

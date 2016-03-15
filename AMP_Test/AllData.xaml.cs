@@ -2,6 +2,7 @@
 using Anfema.Amp.DataModel;
 using Anfema.Amp.FullTextSearch;
 using Anfema.Amp.Parsing;
+using Anfema.Amp.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -46,20 +47,8 @@ namespace AMP_Test
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.Loaded += (s, e2) =>
-            {
-                Button pressedButton = (Button)e.Parameter;
-
-                // Check for test button
-                if (pressedButton == null)
-                {
-                    showData("page_002");
-                }
-                else
-                {
-                    showData((string)pressedButton.DataContext);
-                }
-            };
+            Button pressedButton = (Button)e.Parameter;
+            showData((string)pressedButton.DataContext);
 
             HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
         }
@@ -67,41 +56,38 @@ namespace AMP_Test
 
         private async Task showData( string pageName )
         {
-            //await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-            //{
-                try
-                {
-                    AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
+            try
+            {
+                AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
 
-                    _allContent = page.content[0].children[0];
+                _allContent = DataConverters.convertContent(page.getContent());
                 
-                    foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
-                    {
-                        await ampImageContent.createBitmap( Amp.getInstance( AppController.instance.ampConfig ) );
-                    }
-
-                //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
-                //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");
-
-                // Set the data context of the lists
-                imageContentList.DataContext = _allContent.imageContent;
-                textContentList.DataContext = _allContent.textContent;
-                colorContentList.DataContext = _allContent.colorContent;
-                flagContentList.DataContext = _allContent.flagContent;
-                fileContentList.DataContext = _allContent.fileContent;
-                mediaContentList.DataContext = _allContent.mediaContent;
-                dateTimeContentList.DataContext = _allContent.dateTimeContent;
-                optionContentList.DataContext = _allContent.optionContent;
-                }
-                catch (Exception exception)
+                foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
                 {
-                    // Error handling, if no data could be loaded   
+                    await ampImageContent.createBitmap( Amp.getInstance( AppController.instance.ampConfig ) );
                 }
 
-                setDataLoaded();
+            //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
+            //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");
 
-                initPage();
-            //});
+            // Set the data context of the lists
+            imageContentList.DataContext = _allContent.imageContent;
+            textContentList.DataContext = _allContent.textContent;
+            colorContentList.DataContext = _allContent.colorContent;
+            flagContentList.DataContext = _allContent.flagContent;
+            fileContentList.DataContext = _allContent.fileContent;
+            mediaContentList.DataContext = _allContent.mediaContent;
+            dateTimeContentList.DataContext = _allContent.dateTimeContent;
+            optionContentList.DataContext = _allContent.optionContent;
+            }
+            catch (Exception exception)
+            {
+                // Error handling, if no data could be loaded   
+            }
+
+            setDataLoaded();
+
+            initPage();
         }
 
 
