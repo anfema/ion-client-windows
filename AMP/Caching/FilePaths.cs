@@ -1,10 +1,6 @@
 ﻿using Anfema.Amp.DataModel;
 using Anfema.Amp.Utils;
 using System;
-using Windows.Security.Cryptography;
-using Windows.Security.Cryptography.Core;
-using Windows.Storage.Streams;
-
 
 
 namespace Anfema.Amp.Caching
@@ -70,8 +66,7 @@ namespace Anfema.Amp.Caching
 
         public static String GetFtsDbFilePath( String collectionIdentifier )
         {
-            //return _ftsDbFolderPath + FileUtils.SLASH + "fts_" + collectionIdentifier + ".sqlite";
-            return "test.db";
+            return _ftsDbFolderPath + FileUtils.SLASH + "fts_" + collectionIdentifier + ".sqlite";
         }
     }
 }

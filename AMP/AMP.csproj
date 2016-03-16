@@ -142,6 +142,7 @@
     <Compile Include="Utils\DateTimeUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HashUtils.cs" />
+    <Compile Include="Utils\LockWithCounter.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />
     <Compile Include="Utils\StorageUtils.cs" />
   </ItemGroup>

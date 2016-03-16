@@ -1,14 +1,8 @@
 ﻿using Anfema.Amp.Caching;
 using Anfema.Amp.DataModel;
-using Anfema.Amp.MediaFiles;
 using Anfema.Amp.Utils;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Anfema.Amp.MediaFiles
@@ -20,6 +14,8 @@ namespace Anfema.Amp.MediaFiles
 
         // Data client that will be used to get the data from the server
         private DataClient _dataClient;
+
+        private OperationLocks downloadLocks = new OperationLocks();
 
         public AmpFilesWithCaching( AmpConfig config )
         {
@@ -45,39 +41,45 @@ namespace Anfema.Amp.MediaFiles
                 return await _dataClient.PerformRequest( new Uri( url ) );
             }
 
-            // fetch file from local storage or download it?
-            if ( await FileUtils.Exists( targetFile ) && await IsFileUpToDate( url, checksum ) )
+            MemoryStream returnStream = null;
+            using ( await downloadLocks.ObtainLock( url ).LockAsync() )
             {
-                // retrieve current version from cache
-                return await FileUtils.ReadFromFile( targetFile );
-            }
-            else if ( NetworkUtils.isOnline() )
-            {
-                // download media file
-                MemoryStream responseStream = await _dataClient.PerformRequest( new Uri( url ) );
-
-                // save data to file
-                using ( MemoryStream saveStream = new MemoryStream() )
+                // fetch file from local storage or download it?
+                if ( await FileUtils.Exists( targetFile ) && await IsFileUpToDate( url, checksum ) )
                 {
-                    responseStream.CopyTo( saveStream );
-                    saveStream.Position = 0;
-                    await FileUtils.WriteToFile( saveStream, targetFile );
-                    await FileCacheIndex.save( url, saveStream, _config, checksum );
+                    // retrieve current version from cache
+                    returnStream = await FileUtils.ReadFromFile( targetFile );
                 }
+                else if ( NetworkUtils.isOnline() )
+                {
+                    // download media file
+                    MemoryStream responseStream = await _dataClient.PerformRequest( new Uri( url ) );
 
-                responseStream.Position = 0;
-                return responseStream;
+                    // save data to file
+                    using ( MemoryStream saveStream = new MemoryStream() )
+                    {
+                        responseStream.CopyTo( saveStream );
+                        saveStream.Position = 0;
+                        await FileUtils.WriteToFile( saveStream, targetFile );
+                        await FileCacheIndex.save( url, saveStream, _config, checksum );
+                    }
+
+                    responseStream.Position = 0;
+                    returnStream = responseStream;
+                }
+                else if ( await FileUtils.Exists( targetFile ) )
+                {
+                    // TODO notify app that data might be outdated
+                    // no network: use old version from cache (even if no cache index entry exists)
+                    returnStream = await FileUtils.ReadFromFile( targetFile );
+                }
             }
-            else if ( await FileUtils.Exists( targetFile ) )
-            {
-                // TODO notify app that data might be outdated
-                // no network: use old version from cache (even if no cache index entry exists)
-                return await FileUtils.ReadFromFile( targetFile );
-            }
-            else
+            downloadLocks.ReleaseLock( url );
+            if ( returnStream == null )
             {
                 throw new Exception( "Media file " + url + " is not in cache and no internet connection is available." );
             }
+            return returnStream;
         }
 
         private async Task<bool> IsFileUpToDate( String url, String checksum )
