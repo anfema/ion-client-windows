@@ -17,6 +17,12 @@ namespace Anfema.Amp.Utils
 
             for( int i=0; i< list.Count; i++ )
             {
+                // Check if the item is avialible (means that is has all properties filled with data)
+                if( !list[i].isAvailable )
+                {
+                   continue;
+                }
+
                 switch (list[i].type)
                 {
                     case "textcontent":
