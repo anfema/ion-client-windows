@@ -53,19 +53,18 @@ namespace Anfema.Amp.MediaFiles
                 else if ( NetworkUtils.isOnline() )
                 {
                     // download media file
-                    MemoryStream responseStream = await _dataClient.PerformRequest( new Uri( url ) );
+                    returnStream = await _dataClient.PerformRequest( new Uri( url ) );
 
                     // save data to file
                     using ( MemoryStream saveStream = new MemoryStream() )
                     {
-                        responseStream.CopyTo( saveStream );
+                        returnStream.CopyTo( saveStream );
                         saveStream.Position = 0;
                         await FileUtils.WriteToFile( saveStream, targetFile );
                         await FileCacheIndex.save( url, saveStream, _config, checksum );
                     }
 
-                    responseStream.Position = 0;
-                    returnStream = responseStream;
+                    returnStream.Position = 0;
                 }
                 else if ( await FileUtils.Exists( targetFile ) )
                 {

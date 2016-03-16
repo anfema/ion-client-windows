@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+
 
 namespace Anfema.Amp.DataModel
 {
@@ -15,11 +11,11 @@ namespace Anfema.Amp.DataModel
         public ObservableCollection<AmpFileContent> fileContent { get; set; }
         public ObservableCollection<AmpFlagContent> flagContent { get; set; }
         public ObservableCollection<AmpImageContent> imageContent { get; set; }
-        public ObservableCollection<AmpKeyValueContent> keyValueContent { get; set; }
         public ObservableCollection<AmpMediaContent> mediaContent { get; set; }
         public ObservableCollection<AmpOptionContent> optionContent { get; set; }
         public ObservableCollection<AmpTextContent> textContent { get; set; }
         public ObservableCollection<AmpConnectionContent> connectionContent { get; set; }
+        public ObservableCollection<AmpNumberContent> numberContent { get; set; }
 
 
         public AmpPageObservableCollection()
@@ -29,11 +25,11 @@ namespace Anfema.Amp.DataModel
             fileContent = new ObservableCollection<AmpFileContent>();
             flagContent = new ObservableCollection<AmpFlagContent>();
             imageContent = new ObservableCollection<AmpImageContent>();
-            keyValueContent = new ObservableCollection<AmpKeyValueContent>();
             mediaContent = new ObservableCollection<AmpMediaContent>();
             optionContent = new ObservableCollection<AmpOptionContent>();
             textContent = new ObservableCollection<AmpTextContent>();
             connectionContent = new ObservableCollection<AmpConnectionContent>();
+            numberContent = new ObservableCollection<AmpNumberContent>();
         }
     }
 }

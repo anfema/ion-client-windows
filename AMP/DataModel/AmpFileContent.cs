@@ -1,23 +1,26 @@
-﻿using Anfema.Amp.Parsing;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Anfema.Amp.DataModel
 {
     public class AmpFileContent : AmpContent, INotifyPropertyChanged
     {
+        [JsonProperty("mime_type")]
         public string mimeType { get; set; }
+
         public string name { get; set; }
-        public int file_size { get; set; }
+
+        [JsonProperty("file_size")]
+        public int fileSize { get; set; }
+
         public string checksum { get; set; }
+
+        [JsonProperty("file")]
         public string fileURL { get; set; }
+
 
         [JsonIgnore]
         private object _fileContent;
@@ -27,18 +30,6 @@ namespace Anfema.Amp.DataModel
 
         // Declare the PropertyChanged event.
         public event PropertyChangedEventHandler PropertyChanged;
-
-
-        public override void init(ContentNodeRaw contentNode)
-        {
-            base.init(contentNode);
-
-            mimeType = contentNode.mime_type;
-            name = contentNode.name;
-            file_size = contentNode.file_size;
-            checksum = contentNode.checksum;
-            fileURL = contentNode.file;
-        }
 
 
         [JsonIgnore]

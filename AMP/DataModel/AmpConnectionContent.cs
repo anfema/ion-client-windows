@@ -1,4 +1,5 @@
 ﻿using Anfema.Amp.Parsing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,7 @@ namespace Anfema.Amp.DataModel
 {
     public class AmpConnectionContent : AmpContent
     {
-        public string connection_string { get; set; }
-
-
-        public override void init(ContentNodeRaw contentNode)
-        {
-            base.init(contentNode);
-
-            connection_string = contentNode.connection_string;
-        }
+        [JsonProperty("connection_string")]
+        public string connectionString { get; set; }
     }
 }
