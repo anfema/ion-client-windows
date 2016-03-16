@@ -331,7 +331,7 @@ namespace Anfema.Amp.Utils
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Error saving cacheIndex to isolated storage");
+                Debug.WriteLine("Error loading cacheIndex from isolated storage");
                 return null;
             }
         }
