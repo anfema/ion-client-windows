@@ -127,7 +127,7 @@
     <Compile Include="Parsing\AmpPageRoot.cs" />
     <Compile Include="Parsing\ContainerContent.cs" />
     <Compile Include="Parsing\DataParser.cs" />
-    <Compile Include="Parsing\CollectionPage.cs" />
+    <Compile Include="Parsing\PagePreview.cs" />
     <Compile Include="Parsing\CollectionPageMeta.cs" />
     <Compile Include="Parsing\CollectionRoot.cs" />
     <Compile Include="Parsing\CollectionMeta.cs" />
@@ -140,6 +140,7 @@
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HashUtils.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />
+    <Compile Include="Utils\PagesFilter.cs" />
     <Compile Include="Utils\StorageUtils.cs" />
   </ItemGroup>
   <ItemGroup>
