@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Phone.UI.Input;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -64,21 +65,21 @@ namespace AMP_Test
                 
                 foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
                 {
-                    await ampImageContent.createBitmap( Amp.getInstance( AppController.instance.ampConfig ) );
+                    ampImageContent.createBitmap( Amp.getInstance( AppController.instance.ampConfig ) );
                 }
 
-            //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
-            //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");
+                //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
+                //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");
 
-            // Set the data context of the lists
-            imageContentList.DataContext = _allContent.imageContent;
-            textContentList.DataContext = _allContent.textContent;
-            colorContentList.DataContext = _allContent.colorContent;
-            flagContentList.DataContext = _allContent.flagContent;
-            fileContentList.DataContext = _allContent.fileContent;
-            mediaContentList.DataContext = _allContent.mediaContent;
-            dateTimeContentList.DataContext = _allContent.dateTimeContent;
-            optionContentList.DataContext = _allContent.optionContent;
+                // Set the data context of the lists
+                imageContentList.DataContext = _allContent.imageContent;
+                textContentList.DataContext = _allContent.textContent;
+                colorContentList.DataContext = _allContent.colorContent;
+                flagContentList.DataContext = _allContent.flagContent;
+                fileContentList.DataContext = _allContent.fileContent;
+                mediaContentList.DataContext = _allContent.mediaContent;
+                dateTimeContentList.DataContext = _allContent.dateTimeContent;
+                optionContentList.DataContext = _allContent.optionContent;
             }
             catch (Exception exception)
             {

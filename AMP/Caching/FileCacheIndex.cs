@@ -14,6 +14,8 @@ namespace Anfema.Amp.Caching
         public String checksum { get; set; }        // Used to store the checksum of the file
         public DateTime lastUpdated { get; set; }   // Used to store the last time, the file was checked for modification
 
+        public FileCacheIndex() { }
+
         public FileCacheIndex( String filename, String checksum, DateTime lastUpdated ) : base( filename )
         {
             this.checksum = checksum;

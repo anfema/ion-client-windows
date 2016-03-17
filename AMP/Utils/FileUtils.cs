@@ -10,51 +10,10 @@ namespace Anfema.Amp.Utils
 {
     public class FileUtils
     {
+        private static OperationLocks fileLocks = new OperationLocks();
         private static readonly StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
         public static readonly String SLASH = "\\";
         
-        private static readonly object syncLock = new object();
-
-        class LockWithCounter
-        {
-            public int counter { get; set; } = 0;
-            public AsyncLock asyncLock { get; } = new AsyncLock();
-        }
-
-        private static Dictionary<String, LockWithCounter> ongoingWriteOperations = new Dictionary<string, LockWithCounter>();
-
-        private static void ReleaseLock( String filePath )
-        {
-            lock ( syncLock )
-            {
-                LockWithCounter lockWithCounter = null;
-                if ( ongoingWriteOperations.TryGetValue( filePath, out lockWithCounter ) )
-                {
-                    lockWithCounter.counter--;
-
-                    if ( lockWithCounter.counter <= 0 )
-                    {
-                        ongoingWriteOperations.Remove( filePath );
-                    }
-                }
-            }
-        }
-
-        private static AsyncLock ObtainLock( String filePath )
-        {
-            lock ( syncLock )
-            {
-                LockWithCounter lockWithCounter = null;
-                if ( !ongoingWriteOperations.TryGetValue( filePath, out lockWithCounter ) )
-                {
-                    lockWithCounter = new LockWithCounter();
-                    ongoingWriteOperations.Add( filePath, lockWithCounter );
-                }
-                lockWithCounter.counter++;
-                return lockWithCounter.asyncLock;
-            }
-        }
-
         /// <summary>
         /// Write MemoryStream to file
         /// </summary>
@@ -63,7 +22,7 @@ namespace Anfema.Amp.Utils
         /// <returns></returns>
         public static async Task<bool> WriteToFile( MemoryStream inputStream, String targetFilePath )
         {
-            using ( await ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
                 StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
                 using ( Stream outputStream = await file.OpenStreamForWriteAsync() )
@@ -71,11 +30,10 @@ namespace Anfema.Amp.Utils
                     await inputStream.CopyToAsync( outputStream );
                 }
             }
-            ReleaseLock( targetFilePath );
+            fileLocks.ReleaseLock( targetFilePath );
             return true;
         }
-
-
+        
         /// <summary>
         /// Read file into MemoryStream
         /// </summary>
@@ -84,7 +42,7 @@ namespace Anfema.Amp.Utils
         public static async Task<MemoryStream> ReadFromFile( String targetFilePath )
         {
             MemoryStream outputStream = new MemoryStream();
-            using ( await ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
                 StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.OpenIfExists);
                 using ( Stream inputStream = await file.OpenStreamForReadAsync() )
@@ -93,7 +51,7 @@ namespace Anfema.Amp.Utils
                     outputStream.Position = 0;
                 }
             }
-            ReleaseLock( targetFilePath );
+            fileLocks.ReleaseLock( targetFilePath );
             return outputStream;
         }
 
@@ -104,12 +62,12 @@ namespace Anfema.Amp.Utils
         /// <param name="targetFilePath"></param>
         public static async void WriteTextToFile( String text, String targetFilePath )
         {
-            using ( await ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
                 StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
                 await FileIO.WriteTextAsync( file, text );
             }
-            ReleaseLock( targetFilePath );
+            fileLocks.ReleaseLock( targetFilePath );
         }
 
         /// <summary>
@@ -120,12 +78,12 @@ namespace Anfema.Amp.Utils
         public static async Task<String> ReadTextFromFile( String targetFilePath )
         {
             String value = String.Empty;
-            using ( await ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
                 StorageFile file = await _localFolder.GetFileAsync( targetFilePath );
                 value = await FileIO.ReadTextAsync( file );
             }
-            ReleaseLock( targetFilePath );
+            fileLocks.ReleaseLock( targetFilePath );
             return value;
         }
 

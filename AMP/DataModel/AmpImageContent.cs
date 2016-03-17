@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
@@ -48,20 +49,19 @@ namespace Anfema.Amp.DataModel
         public BitmapImage bitmap { get; set; }
         
 
-        public async Task<bool> createBitmap( Amp amp )
+        public async Task createBitmap( Amp amp )
         {
             bitmap = new BitmapImage();
             bitmap.DecodePixelWidth = this.width;
             bitmap.DecodePixelHeight = this.height;
             if ( this.imageURL == null )
             {
-                return false;
+                Debug.WriteLine( "No imageUrl for AmpImageContent" );
+                return;
             }
-            using ( MemoryStream data = await amp.Request( this.imageURL, null ) )
-            {
-                await bitmap.SetSourceAsync( data.AsRandomAccessStream() );
-            }
-            return true;
+            MemoryStream data = await amp.Request( this.imageURL, null );
+            await bitmap.SetSourceAsync( data.AsRandomAccessStream() );
+            return;
         }
     }
 }
