@@ -68,9 +68,8 @@ namespace Anfema.Amp.Parsing
                         return new AmpConnectionContent();
                     }
             }
-            return null;
 
-            //throw new ApplicationException(string.Format("The datetype " + objectTypeString + " is not defined.");
+            throw new JsonReaderException(string.Format("The datetype " + objectTypeString + " is not defined for AmpContent") );
         }
 
 
@@ -90,10 +89,22 @@ namespace Anfema.Amp.Parsing
             // Create target object based on JObject
             var target = Create(objectType, jObject);
 
-            // Populate the object properties
-            serializer.Populate(jObject.CreateReader(), target);
+            try
+            {
+                // Populate the object properties
+                serializer.Populate(jObject.CreateReader(), target);
 
-            return target;
+                return target;
+            }
+            catch ( JsonSerializationException e)
+            {
+                // This sets a dateTime with value null to the minimal available time. This null is caused by a AMP bug!!!
+                if( target.GetType() == typeof(AmpDateTimeContent))
+                {
+                    return DateTime.MinValue;
+                }
+                throw new JsonSerializationException("Error reading JSON-token " + target + " with value " + jObject.ToString(), e);
+            }
         }
     }
 }
