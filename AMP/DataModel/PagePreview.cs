@@ -2,9 +2,9 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
-namespace Anfema.Amp.Parsing
+
+namespace Anfema.Amp.DataModel
 {
     public class PagePreview
     {

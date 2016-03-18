@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Anfema.Amp.Parsing
+namespace Anfema.Amp.DataModel
 {
     public class AmpCollection
     {

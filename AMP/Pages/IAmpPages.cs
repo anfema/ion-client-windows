@@ -1,10 +1,8 @@
 ﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Parsing;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Anfema.Amp.Pages
 {
@@ -13,5 +11,6 @@ namespace Anfema.Amp.Pages
         Task<AmpCollection> getCollectionAsync();
         Task<AmpPage> getPageAsync(string pageIdentifier);
         Task<List<string>> getAllPagesIdentifierAsync();
+        Task<List<AmpPage>> getPagesAsync(Predicate<PagePreview> filter);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Anfema.Amp.Parsing;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+
 
 namespace Anfema.Amp.DataModel
 {

@@ -127,7 +127,7 @@
     <Compile Include="Parsing\AmpPageRoot.cs" />
     <Compile Include="Parsing\ContainerContent.cs" />
     <Compile Include="Parsing\DataParser.cs" />
-    <Compile Include="Parsing\PagePreview.cs" />
+    <Compile Include="DataModel\PagePreview.cs" />
     <Compile Include="Parsing\CollectionPageMeta.cs" />
     <Compile Include="Parsing\CollectionRoot.cs" />
     <Compile Include="Parsing\CollectionMeta.cs" />

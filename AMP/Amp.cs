@@ -73,6 +73,24 @@ namespace Anfema.Amp
 
 
         /// <summary>
+        /// Returns a list of AmpPages that match the given filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>List of AmpPagees</returns>
+        public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback )
+        {
+            List<AmpPage> pagesList = await _ampPages.getPagesAsync(filter);
+
+            if( callback != null )
+            {
+                callback();
+            }
+
+            return pagesList;
+        }
+
+
+        /// <summary>
         /// Returns a list of all page identifiers
         /// </summary>
         /// <returns>List of identifier</returns>
