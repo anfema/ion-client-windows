@@ -165,9 +165,7 @@ namespace Anfema.Amp.Pages
         /// <returns>List of AmpPage</returns>
         public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter )
         {
-            // Filter all pagePreviews in collection with the given filter
-            AmpCollection collection = await getCollectionAsync();
-            List<PagePreview> filteredPagePreviews = collection.pages.FindAll(filter);
+            List<PagePreview> filteredPagePreviews = await getPagePreviewsAsync(filter);
 
             // Fetch all pages that fitted the filter
             List<AmpPage> pageList = new List<AmpPage>();
@@ -181,7 +179,21 @@ namespace Anfema.Amp.Pages
         }
 
 
+        /// <summary>
+        /// Used to get a list of pagePreviews that match the given filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>List of pagePreviews</returns>
+        public async Task<List<PagePreview>> getPagePreviewsAsync( Predicate<PagePreview> filter )
+        {
+            // Filter all pagePreviews in collection with the given filter
+            AmpCollection collection = await getCollectionAsync();
+            List<PagePreview> filteredPagePreviews = collection.pages.FindAll(filter);
 
+            return filteredPagePreviews;
+        }
+
+        
         /// <summary>
         /// Gets a page directly from the server
         /// </summary>

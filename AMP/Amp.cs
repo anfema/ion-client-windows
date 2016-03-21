@@ -77,7 +77,7 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>List of AmpPagees</returns>
-        public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback )
+        public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback = null )
         {
             List<AmpPage> pagesList = await _ampPages.getPagesAsync(filter);
 
@@ -97,6 +97,24 @@ namespace Anfema.Amp
         public async Task<List<string>> getAllPageIdentifierAsync()
         {
             return await _ampPages.getAllPagesIdentifierAsync();
+        }
+
+
+        /// <summary>
+        /// Used to get a list of PagePreviews matching the given filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>List of PagePreview elements</returns>
+        public async Task<List<PagePreview>> getPagePreviews( Predicate<PagePreview> filter, Action callback = null )
+        {
+            List<PagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync(filter);
+
+            if( callback != null )
+            {
+                callback();
+            }
+
+            return pagePreviewList;
         }
 
 
