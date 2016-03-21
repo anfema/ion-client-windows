@@ -1,5 +1,6 @@
 ﻿using Anfema.Amp.Caching;
 using Anfema.Amp.DataModel;
+using Anfema.Amp.Exceptions;
 using Anfema.Amp.Parsing;
 using Anfema.Amp.Utils;
 using System;
@@ -74,7 +75,7 @@ namespace Anfema.Amp.Pages
                     else
                     {
                         // Collection can neither be downloaded nor be found in cache
-                        return null;
+                        throw new CollectionNotAvailableException();
                     }
                 }
             }
@@ -100,7 +101,7 @@ namespace Anfema.Amp.Pages
                 }
                 else
                 {
-                    return null;
+                    throw new PageNotAvailableException();
                 }
 
             }

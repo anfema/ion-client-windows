@@ -14,39 +14,32 @@ namespace Anfema.Amp.Authorization
         // login to get access token
         public static async Task<AuthenticationHeaderValue> GetAuthHeaderValue(string username, string password, string loginAdress)
         {
-            try
-            {
-                // Temporary httpClient for the login process
-                HttpClient loginClient = new HttpClient();
+            // Temporary httpClient for the login process
+            HttpClient loginClient = new HttpClient();
 
-                // Login data object
-                Login loginData;
+            // Login data object
+            Login loginData;
 
-                // Generate POST request
-                Dictionary<string, string> request = new Dictionary<string, string>();
-                request.Add("username", username);
-                request.Add("password", password);
+            // Generate POST request
+            Dictionary<string, string> request = new Dictionary<string, string>();
+            request.Add("username", username);
+            request.Add("password", password);
 
-                FormUrlEncodedContent requestContent = new FormUrlEncodedContent(request);
+            FormUrlEncodedContent requestContent = new FormUrlEncodedContent(request);
 
-                // Post request to server
-                HttpResponseMessage response = await loginClient.PostAsync(new Uri(loginAdress), requestContent);
+            // Post request to server
+            HttpResponseMessage response = await loginClient.PostAsync(new Uri(loginAdress), requestContent);
 
-                // Process and return the acces token
-                string jsonResult = response.Content.ReadAsStringAsync().Result;
+            // Process and return the acces token
+            string jsonResult = response.Content.ReadAsStringAsync().Result;
 
-                // Generate the model and try to parse the answer from the server
-                LoginRootObject lro = new LoginRootObject();
+            // Generate the model and try to parse the answer from the server
+            LoginRootObject lro = new LoginRootObject();
 
-                loginData = JsonConvert.DeserializeObject<LoginRootObject>(jsonResult).login;
+            loginData = JsonConvert.DeserializeObject<LoginRootObject>(jsonResult).login;
 
-                // Create the http authentication header
-                return new AuthenticationHeaderValue("Token", loginData.token);
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
+            // Create the http authentication header
+            return new AuthenticationHeaderValue("Token", loginData.token);
         }
     }
 }

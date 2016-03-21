@@ -115,6 +115,8 @@
     <Compile Include="DataModel\AmpOptionContent.cs" />
     <Compile Include="DataModel\AmpTextContent.cs" />
     <Compile Include="DataModel\AmpCollection.cs" />
+    <Compile Include="Exceptions\CollectionNotAvailableException.cs" />
+    <Compile Include="Exceptions\PageNotAvailableException.cs" />
     <Compile Include="FullTextSearch\AmpFtsImpl.cs" />
     <Compile Include="FullTextSearch\IAmpFts.cs" />
     <Compile Include="FullTextSearch\SearchResult.cs" />
