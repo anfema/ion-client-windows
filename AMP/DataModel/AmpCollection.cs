@@ -11,8 +11,7 @@ namespace Anfema.Amp.DataModel
         public Uri archive { get; set; }
         public List<PagePreview> pages { get; set; }
         public DateTime last_changed { get; set; }
-
-
+        
         public DateTime getPageLastChanged( string pageIdentifier )
         {
             return pages.Find(x => x.identifier.Equals(pageIdentifier)).lastChanged;

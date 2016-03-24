@@ -39,8 +39,6 @@ namespace Anfema.Amp.DataModel
         public int height { get; set; }
         public string checksum { get; set; }
         public int length { get; set; }
-
-
         
         // Returns the media uri   TODO: currently some failsave stuff because of a Amp error
         [JsonIgnore]

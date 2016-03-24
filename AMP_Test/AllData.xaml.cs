@@ -15,7 +15,11 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Phone.UI.Input;
+using Windows.Storage;
+using Windows.System;
+using System.Reflection;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -54,6 +58,11 @@ namespace AMP_Test
             HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
         }
 
+        private async void fileContent_Click( object sender, RoutedEventArgs e )
+        {
+            AmpFileContent fileContent = ( ( AmpFileContent ) ( ( Button ) sender ).DataContext );
+            bool success = await Windows.System.Launcher.LaunchFileAsync( fileContent.storageFile );
+        }
 
         private async Task showData( string pageName )
         {
@@ -62,11 +71,9 @@ namespace AMP_Test
                 AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
 
                 _allContent = DataConverters.convertContent(page.getContent());
-                
-                foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
-                {
-                    ampImageContent.createBitmap( Amp.getInstance( AppController.instance.ampConfig ) );
-                }
+
+                // Load files for page content
+                await Amp.getInstance( AppController.instance.ampConfig ).LoadContentFiles( _allContent );
 
                 //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
                 //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");

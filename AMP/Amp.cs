@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-
+using Windows.Storage;
 
 namespace Anfema.Amp
 {
@@ -19,7 +19,6 @@ namespace Anfema.Amp
         private IAmpPages _ampPages;
         private IAmpFiles _ampFiles;
         private IAmpFts _ampFts;
-
 
         /// <summary>
         /// Is used to get a instance of Amp corresponding to the given configuration
@@ -112,9 +111,22 @@ namespace Anfema.Amp
         }
 
 
-        public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching = false )
+        public async Task<StorageFile> Request( String url, String checksum, Boolean ignoreCaching = false )
         {
             return await _ampFiles.Request( url, checksum, ignoreCaching );
+        }
+
+        public async Task LoadContentFiles( AmpPageObservableCollection content )
+        {
+            foreach ( AmpImageContent ampImageContent in content.imageContent )
+            {
+                await ampImageContent.loadImage( this );
+            }
+
+            foreach ( AmpFileContent ampFileContent in content.fileContent )
+            {
+                await ampFileContent.loadFile( this );
+            }
         }
     }
 }

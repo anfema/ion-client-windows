@@ -4,6 +4,7 @@ using Anfema.Amp.Utils;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Anfema.Amp.MediaFiles
 {
@@ -33,52 +34,45 @@ namespace Anfema.Amp.MediaFiles
         /// <param name="ignoreCaching"></param>
         /// <param name="inTargetFile"></param>
         /// <returns></returns>
-        public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching )
+        public async Task<StorageFile> Request( String url, String checksum, Boolean ignoreCaching )
         {
             String targetFile = FilePaths.GetMediaFilePath( url, _config );
-            if ( ignoreCaching )
-            {
-                return await _dataClient.PerformRequest( new Uri( url ) );
-            }
+            //if ( ignoreCaching )
+            //{
+            //    return await _dataClient.PerformRequest( new Uri( url ) );
+            //}
 
-            MemoryStream returnStream = null;
+            StorageFile returnFile = null;
             using ( await downloadLocks.ObtainLock( url ).LockAsync() )
             {
                 // fetch file from local storage or download it?
                 if ( await FileUtils.Exists( targetFile ) && await IsFileUpToDate( url, checksum ) )
                 {
                     // retrieve current version from cache
-                    returnStream = await FileUtils.ReadFromFile( targetFile );
+                    returnFile = await FileUtils.ReadFromFile( targetFile );
                 }
                 else if ( NetworkUtils.isOnline() )
                 {
                     // download media file
-                    returnStream = await _dataClient.PerformRequest( new Uri( url ) );
+                    MemoryStream saveStream = await _dataClient.PerformRequest( new Uri( url ) );
 
                     // save data to file
-                    using ( MemoryStream saveStream = new MemoryStream() )
-                    {
-                        returnStream.CopyTo( saveStream );
-                        saveStream.Position = 0;
-                        await FileUtils.WriteToFile( saveStream, targetFile );
-                        await FileCacheIndex.save( url, saveStream, _config, checksum );
-                    }
-
-                    returnStream.Position = 0;
+                    returnFile = await FileUtils.WriteToFile( saveStream, targetFile );
+                    await FileCacheIndex.save( url, saveStream, _config, checksum );
                 }
                 else if ( await FileUtils.Exists( targetFile ) )
                 {
                     // TODO notify app that data might be outdated
                     // no network: use old version from cache (even if no cache index entry exists)
-                    returnStream = await FileUtils.ReadFromFile( targetFile );
+                    returnFile = await FileUtils.ReadFromFile( targetFile );
                 }
             }
             downloadLocks.ReleaseLock( url );
-            if ( returnStream == null )
+            if ( returnFile == null )
             {
                 throw new Exception( "Media file " + url + " is not in cache and no internet connection is available." );
             }
-            return returnStream;
+            return returnFile;
         }
 
         private async Task<bool> IsFileUpToDate( String url, String checksum )

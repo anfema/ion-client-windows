@@ -20,18 +20,19 @@ namespace Anfema.Amp.Utils
         /// <param name="inputStream"></param>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<bool> WriteToFile( MemoryStream inputStream, String targetFilePath )
+        public static async Task<StorageFile> WriteToFile( MemoryStream inputStream, String targetFilePath )
         {
+            StorageFile file = null;
             using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
-                StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
+                file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
                 using ( Stream outputStream = await file.OpenStreamForWriteAsync() )
                 {
                     await inputStream.CopyToAsync( outputStream );
                 }
             }
             fileLocks.ReleaseLock( targetFilePath );
-            return true;
+            return file;
         }
         
         /// <summary>
@@ -39,20 +40,15 @@ namespace Anfema.Amp.Utils
         /// </summary>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<MemoryStream> ReadFromFile( String targetFilePath )
+        public static async Task<StorageFile> ReadFromFile( String targetFilePath )
         {
-            MemoryStream outputStream = new MemoryStream();
+            StorageFile file = null;
             using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
-                StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.OpenIfExists);
-                using ( Stream inputStream = await file.OpenStreamForReadAsync() )
-                {
-                    await inputStream.CopyToAsync( outputStream );
-                    outputStream.Position = 0;
-                }
+                file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.OpenIfExists);
             }
             fileLocks.ReleaseLock( targetFilePath );
-            return outputStream;
+            return file;
         }
 
         /// <summary>

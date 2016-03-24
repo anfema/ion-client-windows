@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Anfema.Amp.DataModel
@@ -45,23 +46,12 @@ namespace Anfema.Amp.DataModel
         public int width { get; set; }
         public int height { get; set; }
         public double scale { get; set; }
-
-        public BitmapImage bitmap { get; set; }
         
-
-        public async Task createBitmap( Amp amp )
+        public StorageFile storageFile { get; set; }
+        
+        public async Task loadImage( Amp amp )
         {
-            bitmap = new BitmapImage();
-            bitmap.DecodePixelWidth = this.width;
-            bitmap.DecodePixelHeight = this.height;
-            if ( this.imageURL == null )
-            {
-                Debug.WriteLine( "No imageUrl for AmpImageContent" );
-                return;
-            }
-            MemoryStream data = await amp.Request( this.imageURL, null );
-            await bitmap.SetSourceAsync( data.AsRandomAccessStream() );
-            return;
+            this.storageFile = await amp.Request( this.imageURL, null );
         }
     }
 }
