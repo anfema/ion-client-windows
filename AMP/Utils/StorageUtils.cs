@@ -316,7 +316,7 @@ namespace Anfema.Amp.Utils
                 using ( await fileLocks.ObtainLock( filePath ).LockAsync() )
                 {
                     // Create file or use existing file
-                    StorageFile file = await cacheFolder.GetFileAsync( fileName );
+                    StorageFile file = await cacheFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
 
                     // Read content of the file
                     string content = await FileIO.ReadTextAsync(file);

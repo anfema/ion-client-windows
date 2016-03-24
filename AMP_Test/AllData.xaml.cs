@@ -90,7 +90,8 @@ namespace AMP_Test
             }
             catch (Exception exception)
             {
-                // Error handling, if no data could be loaded   
+                // Error handling, if no data could be loaded  
+                Debug.WriteLine("Error loading page: " + exception.Message); 
             }
 
             setDataLoaded();

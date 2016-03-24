@@ -1,7 +1,9 @@
 ﻿using Anfema.Amp.DataModel;
+using Anfema.Amp.Exceptions;
 using Anfema.Amp.FullTextSearch;
 using Anfema.Amp.MediaFiles;
 using Anfema.Amp.Pages;
+using Anfema.Amp.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,7 +78,7 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>List of AmpPagees</returns>
-        public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback )
+        public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback = null )
         {
             List<AmpPage> pagesList = await _ampPages.getPagesAsync(filter);
 
@@ -96,6 +98,52 @@ namespace Anfema.Amp
         public async Task<List<string>> getAllPageIdentifierAsync()
         {
             return await _ampPages.getAllPagesIdentifierAsync();
+        }
+
+
+        /// <summary>
+        /// Used to get a list of PagePreviews matching the given filter
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns>List of PagePreview elements</returns>
+        public async Task<List<PagePreview>> getPagePreviewsAsync( Predicate<PagePreview> filter, Action callback = null )
+        {
+            List<PagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync(filter);
+
+            if( callback != null )
+            {
+                callback();
+            }
+
+            return pagePreviewList;
+        }
+
+
+        /// <summary>
+        /// Used to search for a specific PagePreview with the exact identifier
+        /// </summary>
+        /// <param name="identifier"></param>
+        /// <param name="callback"></param>
+        /// <returns>PagePreview</returns>
+        public async Task<PagePreview> getPagePreviewAsync( string identifier, Action callback = null )
+        {
+            List<PagePreview> searchResult = await _ampPages.getPagePreviewsAsync(PageFilter.identifierEquals(identifier));
+
+            // If no PagePreview was found throw a not found exception
+            if( searchResult.Count == 0 )
+            {
+                throw new PagePreviewNotFoundException(identifier);
+            }
+
+            // Get first result
+            PagePreview pagePreview = searchResult[0];
+
+            if( callback != null )
+            {
+                callback();
+            }
+
+            return pagePreview;
         }
 
 

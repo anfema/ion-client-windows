@@ -1,6 +1,8 @@
 ﻿using Anfema.Amp;
 using Anfema.Amp.DataModel;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -33,12 +35,20 @@ namespace AMP_Test
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             // Get all the login informations needed for later communication            
-            _ampConfig = await AppController.instance.loginAsync();
+            try
+            {
+                _ampConfig = await AppController.instance.loginAsync();
+                this.allDataButton.IsEnabled = true;
+                this.dataTypesButton.IsEnabled = true;
 
-            this.allDataButton.IsEnabled = true;
-            this.dataTypesButton.IsEnabled = true;
+                await this.getPageNames();
+            }
+            catch( Exception exception )
+            {
+                Debug.WriteLine("Error occured logging in: " + exception.Message);
 
-            await this.getPageNames();
+                disableProgressIndicator();
+            }
         }
 
         private async Task<bool> getPageNames()
@@ -47,9 +57,7 @@ namespace AMP_Test
 
             allPagesList.DataContext = pageNames;
 
-            // Disable the progress ring
-            allPagesProgressRing.IsActive = false;
-            allPagesProgressRing.Visibility = Visibility.Collapsed;
+            disableProgressIndicator();            
 
             return true;
         }
@@ -68,6 +76,14 @@ namespace AMP_Test
         private void pageButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(AllData), sender);
+        }
+
+
+        private void disableProgressIndicator()
+        {
+            // Disable the progress ring
+            allPagesProgressRing.IsActive = false;
+            allPagesProgressRing.Visibility = Visibility.Collapsed;
         }
     }
 }
