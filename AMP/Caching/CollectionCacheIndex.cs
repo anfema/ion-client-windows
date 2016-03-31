@@ -63,13 +63,13 @@ namespace Anfema.Amp.Caching
         /// <returns>collectionCacheIndex or null, if the index isn't found</returns>
         public static async Task<CollectionCacheIndex> retrieve( string requestURL, string collectionIdentifier )
         {
-            return await CacheIndexStore.retrieve<CollectionCacheIndex>(requestURL, collectionIdentifier);
+            return await CacheIndexStore.retrieve<CollectionCacheIndex>(requestURL, collectionIdentifier).ConfigureAwait(false);
         }
 
         public static async Task<CollectionCacheIndex> retrieve( AmpConfig config )
         {
             String requestUrl = PagesURLs.getCollectionURL( config );
-            return await CacheIndexStore.retrieve<CollectionCacheIndex>( requestUrl, config.collectionIdentifier );
+            return await CacheIndexStore.retrieve<CollectionCacheIndex>( requestUrl, config.collectionIdentifier ).ConfigureAwait(false);
         }
 
 
@@ -83,7 +83,7 @@ namespace Anfema.Amp.Caching
         {
             string collectionURL = PagesURLs.getCollectionURL(config);
             CollectionCacheIndex cacheIndex = new CollectionCacheIndex(collectionURL, DateTimeUtils.now().ToUniversalTime(), lastModified);
-            await CacheIndexStore.save<CollectionCacheIndex>(collectionURL, cacheIndex, config);
+            await CacheIndexStore.save<CollectionCacheIndex>(collectionURL, cacheIndex, config).ConfigureAwait(false);
 
             return true;
         }

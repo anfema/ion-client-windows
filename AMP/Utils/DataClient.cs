@@ -45,7 +45,7 @@ namespace Anfema.Amp.Utils
         /// <returns>AmpCollection with the desired identifier</returns>
         public async Task<HttpResponseMessage> getCollectionAsync( string collectionIdentifier )
         {
-            return await getCollectionAsync(collectionIdentifier, DateTime.MinValue);
+            return await getCollectionAsync(collectionIdentifier, DateTime.MinValue).ConfigureAwait(false);
         }
 
 
@@ -58,7 +58,7 @@ namespace Anfema.Amp.Utils
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(_config.baseUrl + _config.locale + "/" + _config.collectionIdentifier + "/" + identifier);
+                HttpResponseMessage response = await _client.GetAsync(_config.baseUrl + _config.locale + "/" + _config.collectionIdentifier + "/" + identifier).ConfigureAwait(false);
                 return response;
             }
             catch( Exception e )
@@ -86,7 +86,7 @@ namespace Anfema.Amp.Utils
                 _client.DefaultRequestHeaders.Add("If-Modified-Since", lastModified.ToString("r") );
 
                 // Recieve the response
-                HttpResponseMessage response = await _client.GetAsync(requestString);
+                HttpResponseMessage response = await _client.GetAsync(requestString).ConfigureAwait(false);
 
                 // Remove the last-modified-header
                 _client.DefaultRequestHeaders.Remove("If-Modified-Since");
@@ -101,11 +101,12 @@ namespace Anfema.Amp.Utils
             }                
         }
 
+
         public async Task<MemoryStream> PerformRequest( Uri uri )
         {
-            Stream stream = await _client.GetStreamAsync( uri );
+            Stream stream = await _client.GetStreamAsync( uri ).ConfigureAwait(false);
             var memStream = new MemoryStream();
-            await stream.CopyToAsync( memStream );
+            await stream.CopyToAsync( memStream ).ConfigureAwait(false);
             memStream.Position = 0;
             return memStream;
         }

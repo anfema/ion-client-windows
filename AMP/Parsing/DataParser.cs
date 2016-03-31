@@ -18,7 +18,7 @@ namespace Anfema.Amp.Parsing
         public static async Task<AmpPage> parsePage(HttpResponseMessage response)
         {
             // Extract the json string from the content of the response message
-            string responseString = await response.Content.ReadAsStringAsync();
+            string responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Parse the page to a raw page container
             AmpPage pageParsed = new AmpPage();
@@ -44,7 +44,7 @@ namespace Anfema.Amp.Parsing
         /// <returns></returns>
         public static async Task<AmpCollection> parseCollection( HttpResponseMessage response )
         {
-            return JsonConvert.DeserializeObject<CollectionRoot>( await response.Content.ReadAsStringAsync() ).collection[0];
+            return JsonConvert.DeserializeObject<CollectionRoot>( await response.Content.ReadAsStringAsync().ConfigureAwait(false) ).collection[0];
         }
     }
 }

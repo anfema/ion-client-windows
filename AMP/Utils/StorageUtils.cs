@@ -56,7 +56,7 @@ namespace Anfema.Amp.Utils
         /// <returns></returns>
         public static async Task deleteFolderInIsolatedStorage( string folderName )
         {
-            using ( await fileLocks.ObtainLock( folderName ).LockAsync() )
+            using ( await fileLocks.ObtainLock( folderName ).LockAsync().ConfigureAwait(false))
             {
                 StorageFolder folder = await _localFolder.GetFolderAsync(folderName);
                 await folder.DeleteAsync();
@@ -76,14 +76,14 @@ namespace Anfema.Amp.Utils
             String filePath = collection.identifier + FileUtils.SLASH + fileName;
 
             StorageFolder folder = null;
-            using ( await fileLocks.ObtainLock( collection.identifier ).LockAsync() )
+            using ( await fileLocks.ObtainLock( collection.identifier ).LockAsync().ConfigureAwait(false))
             {
                 // Create folder or use existing folder
                 folder = await _localFolder.CreateFolderAsync(collection.identifier, CreationCollisionOption.OpenIfExists);
             }
             fileLocks.ReleaseLock( collection.identifier );
 
-            using ( await fileLocks.ObtainLock( filePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
             {
                 // Create file or use existing file
                 StorageFile file = await folder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
@@ -111,14 +111,14 @@ namespace Anfema.Amp.Utils
                 String filePath = collectionIdentifier + FileUtils.SLASH + fileName;
 
                 StorageFolder folder = null;
-                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync() )
+                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait(false))
                 {
                     folder = await _localFolder.GetFolderAsync( collectionIdentifier );
                 }
                 fileLocks.ReleaseLock( collectionIdentifier );
 
                 AmpCollection collection = null;
-                using ( await fileLocks.ObtainLock( filePath ).LockAsync() )
+                using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
                 {
                     StorageFile file = await folder.GetFileAsync( fileName );
 
@@ -151,7 +151,7 @@ namespace Anfema.Amp.Utils
             String filePath = localeFolderPath + FileUtils.SLASH + fileName;
 
             StorageFolder collectionFolder = null;
-            using ( await fileLocks.ObtainLock( page.collection ).LockAsync() )
+            using ( await fileLocks.ObtainLock( page.collection ).LockAsync().ConfigureAwait(false))
             {
                 // Create folder for collection or use existing folder
                 collectionFolder = await _localFolder.CreateFolderAsync(page.collection, CreationCollisionOption.OpenIfExists);
@@ -159,14 +159,14 @@ namespace Anfema.Amp.Utils
             fileLocks.ReleaseLock( page.collection );
 
             StorageFolder localeFolder = null;
-            using ( await fileLocks.ObtainLock( localeFolderPath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( localeFolderPath ).LockAsync().ConfigureAwait(false))
             {
                 // Create folder for locale or use existing folder
                 localeFolder = await collectionFolder.CreateFolderAsync(page.locale, CreationCollisionOption.OpenIfExists);
             }
             fileLocks.ReleaseLock( page.locale );
 
-            using ( await fileLocks.ObtainLock( filePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
             {
                 // Create file or use existing file
                 StorageFile file = await localeFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
@@ -197,21 +197,21 @@ namespace Anfema.Amp.Utils
                 String filePath = localeFolderPath + FileUtils.SLASH + fileName;
                 
                 StorageFolder collectionFolder = null;
-                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync() )
+                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait(false))
                 {
                     collectionFolder = await _localFolder.GetFolderAsync(collectionIdentifier);
                 }
                 fileLocks.ReleaseLock( collectionIdentifier );
 
                 StorageFolder localeFolder = null;
-                using ( await fileLocks.ObtainLock( localeFolderPath ).LockAsync() )
+                using ( await fileLocks.ObtainLock( localeFolderPath ).LockAsync().ConfigureAwait(false))
                 {
                     localeFolder = await collectionFolder.GetFolderAsync(locale);
                 }
                 fileLocks.ReleaseLock( localeFolderPath );
 
                 AmpPage page = null;
-                using ( await fileLocks.ObtainLock( filePath ).LockAsync() )
+                using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
                 {
                     StorageFile file = await localeFolder.GetFileAsync(fileName);
 
@@ -248,7 +248,7 @@ namespace Anfema.Amp.Utils
                 String filePath = cacheFolderPath + FileUtils.SLASH + fileName;
 
                 StorageFolder collectionFolder = null;
-                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync() )
+                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait(false))
                 {
                     // Create folder or use existing folder
                     collectionFolder = await _localFolder.CreateFolderAsync(collectionIdentifier, CreationCollisionOption.OpenIfExists);
@@ -256,13 +256,13 @@ namespace Anfema.Amp.Utils
                 fileLocks.ReleaseLock( collectionIdentifier );
 
                 StorageFolder cacheFolder = null;
-                using ( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync() )
+                using ( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync().ConfigureAwait(false))
                 {
                     cacheFolder = await collectionFolder.CreateFolderAsync(CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists);
                 }
                 fileLocks.ReleaseLock( cacheFolderPath );
 
-                using ( await fileLocks.ObtainLock( filePath ).LockAsync() )
+                using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
                 {
                     StorageFile file = await cacheFolder.CreateFileAsync( fileName, CreationCollisionOption.ReplaceExisting);
 
@@ -298,7 +298,7 @@ namespace Anfema.Amp.Utils
                 String filePath = cacheFolderPath + FileUtils.SLASH + fileName;
 
                 StorageFolder collectionFolder = null;
-                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync() )
+                using ( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait(false))
                 {
                     // Create folder or use existing folder
                     collectionFolder = await _localFolder.CreateFolderAsync(collectionIdentifier, CreationCollisionOption.OpenIfExists);
@@ -306,14 +306,14 @@ namespace Anfema.Amp.Utils
                 fileLocks.ReleaseLock( collectionIdentifier );
 
                 StorageFolder cacheFolder = null;
-                using ( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync() )
+                using ( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync().ConfigureAwait(false))
                 {
                     cacheFolder = await collectionFolder.CreateFolderAsync(CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists);
                 }
                 fileLocks.ReleaseLock( cacheFolderPath );
 
                 T cacheIndex = null;
-                using ( await fileLocks.ObtainLock( filePath ).LockAsync() )
+                using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
                 {
                     // Create file or use existing file
                     StorageFile file = await cacheFolder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);

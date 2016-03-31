@@ -63,7 +63,7 @@ namespace Anfema.Amp
         /// <returns>AmpPage with the desired name</returns>
         public async Task<AmpPage> getPageAsync( string name, Action callback )
         {
-            AmpPage page = await _ampPages.getPageAsync(name);
+            AmpPage page = await _ampPages.getPageAsync(name).ConfigureAwait(false);
 
             if( callback != null )
             {
@@ -81,7 +81,7 @@ namespace Anfema.Amp
         /// <returns>List of AmpPagees</returns>
         public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback = null )
         {
-            List<AmpPage> pagesList = await _ampPages.getPagesAsync(filter);
+            List<AmpPage> pagesList = await _ampPages.getPagesAsync(filter).ConfigureAwait(false);
 
             if( callback != null )
             {
@@ -98,7 +98,7 @@ namespace Anfema.Amp
         /// <returns>List of identifier</returns>
         public async Task<List<string>> getAllPageIdentifierAsync()
         {
-            return await _ampPages.getAllPagesIdentifierAsync();
+            return await _ampPages.getAllPagesIdentifierAsync().ConfigureAwait(false);
         }
 
 
@@ -109,7 +109,7 @@ namespace Anfema.Amp
         /// <returns>List of PagePreview elements</returns>
         public async Task<List<PagePreview>> getPagePreviewsAsync( Predicate<PagePreview> filter, Action callback = null )
         {
-            List<PagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync(filter);
+            List<PagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync(filter).ConfigureAwait(false);
 
             if( callback != null )
             {
@@ -128,7 +128,7 @@ namespace Anfema.Amp
         /// <returns>PagePreview</returns>
         public async Task<PagePreview> getPagePreviewAsync( string identifier, Action callback = null )
         {
-            List<PagePreview> searchResult = await _ampPages.getPagePreviewsAsync(PageFilter.identifierEquals(identifier));
+            List<PagePreview> searchResult = await _ampPages.getPagePreviewsAsync(PageFilter.identifierEquals(identifier)).ConfigureAwait(false);
 
             // If no PagePreview was found throw a not found exception
             if( searchResult.Count == 0 )
@@ -150,19 +150,19 @@ namespace Anfema.Amp
 
         public async Task<String> DownloadSearchDatabase()
         {
-            return await _ampFts.DownloadSearchDatabase();
+            return await _ampFts.DownloadSearchDatabase().ConfigureAwait(false);
         }
 
 
         public async Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null )
         {
-            return await _ampFts.FullTextSearch( searchTerm, locale, pageLayout);
+            return await _ampFts.FullTextSearch( searchTerm, locale, pageLayout).ConfigureAwait(false);
         }
 
 
         public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching = false )
         {
-            return await _ampFiles.Request( url, checksum, ignoreCaching );
+            return await _ampFiles.Request( url, checksum, ignoreCaching ).ConfigureAwait(false);
         }
     }
 }

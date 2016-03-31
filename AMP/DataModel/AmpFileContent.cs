@@ -56,19 +56,19 @@ namespace Anfema.Amp.DataModel
         {
             // Generate new httpClient to retrieve the file
             HttpClient http = new System.Net.Http.HttpClient();
-            HttpResponseMessage response = await http.GetAsync( new Uri( fileURL ) );
+            HttpResponseMessage response = await http.GetAsync( new Uri( fileURL ) ).ConfigureAwait(false);
 
             // Handle different file types
             switch(mimeType)
             {
                 case "text/plain":
                     {
-                        _fileContent = await response.Content.ReadAsStringAsync();
+                        _fileContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                         break;
                     }
                 default:
                     {
-                        _fileContent = await response.Content.ReadAsByteArrayAsync();
+                        _fileContent = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
                         break;
                     }
             }

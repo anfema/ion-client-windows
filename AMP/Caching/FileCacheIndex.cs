@@ -46,7 +46,7 @@ namespace Anfema.Amp.Caching
         /// <returns>FileCacheIndex object or null, if the index isn't found</returns>
         public static async Task<FileCacheIndex> retrieve( String requestUrl, String collectionIdentifier )
         {
-            return await CacheIndexStore.retrieve<FileCacheIndex>( requestUrl, collectionIdentifier );
+            return await CacheIndexStore.retrieve<FileCacheIndex>( requestUrl, collectionIdentifier ).ConfigureAwait(false);
 	    }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Anfema.Amp.Caching
             }
 
             FileCacheIndex cacheIndex = new FileCacheIndex( requestUrl, checksum, DateTime.Now );
-            await CacheIndexStore.save<FileCacheIndex>( requestUrl, cacheIndex, config );
+            await CacheIndexStore.save<FileCacheIndex>( requestUrl, cacheIndex, config ).ConfigureAwait(false);
 
             return true;
         }

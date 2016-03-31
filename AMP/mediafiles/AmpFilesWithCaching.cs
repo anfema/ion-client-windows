@@ -38,39 +38,39 @@ namespace Anfema.Amp.MediaFiles
             String targetFile = FilePaths.GetMediaFilePath( url, _config );
             if ( ignoreCaching )
             {
-                return await _dataClient.PerformRequest( new Uri( url ) );
+                return await _dataClient.PerformRequest( new Uri( url ) ).ConfigureAwait(false);
             }
 
             MemoryStream returnStream = null;
-            using ( await downloadLocks.ObtainLock( url ).LockAsync() )
+            using ( await downloadLocks.ObtainLock( url ).LockAsync().ConfigureAwait(false))
             {
                 // fetch file from local storage or download it?
-                if ( await FileUtils.Exists( targetFile ) && await IsFileUpToDate( url, checksum ) )
+                if ( await FileUtils.Exists( targetFile ) && await IsFileUpToDate( url, checksum ).ConfigureAwait(false))
                 {
                     // retrieve current version from cache
-                    returnStream = await FileUtils.ReadFromFile( targetFile );
+                    returnStream = await FileUtils.ReadFromFile( targetFile ).ConfigureAwait(false);
                 }
                 else if ( NetworkUtils.isOnline() )
                 {
                     // download media file
-                    returnStream = await _dataClient.PerformRequest( new Uri( url ) );
+                    returnStream = await _dataClient.PerformRequest( new Uri( url ) ).ConfigureAwait(false);
 
                     // save data to file
                     using ( MemoryStream saveStream = new MemoryStream() )
                     {
                         returnStream.CopyTo( saveStream );
                         saveStream.Position = 0;
-                        await FileUtils.WriteToFile( saveStream, targetFile );
-                        await FileCacheIndex.save( url, saveStream, _config, checksum );
+                        await FileUtils.WriteToFile( saveStream, targetFile ).ConfigureAwait(false);
+                        await FileCacheIndex.save( url, saveStream, _config, checksum ).ConfigureAwait(false);
                     }
 
                     returnStream.Position = 0;
                 }
-                else if ( await FileUtils.Exists( targetFile ) )
+                else if ( await FileUtils.Exists( targetFile ).ConfigureAwait(false))
                 {
                     // TODO notify app that data might be outdated
                     // no network: use old version from cache (even if no cache index entry exists)
-                    returnStream = await FileUtils.ReadFromFile( targetFile );
+                    returnStream = await FileUtils.ReadFromFile( targetFile ).ConfigureAwait(false);
                 }
             }
             downloadLocks.ReleaseLock( url );
@@ -83,7 +83,7 @@ namespace Anfema.Amp.MediaFiles
 
         private async Task<bool> IsFileUpToDate( String url, String checksum )
         {
-            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve( url, _config.collectionIdentifier );
+            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve( url, _config.collectionIdentifier ).ConfigureAwait(false);
             if ( fileCacheIndex == null )
             {
                 return false;
@@ -97,7 +97,7 @@ namespace Anfema.Amp.MediaFiles
             else
             {
                 // check with collection's last_modified (previewPage.last_changed would be slightly more precise)
-                CollectionCacheIndex collectionCacheIndex = await CollectionCacheIndex.retrieve( _config );
+                CollectionCacheIndex collectionCacheIndex = await CollectionCacheIndex.retrieve( _config ).ConfigureAwait(false);
                 DateTime collectionLastModified = collectionCacheIndex == null ? default( DateTime )  : collectionCacheIndex.lastModified;
                 return collectionLastModified != null && fileCacheIndex.lastUpdated != null && !( collectionLastModified.CompareTo( fileCacheIndex.lastUpdated ) > 0 );
             }

@@ -35,7 +35,7 @@ namespace Anfema.Amp.Caching
         /// <returns></returns>
         public static async Task<PageCacheIndex> retrieve( string requestURL, string collectionIdentifier )
         {
-            return await CacheIndexStore.retrieve<PageCacheIndex>(requestURL, collectionIdentifier);
+            return await CacheIndexStore.retrieve<PageCacheIndex>(requestURL, collectionIdentifier).ConfigureAwait(false);
         }
 
 
@@ -49,7 +49,7 @@ namespace Anfema.Amp.Caching
         {
             string url = PagesURLs.getPageURL(config, page.identifier);
             PageCacheIndex cacheIndex = new PageCacheIndex(url, page.last_changed);
-            await CacheIndexStore.save<PageCacheIndex>(url, cacheIndex, config);
+            await CacheIndexStore.save<PageCacheIndex>(url, cacheIndex, config).ConfigureAwait(false);
 
             return true;
         }

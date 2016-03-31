@@ -22,12 +22,12 @@ namespace Anfema.Amp.Utils
         /// <returns></returns>
         public static async Task<bool> WriteToFile( MemoryStream inputStream, String targetFilePath )
         {
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
             {
                 StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
-                using ( Stream outputStream = await file.OpenStreamForWriteAsync() )
+                using ( Stream outputStream = await file.OpenStreamForWriteAsync().ConfigureAwait(false))
                 {
-                    await inputStream.CopyToAsync( outputStream );
+                    await inputStream.CopyToAsync( outputStream ).ConfigureAwait(false);
                 }
             }
             fileLocks.ReleaseLock( targetFilePath );
@@ -42,12 +42,12 @@ namespace Anfema.Amp.Utils
         public static async Task<MemoryStream> ReadFromFile( String targetFilePath )
         {
             MemoryStream outputStream = new MemoryStream();
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
             {
                 StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.OpenIfExists);
-                using ( Stream inputStream = await file.OpenStreamForReadAsync() )
+                using ( Stream inputStream = await file.OpenStreamForReadAsync().ConfigureAwait(false))
                 {
-                    await inputStream.CopyToAsync( outputStream );
+                    await inputStream.CopyToAsync( outputStream ).ConfigureAwait(false);
                     outputStream.Position = 0;
                 }
             }
@@ -62,7 +62,7 @@ namespace Anfema.Amp.Utils
         /// <param name="targetFilePath"></param>
         public static async void WriteTextToFile( String text, String targetFilePath )
         {
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
             {
                 StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
                 await FileIO.WriteTextAsync( file, text );
@@ -78,7 +78,7 @@ namespace Anfema.Amp.Utils
         public static async Task<String> ReadTextFromFile( String targetFilePath )
         {
             String value = String.Empty;
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
+            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
             {
                 StorageFile file = await _localFolder.GetFileAsync( targetFilePath );
                 value = await FileIO.ReadTextAsync( file );
@@ -103,7 +103,7 @@ namespace Anfema.Amp.Utils
             try
             {
                 file = await ApplicationData.Current.LocalFolder.GetFileAsync( filePath );
-                fileStream = await file.OpenStreamForReadAsync();
+                fileStream = await file.OpenStreamForReadAsync().ConfigureAwait(false);
                 fileStream.Dispose();
             }
             catch ( FileNotFoundException )

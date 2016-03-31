@@ -31,7 +31,7 @@ namespace Anfema.Amp.Caching
 
             try
             {
-                index = await StorageUtils.getIndex<T>(requestUrl, collectionIdentifier);
+                index = await StorageUtils.getIndex<T>(requestUrl, collectionIdentifier).ConfigureAwait(false);
             }
             catch(Exception e)
             {
@@ -64,7 +64,7 @@ namespace Anfema.Amp.Caching
                 MemoryCacheIndex.put<T>(requestURL, config.collectionIdentifier, cacheIndex);
 
                 // save to isolated storage
-                await StorageUtils.saveIndex(requestURL, cacheIndex, config.collectionIdentifier);
+                await StorageUtils.saveIndex(requestURL, cacheIndex, config.collectionIdentifier).ConfigureAwait(false);
             }
             catch( Exception e)
             {
@@ -89,11 +89,11 @@ namespace Anfema.Amp.Caching
             // Clear isolated storage cache
             if (locale == null)
             {
-                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier);
+                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier).ConfigureAwait(false);
             }
             else
             {
-                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier + "/" + locale);
+                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier + "/" + locale).ConfigureAwait(false);
             }
 
             return true;

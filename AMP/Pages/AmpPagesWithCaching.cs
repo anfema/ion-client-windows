@@ -46,7 +46,7 @@ namespace Anfema.Amp.Pages
         public async Task<AmpCollection> getCollectionAsync()
         {
             string collectionURL = PagesURLs.getCollectionURL(_config);
-            CollectionCacheIndex cacheIndex = await CollectionCacheIndex.retrieve(collectionURL, _config.collectionIdentifier);
+            CollectionCacheIndex cacheIndex = await CollectionCacheIndex.retrieve(collectionURL, _config.collectionIdentifier).ConfigureAwait(false);
 
             // Check if there is a not outdated cacheIndex avialible
             bool currentCacheEntry = cacheIndex != null && !cacheIndex.isOutdated(_config);
@@ -56,21 +56,21 @@ namespace Anfema.Amp.Pages
             if( currentCacheEntry)
             {
                 // retrieve current version from cache
-                return await getCollectionFromCache(cacheIndex, false);
+                return await getCollectionFromCache(cacheIndex, false).ConfigureAwait(false);
             }
             else
             {
                 if( networkConnected )
                 {
                     // download collection or check for modifications
-                    return await getCollectionFromServerAsync(cacheIndex, false);
+                    return await getCollectionFromServerAsync(cacheIndex, false).ConfigureAwait(false);
                 }
                 else
                 {
                     if( cacheIndex != null )
                     {
                         // no network: use potential old version from cache
-                        return await getCollectionFromCache(cacheIndex, false);
+                        return await getCollectionFromCache(cacheIndex, false).ConfigureAwait(false);
                     }
                     else
                     {
@@ -90,14 +90,14 @@ namespace Anfema.Amp.Pages
         public async Task<AmpPage> getPageAsync(string pageIdentifier)
         {
             string pageURL = PagesURLs.getPageURL(_config, pageIdentifier);
-            PageCacheIndex pageCacheIndex = await PageCacheIndex.retrieve(pageURL, _config.collectionIdentifier);
+            PageCacheIndex pageCacheIndex = await PageCacheIndex.retrieve(pageURL, _config.collectionIdentifier).ConfigureAwait(false);
             bool isNetworkConnected = NetworkUtils.isOnline();
 
             if( pageCacheIndex == null )
             {
                 if( isNetworkConnected )
                 {
-                    return await getPageFromServerAsync(pageIdentifier);
+                    return await getPageFromServerAsync(pageIdentifier).ConfigureAwait(false);
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace Anfema.Amp.Pages
             }
 
             // Get collection
-            AmpCollection collection = await getCollectionAsync();
+            AmpCollection collection = await getCollectionAsync().ConfigureAwait(false);
 
             // Get last changed of the page from collection
             DateTime pageLastChanged = collection.getPageLastChanged( pageIdentifier );
@@ -117,19 +117,19 @@ namespace Anfema.Amp.Pages
 
             if( !isOutdated )
             {
-                return await getPageFromCache(pageIdentifier);
+                return await getPageFromCache(pageIdentifier).ConfigureAwait(false);
             }
             else
             {
                 if( isNetworkConnected )
                 {
                     // Download page from server
-                    return await getPageFromServerAsync(pageIdentifier);
+                    return await getPageFromServerAsync(pageIdentifier).ConfigureAwait(false);
                 }
                 else
                 {
                     // get old version from cache
-                    return await getPageFromCache(pageIdentifier);
+                    return await getPageFromCache(pageIdentifier).ConfigureAwait(false);
                 }
             }
         }
@@ -144,7 +144,7 @@ namespace Anfema.Amp.Pages
             if( _memoryCache.collection == null)
             {
                 // Get collection from server
-                _memoryCache.collection = await getCollectionAsync();
+                _memoryCache.collection = await getCollectionAsync().ConfigureAwait(false);
             }
 
             List<string> allPageIdentifier = new List<string>();
@@ -165,14 +165,14 @@ namespace Anfema.Amp.Pages
         /// <returns>List of AmpPage</returns>
         public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter )
         {
-            List<PagePreview> filteredPagePreviews = await getPagePreviewsAsync(filter);
+            List<PagePreview> filteredPagePreviews = await getPagePreviewsAsync(filter).ConfigureAwait(false);
 
             // Fetch all pages that fitted the filter
             List<AmpPage> pageList = new List<AmpPage>();
 
             for( int i=0; i< filteredPagePreviews.Count; i++ )
             {
-                pageList.Add( await getPageAsync(filteredPagePreviews[i].identifier) );
+                pageList.Add( await getPageAsync(filteredPagePreviews[i].identifier).ConfigureAwait(false));
             }
 
             return pageList;
@@ -187,7 +187,7 @@ namespace Anfema.Amp.Pages
         public async Task<List<PagePreview>> getPagePreviewsAsync( Predicate<PagePreview> filter )
         {
             // Filter all pagePreviews in collection with the given filter
-            AmpCollection collection = await getCollectionAsync();
+            AmpCollection collection = await getCollectionAsync().ConfigureAwait(false);
             List<PagePreview> filteredPagePreviews = collection.pages.FindAll(filter);
 
             return filteredPagePreviews;
@@ -204,8 +204,8 @@ namespace Anfema.Amp.Pages
             try
             {
                 // Retrieve the page from the server
-                HttpResponseMessage response = await _dataClient.getPageAsync(pageIdentifier);
-                AmpPage page = await DataParser.parsePage(response);
+                HttpResponseMessage response = await _dataClient.getPageAsync(pageIdentifier).ConfigureAwait(false);
+                AmpPage page = await DataParser.parsePage(response).ConfigureAwait(false);
 
                 // Add page to cache, if it is not null
                 if (page != null)
@@ -214,10 +214,10 @@ namespace Anfema.Amp.Pages
                     _memoryCache.savePage(page, _config);
 
                     // Local storage cache
-                    await StorageUtils.savePageToIsolatedStorage(page);
+                    await StorageUtils.savePageToIsolatedStorage(page).ConfigureAwait(false);
 
                     // Save page cache index
-                    await PageCacheIndex.save(page, _config);
+                    await PageCacheIndex.save(page, _config).ConfigureAwait(false);
                 }
 
                 return page;
@@ -242,22 +242,22 @@ namespace Anfema.Amp.Pages
             try
             {
                 // Retrive collecion from server and parse it
-                HttpResponseMessage response = await _dataClient.getCollectionAsync( _config.collectionIdentifier, cacheIndex != null ? cacheIndex.lastModified : DateTime.MinValue);
+                HttpResponseMessage response = await _dataClient.getCollectionAsync( _config.collectionIdentifier, cacheIndex != null ? cacheIndex.lastModified : DateTime.MinValue).ConfigureAwait(false);
 
                 // Only parse the answer if it is not newer than the cached version
                 if (! (response.StatusCode == System.Net.HttpStatusCode.NotModified ) )
                 {
                     // Parse collection
-                    AmpCollection collection = await DataParser.parseCollection(response);
+                    AmpCollection collection = await DataParser.parseCollection(response).ConfigureAwait(false);
 
                     // Add collection to memory cache
                     _memoryCache.collection = collection;
 
                     // Save collection to isolated storage
-                    await StorageUtils.saveCollectionToIsolatedStorage(collection);
+                    await StorageUtils.saveCollectionToIsolatedStorage(collection).ConfigureAwait(false);
 
                     // save cacheIndex
-                    await saveCollectionCacheIndex(collection.last_changed);
+                    await saveCollectionCacheIndex(collection.last_changed).ConfigureAwait(false);
 
                     return collection;
                 }
@@ -270,7 +270,7 @@ namespace Anfema.Amp.Pages
                         try
                         {
                             // Get collection from isolated storage
-                            AmpCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
+                            AmpCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier).ConfigureAwait(false);
 
                             // Add collection to memory cache
                             if (collection != null)
@@ -279,7 +279,7 @@ namespace Anfema.Amp.Pages
                             }
 
                             // change the last-mofied date in the cacheIndex to now
-                            await saveCollectionCacheIndex(collection.last_changed);
+                            await saveCollectionCacheIndex(collection.last_changed).ConfigureAwait(false);
 
                             return collection;
                         }
@@ -292,7 +292,7 @@ namespace Anfema.Amp.Pages
                     else
                     {
                         // change the last-mofied date in the cacheIndex to now
-                        await saveCollectionCacheIndex(_memoryCache.collection.last_changed);
+                        await saveCollectionCacheIndex(_memoryCache.collection.last_changed).ConfigureAwait(false);
                         return _memoryCache.collection;
                     }
                 }
@@ -326,7 +326,7 @@ namespace Anfema.Amp.Pages
             // try to load collection from isolated storage
             try
             {
-                collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier);
+                collection = await StorageUtils.loadCollectionFromIsolatedStorage(_config.collectionIdentifier).ConfigureAwait(false);
 
                 // Add collection to memory cache
                 if (collection != null)
@@ -360,7 +360,7 @@ namespace Anfema.Amp.Pages
             }
 
             // Try to load page from local storage
-            page = await StorageUtils.loadPageFromIsolatedStorage(_config.collectionIdentifier, _config.locale, pageIdentifier);
+            page = await StorageUtils.loadPageFromIsolatedStorage(_config.collectionIdentifier, _config.locale, pageIdentifier).ConfigureAwait(false);
 
             // Add page to memory cache
             if( page != null )
@@ -378,7 +378,7 @@ namespace Anfema.Amp.Pages
         /// <param name="lastModified"></param>
         private async Task<bool> saveCollectionCacheIndex( DateTime lastModified )
         {
-            await CollectionCacheIndex.save(_config, lastModified);
+            await CollectionCacheIndex.save(_config, lastModified).ConfigureAwait(false);
 
             return true;
         }

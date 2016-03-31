@@ -28,7 +28,7 @@ namespace Anfema.Amp.Authorization
             FormUrlEncodedContent requestContent = new FormUrlEncodedContent(request);
 
             // Post request to server
-            HttpResponseMessage response = await loginClient.PostAsync(new Uri(loginAdress), requestContent);
+            HttpResponseMessage response = await loginClient.PostAsync(new Uri(loginAdress), requestContent).ConfigureAwait(false);
 
             // Process and return the acces token
             string jsonResult = response.Content.ReadAsStringAsync().Result;

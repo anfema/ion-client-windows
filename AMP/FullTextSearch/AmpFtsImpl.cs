@@ -51,12 +51,12 @@ namespace Anfema.Amp.FullTextSearch
         public async Task<String> DownloadSearchDatabase()
         {
             String dbTargetFile = FilePaths.GetFtsDbFilePath( _config.collectionIdentifier );
-            AmpCollection ampCollection = await _ampPages.getCollectionAsync();
+            AmpCollection ampCollection = await _ampPages.getCollectionAsync().ConfigureAwait(false);
             
             // Load fts db from server and save data to file
-            using ( MemoryStream responseStream = await _dataClient.PerformRequest( ampCollection.fts_db ) )
+            using ( MemoryStream responseStream = await _dataClient.PerformRequest( ampCollection.fts_db ).ConfigureAwait(false) )
             {
-                await FileUtils.WriteToFile( responseStream, dbTargetFile );
+                await FileUtils.WriteToFile( responseStream, dbTargetFile ).ConfigureAwait(false);
             }
             
             return dbTargetFile;
@@ -93,7 +93,7 @@ namespace Anfema.Amp.FullTextSearch
 
             String query = _ftsQuery.Replace( "<additional_filters>", additionalFilters );
             
-            return await _connection.QueryAsync<SearchResult>( query, args.ToArray() );
+            return await _connection.QueryAsync<SearchResult>( query, args.ToArray() ).ConfigureAwait(false);
         }
         
         public String PrepareSearchTerm( String searchTerm )
