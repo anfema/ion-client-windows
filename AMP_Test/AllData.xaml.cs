@@ -15,7 +15,11 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Phone.UI.Input;
+using Windows.Storage;
+using Windows.System;
+using System.Reflection;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -54,19 +58,22 @@ namespace AMP_Test
             HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
         }
 
+        private async void fileContent_Click(object sender, RoutedEventArgs e)
+        {
+            AmpFileContent fileContent = ((AmpFileContent)((Button)sender).DataContext);
+            bool success = await Windows.System.Launcher.LaunchFileAsync(fileContent.storageFile);
+        }
 
-        private async Task showData( string pageName )
+        private async Task showData(string pageName)
         {
             try
             {
                 AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
 
                 _allContent = DataConverters.convertContent(page.getContent());
-                
-                foreach ( AmpImageContent ampImageContent in _allContent.imageContent )
-                {
-                    ampImageContent.createBitmap( Amp.getInstance( AppController.instance.ampConfig ) );
-                }
+
+                // Load files for page content
+                await Amp.getInstance(AppController.instance.ampConfig).LoadContentFiles(_allContent);
 
                 //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
                 //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");
@@ -84,7 +91,7 @@ namespace AMP_Test
             catch (Exception exception)
             {
                 // Error handling, if no data could be loaded  
-                Debug.WriteLine("Error loading page: " + exception.Message); 
+                Debug.WriteLine("Error loading page: " + exception.Message);
             }
 
             setDataLoaded();
@@ -152,7 +159,7 @@ namespace AMP_Test
         {
             Visibility currentVisibility = imageContentList.Visibility;
 
-            if( currentVisibility == Visibility.Collapsed )
+            if (currentVisibility == Visibility.Collapsed)
             {
                 imageContentList.Visibility = Visibility.Visible;
                 imageContentChevron.Symbol = Symbol.Remove;
@@ -170,7 +177,7 @@ namespace AMP_Test
         {
             ToggleSwitch ts = (ToggleSwitch)sender;
 
-            if( ts.IsOn )
+            if (ts.IsOn)
             {
                 textContentList.Visibility = Visibility.Visible;
             }
@@ -196,7 +203,7 @@ namespace AMP_Test
 
             Visibility currentVisibility = colorContentList.Visibility;
 
-            if( currentVisibility == Visibility.Collapsed )
+            if (currentVisibility == Visibility.Collapsed)
             {
                 colorContentList.Visibility = Visibility.Visible;
                 rb.IsChecked = true;
@@ -214,11 +221,11 @@ namespace AMP_Test
         {
             MediaElement me = (MediaElement)sender;
 
-            TextBlock playButton = getSibling<TextBlock>(me, "playButtonTextBlock");        
+            TextBlock playButton = getSibling<TextBlock>(me, "playButtonTextBlock");
 
 
             // Change the state of the media element
-            switch( me.CurrentState )
+            switch (me.CurrentState)
             {
                 case MediaElementState.Playing:
                     {
@@ -249,18 +256,18 @@ namespace AMP_Test
             AmpMediaContent mc = (AmpMediaContent)me.DataContext;
 
             // This is the fallback in case the media file is simply an image
-            if( mc.mimeType.Contains( "image/" ) && mc.mediaURI != null )
+            if (mc.mimeType.Contains("image/") && mc.mediaURI != null)
             {
                 // Set image and set it visible
                 Image image = getSibling<Image>(me, "mediaContentImage");
-                image.Source = new BitmapImage( mc.mediaURI );
+                image.Source = new BitmapImage(mc.mediaURI);
                 image.Visibility = Visibility.Visible;
 
                 // Hide media element
                 me.Visibility = Visibility.Collapsed;
 
                 // Hide the play button
-                getSibling<TextBlock>(me, "playButtonTextBlock").Visibility = Visibility.Collapsed;       
+                getSibling<TextBlock>(me, "playButtonTextBlock").Visibility = Visibility.Collapsed;
             }
 
             //Debug.WriteLine("Media content of type " + mc.mime_type + " failed! " + me.Source);
@@ -268,10 +275,10 @@ namespace AMP_Test
 
 
         // Gets a sibling of the overhanded element with the name specified
-        private static T getSibling<T>( DependencyObject reference, string name ) where T : FrameworkElement
+        private static T getSibling<T>(DependencyObject reference, string name) where T : FrameworkElement
         {
             // Get parent of the actual element to finally get the siblings of the element
-            DependencyObject parent = VisualTreeHelper.GetParent( reference );
+            DependencyObject parent = VisualTreeHelper.GetParent(reference);
 
             // Iterate through all siblings
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
@@ -279,9 +286,9 @@ namespace AMP_Test
                 DependencyObject child = VisualTreeHelper.GetChild(parent, i);
 
                 // Search for the desired sibling of type T
-                if (child.GetType() == typeof( T ))
+                if (child.GetType() == typeof(T))
                 {
-                    T convertedChild =(T) Convert.ChangeType( child, typeof(T) );
+                    T convertedChild = (T)Convert.ChangeType(child, typeof(T));
 
                     // Check the searched name
                     if (convertedChild.Name.Equals(name))

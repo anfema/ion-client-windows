@@ -4,6 +4,7 @@ using Anfema.Amp.Utils;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Anfema.Amp.MediaFiles
 {
@@ -17,14 +18,14 @@ namespace Anfema.Amp.MediaFiles
 
         private OperationLocks downloadLocks = new OperationLocks();
 
-        public AmpFilesWithCaching( AmpConfig config )
+        public AmpFilesWithCaching(AmpConfig config)
         {
             _config = config;
 
             // Init the data client
-            _dataClient = new DataClient( config );
+            _dataClient = new DataClient(config);
         }
-        
+
         /// <summary>
         /// Request file from url
         /// </summary>
@@ -33,73 +34,66 @@ namespace Anfema.Amp.MediaFiles
         /// <param name="ignoreCaching"></param>
         /// <param name="inTargetFile"></param>
         /// <returns></returns>
-        public async Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching )
+        public async Task<StorageFile> Request(String url, String checksum, Boolean ignoreCaching)
         {
-            String targetFile = FilePaths.GetMediaFilePath( url, _config );
-            if ( ignoreCaching )
-            {
-                return await _dataClient.PerformRequest( new Uri( url ) ).ConfigureAwait(false);
-            }
+            String targetFile = FilePaths.GetMediaFilePath(url, _config);
+            //if ( ignoreCaching )
+            //{
+            //    return await _dataClient.PerformRequest( new Uri( url ) );
+            //}
 
-            MemoryStream returnStream = null;
-            using ( await downloadLocks.ObtainLock( url ).LockAsync().ConfigureAwait(false))
+            StorageFile returnFile = null;
+            using (await downloadLocks.ObtainLock(url).LockAsync())
             {
                 // fetch file from local storage or download it?
-                if ( await FileUtils.Exists( targetFile ) && await IsFileUpToDate( url, checksum ).ConfigureAwait(false))
+                if (await FileUtils.Exists(targetFile) && await IsFileUpToDate(url, checksum))
                 {
                     // retrieve current version from cache
-                    returnStream = await FileUtils.ReadFromFile( targetFile ).ConfigureAwait(false);
+                    returnFile = await FileUtils.ReadFromFile(targetFile);
                 }
-                else if ( NetworkUtils.isOnline() )
+                else if (NetworkUtils.isOnline())
                 {
                     // download media file
-                    returnStream = await _dataClient.PerformRequest( new Uri( url ) ).ConfigureAwait(false);
+                    MemoryStream saveStream = await _dataClient.PerformRequest(new Uri(url));
 
                     // save data to file
-                    using ( MemoryStream saveStream = new MemoryStream() )
-                    {
-                        returnStream.CopyTo( saveStream );
-                        saveStream.Position = 0;
-                        await FileUtils.WriteToFile( saveStream, targetFile ).ConfigureAwait(false);
-                        await FileCacheIndex.save( url, saveStream, _config, checksum ).ConfigureAwait(false);
-                    }
-
-                    returnStream.Position = 0;
+                    returnFile = await FileUtils.WriteToFile(saveStream, targetFile);
+                    await FileCacheIndex.save(url, saveStream, _config, checksum);
                 }
-                else if ( await FileUtils.Exists( targetFile ).ConfigureAwait(false))
+                else if (await FileUtils.Exists(targetFile))
                 {
                     // TODO notify app that data might be outdated
                     // no network: use old version from cache (even if no cache index entry exists)
-                    returnStream = await FileUtils.ReadFromFile( targetFile ).ConfigureAwait(false);
+                    returnFile = await FileUtils.ReadFromFile(targetFile);
                 }
             }
-            downloadLocks.ReleaseLock( url );
-            if ( returnStream == null )
+            downloadLocks.ReleaseLock(url);
+            if (returnFile == null)
             {
-                throw new Exception( "Media file " + url + " is not in cache and no internet connection is available." );
+                throw new Exception("Media file " + url + " is not in cache and no internet connection is available.");
             }
-            return returnStream;
+            return returnFile;
         }
 
-        private async Task<bool> IsFileUpToDate( String url, String checksum )
+        private async Task<bool> IsFileUpToDate(String url, String checksum)
         {
-            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve( url, _config.collectionIdentifier ).ConfigureAwait(false);
-            if ( fileCacheIndex == null )
+            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve(url, _config.collectionIdentifier);
+            if (fileCacheIndex == null)
             {
                 return false;
             }
 
-            if ( checksum != null )
+            if (checksum != null)
             {
                 // check with file's checksum
-                return !fileCacheIndex.IsOutdated( checksum );
+                return !fileCacheIndex.IsOutdated(checksum);
             }
             else
             {
                 // check with collection's last_modified (previewPage.last_changed would be slightly more precise)
-                CollectionCacheIndex collectionCacheIndex = await CollectionCacheIndex.retrieve( _config ).ConfigureAwait(false);
-                DateTime collectionLastModified = collectionCacheIndex == null ? default( DateTime )  : collectionCacheIndex.lastModified;
-                return collectionLastModified != null && fileCacheIndex.lastUpdated != null && !( collectionLastModified.CompareTo( fileCacheIndex.lastUpdated ) > 0 );
+                CollectionCacheIndex collectionCacheIndex = await CollectionCacheIndex.retrieve(_config);
+                DateTime collectionLastModified = collectionCacheIndex == null ? default(DateTime) : collectionCacheIndex.lastModified;
+                return collectionLastModified != null && fileCacheIndex.lastUpdated != null && !(collectionLastModified.CompareTo(fileCacheIndex.lastUpdated) > 0);
             }
         }
     }

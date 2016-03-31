@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Anfema.Amp.MediaFiles
 {
     public interface IAmpFiles
     {
-        Task<MemoryStream> Request( String url, String checksum, Boolean ignoreCaching = false );
+        Task<StorageFile> Request(String url, String checksum, Boolean ignoreCaching = false);
     }
 }

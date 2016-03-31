@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    
-    
+
+
     <Page.Resources>
 
         <DataTemplate x:Name="keyValueItemTemplate">
@@ -62,7 +62,7 @@
                             Margin="3, 3, 3, 3"
                             CornerRadius="3, 3, 3, 3"
                         >
-                    <ItemsControl
+                <ItemsControl
                     ItemsSource="{Binding items}"
                     x:Name="keyValueItemsList"
                     ItemTemplate="{StaticResource keyValueItemTemplate}"
@@ -76,14 +76,14 @@
                             Margin="3, 3, 3, 3"
                             CornerRadius="3, 3, 3, 3"
                         >
-                    <TextBlock x:Name="optionContentTextBlock"
+                <TextBlock x:Name="optionContentTextBlock"
                                Text="{Binding selectedOption}"    
                                Style="{StaticResource BaseTextBlockStyle}"
                                FontSize="16"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Bottom"
                                Padding="10, 5, 10, 5">
-                    </TextBlock>
+                </TextBlock>
 
             </Border>
         </DataTemplate>
@@ -94,14 +94,14 @@
                             Margin="3, 3, 3, 3"
                             CornerRadius="3, 3, 3, 3"
                         >
-                    <TextBlock x:Name="dateTimeContentTextBlock"
+                <TextBlock x:Name="dateTimeContentTextBlock"
                                Text="{Binding dateTime}"    
                                Style="{StaticResource BaseTextBlockStyle}"
                                FontSize="16"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Bottom"
                                Padding="10, 5, 10, 5">
-                    </TextBlock>
+                </TextBlock>
 
             </Border>
         </DataTemplate>
@@ -120,10 +120,10 @@
                         <RowDefinition Height="8*"/>
                         <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Image Source="{Binding bitmap}"
+                    <Image Source="{Binding storageFile.Path}"
                            Grid.Row="0"
                            HorizontalAlignment="Center"/>
-                    
+
                     <!--TextBlock x:Name="imageContentTextBlock"
                                Text="{Binding image}"                               
                                Style="{StaticResource BaseTextBlockStyle}"
@@ -134,7 +134,7 @@
                 </Grid>
             </Border>
         </DataTemplate>
-        
+
         <DataTemplate x:Name="textContentTemplate">
             <Border BorderThickness="2"
                             BorderBrush="White"
@@ -154,7 +154,7 @@
                 </Grid>
             </Border>
         </DataTemplate>
-        
+
         <DataTemplate x:Name="colorContentTemplate">
             <Border BorderThickness="2"
                             BorderBrush="White"
@@ -166,11 +166,11 @@
                       Width="50"                      
                       >
                     <Rectangle Height="50"
-                               Width="50"> 
+                               Width="50">
                         <Rectangle.Fill>
                             <SolidColorBrush Color="{Binding color}"/>
                         </Rectangle.Fill>
-                    </Rectangle> 
+                    </Rectangle>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -185,7 +185,7 @@
                       Height="60"
                       Width="100"                      
                       >
-                     <RadioButton IsChecked="{Binding enabled}"
+                    <RadioButton IsChecked="{Binding enabled}"
                                   IsEnabled="False"
                                   VerticalAlignment="Center"
                                   />
@@ -267,18 +267,26 @@
                                        Margin="15, 0, 0, 0"
                                        TextWrapping="Wrap"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
                             <TextBlock
                                 Style="{StaticResource BaseTextBlockStyle}"
                                 FontSize="14">
                                 FileContent:
                             </TextBlock>
-                            <TextBlock Text="{Binding file}"
+                            <TextBlock Text="{Binding storageFile.Path}"
                                        Style="{StaticResource BaseTextBlockStyle}"
                                        FontSize="14"
                                        Margin="15, 0, 0, 0"
                                        TextWrapping="Wrap"/>
                         </StackPanel>
+                        <Button Click="fileContent_Click"
+                            Margin="10, 5, 10, 5"
+                            >
+                            <Button.Content>
+                                <TextBlock Text="Open"
+                                   Padding="0, 0, 10, 0"/>
+                            </Button.Content>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -296,9 +304,9 @@
                       >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
-                        <RowDefinition Height="10*"/>                                       
+                        <RowDefinition Height="10*"/>
                     </Grid.RowDefinitions>
-                        <!--TextBlock Text="{Binding name}"
+                    <!--TextBlock Text="{Binding name}"
                                    Style="{StaticResource HeaderTextBlockStyle}"
                                    FontSize="16"
                                    HorizontalAlignment="Center"
@@ -311,7 +319,7 @@
                                       Grid.Row="1"
                                       Tapped="mediaContentElement_Tabbed"
                                       AutoPlay="False" MediaFailed="mediaContent_MediaFailed"/>
-                        <TextBlock x:Name="playButtonTextBlock"
+                    <TextBlock x:Name="playButtonTextBlock"
                                    FontFamily="Segoe UI Symbol"
                                    FontSize="72"
                                    Text="&#57602;"
@@ -333,7 +341,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
-        
+
         <TextBlock Name="allDataTextBlock"
                    Style="{StaticResource HeaderTextBlockStyle}"
                    FontSize="36"
@@ -341,7 +349,7 @@
                    Margin="10, 0, 10, 0">
             All Data
         </TextBlock>
-        
+
         <ScrollViewer Grid.Row="1"
                       Margin="10, 0, 10, 0">
             <StackPanel Orientation="Vertical">
@@ -366,7 +374,7 @@
                         x:Name="imageContentList"
                         ItemTemplate="{StaticResource imageContentTemplate}"
                         HorizontalAlignment="Center"/>
-                
+
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal"
                                 Margin="0, 15, 0, 0">
@@ -428,7 +436,7 @@
                     x:Name="flagContentList"
                     ItemTemplate="{StaticResource flagContentTemplate}"
                     HorizontalAlignment="Center"/>
-                
+
                 <TextBlock x:Name="fileContentTextBlock"
                            Style="{StaticResource BaseTextBlockStyle}"
                            FontSize="16"

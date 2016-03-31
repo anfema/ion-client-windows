@@ -13,46 +13,42 @@ namespace Anfema.Amp.Utils
         private static OperationLocks fileLocks = new OperationLocks();
         private static readonly StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
         public static readonly String SLASH = "\\";
-        
+
         /// <summary>
         /// Write MemoryStream to file
         /// </summary>
         /// <param name="inputStream"></param>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<bool> WriteToFile( MemoryStream inputStream, String targetFilePath )
+        public static async Task<StorageFile> WriteToFile(MemoryStream inputStream, String targetFilePath)
         {
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
+            StorageFile file = null;
+            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
             {
-                StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
-                using ( Stream outputStream = await file.OpenStreamForWriteAsync().ConfigureAwait(false))
+                file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
+                using (Stream outputStream = await file.OpenStreamForWriteAsync())
                 {
-                    await inputStream.CopyToAsync( outputStream ).ConfigureAwait(false);
+                    await inputStream.CopyToAsync(outputStream);
                 }
             }
-            fileLocks.ReleaseLock( targetFilePath );
-            return true;
+            fileLocks.ReleaseLock(targetFilePath);
+            return file;
         }
-        
+
         /// <summary>
         /// Read file into MemoryStream
         /// </summary>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<MemoryStream> ReadFromFile( String targetFilePath )
+        public static async Task<StorageFile> ReadFromFile(String targetFilePath)
         {
-            MemoryStream outputStream = new MemoryStream();
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
+            StorageFile file = null;
+            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
             {
-                StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.OpenIfExists);
-                using ( Stream inputStream = await file.OpenStreamForReadAsync().ConfigureAwait(false))
-                {
-                    await inputStream.CopyToAsync( outputStream ).ConfigureAwait(false);
-                    outputStream.Position = 0;
-                }
+                file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.OpenIfExists);
             }
-            fileLocks.ReleaseLock( targetFilePath );
-            return outputStream;
+            fileLocks.ReleaseLock(targetFilePath);
+            return file;
         }
 
         /// <summary>
@@ -60,14 +56,14 @@ namespace Anfema.Amp.Utils
         /// </summary>
         /// <param name="text"></param>
         /// <param name="targetFilePath"></param>
-        public static async void WriteTextToFile( String text, String targetFilePath )
+        public static async void WriteTextToFile(String text, String targetFilePath)
         {
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
+            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
             {
                 StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteTextAsync( file, text );
+                await FileIO.WriteTextAsync(file, text);
             }
-            fileLocks.ReleaseLock( targetFilePath );
+            fileLocks.ReleaseLock(targetFilePath);
         }
 
         /// <summary>
@@ -75,15 +71,15 @@ namespace Anfema.Amp.Utils
         /// </summary>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<String> ReadTextFromFile( String targetFilePath )
+        public static async Task<String> ReadTextFromFile(String targetFilePath)
         {
             String value = String.Empty;
-            using ( await fileLocks.ObtainLock( targetFilePath ).LockAsync().ConfigureAwait(false))
+            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
             {
-                StorageFile file = await _localFolder.GetFileAsync( targetFilePath );
-                value = await FileIO.ReadTextAsync( file );
+                StorageFile file = await _localFolder.GetFileAsync(targetFilePath);
+                value = await FileIO.ReadTextAsync(file);
             }
-            fileLocks.ReleaseLock( targetFilePath );
+            fileLocks.ReleaseLock(targetFilePath);
             return value;
         }
 
@@ -94,7 +90,7 @@ namespace Anfema.Amp.Utils
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public async static Task<bool> Exists( String filePath )
+        public async static Task<bool> Exists(String filePath)
         {
             bool fileExists = true;
             Stream fileStream = null;
@@ -102,18 +98,18 @@ namespace Anfema.Amp.Utils
 
             try
             {
-                file = await ApplicationData.Current.LocalFolder.GetFileAsync( filePath );
-                fileStream = await file.OpenStreamForReadAsync().ConfigureAwait(false);
+                file = await ApplicationData.Current.LocalFolder.GetFileAsync(filePath);
+                fileStream = await file.OpenStreamForReadAsync();
                 fileStream.Dispose();
             }
-            catch ( FileNotFoundException )
+            catch (FileNotFoundException)
             {
                 // If the file dosn't exits it throws an exception, make fileExists false in this case 
                 fileExists = false;
             }
             finally
             {
-                if ( fileStream != null )
+                if (fileStream != null)
                 {
                     fileStream.Dispose();
                 }
