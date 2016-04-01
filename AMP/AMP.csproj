@@ -146,6 +146,7 @@
     <Compile Include="Utils\NetworkUtils.cs" />
     <Compile Include="Utils\PagesFilter.cs" />
     <Compile Include="Utils\StorageUtils.cs" />
+    <Compile Include="Utils\TarUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
