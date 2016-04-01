@@ -209,6 +209,14 @@
           "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
+      "sharpcompress/0.11.5": {
+        "compile": {
+          "lib/netcore45/SharpCompress.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/SharpCompress.dll": {}
+        }
+      },
       "SQLite.Net-PCL/3.1.1": {
         "dependencies": {
           "SQLite.Net.Core-PCL": "[3.1.1, )"
@@ -1823,6 +1831,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+        }
+      },
+      "sharpcompress/0.11.5": {
+        "compile": {
+          "lib/netcore45/SharpCompress.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/SharpCompress.dll": {}
         }
       },
       "SQLite.Net-PCL/3.1.1": {
@@ -3472,6 +3488,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+        }
+      },
+      "sharpcompress/0.11.5": {
+        "compile": {
+          "lib/netcore45/SharpCompress.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/SharpCompress.dll": {}
         }
       },
       "SQLite.Net-PCL/3.1.1": {
@@ -5128,6 +5152,14 @@
           "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
+      "sharpcompress/0.11.5": {
+        "compile": {
+          "lib/netcore45/SharpCompress.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/SharpCompress.dll": {}
+        }
+      },
       "SQLite.Net-PCL/3.1.1": {
         "dependencies": {
           "SQLite.Net.Core-PCL": "[3.1.1, )"
@@ -6775,6 +6807,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+        }
+      },
+      "sharpcompress/0.11.5": {
+        "compile": {
+          "lib/netcore45/SharpCompress.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/SharpCompress.dll": {}
         }
       },
       "SQLite.Net-PCL/3.1.1": {
@@ -8431,6 +8471,14 @@
           "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
         }
       },
+      "sharpcompress/0.11.5": {
+        "compile": {
+          "lib/netcore45/SharpCompress.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/SharpCompress.dll": {}
+        }
+      },
       "SQLite.Net-PCL/3.1.1": {
         "dependencies": {
           "SQLite.Net.Core-PCL": "[3.1.1, )"
@@ -10078,6 +10126,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81+dnxcore50/Newtonsoft.Json.dll": {}
+        }
+      },
+      "sharpcompress/0.11.5": {
+        "compile": {
+          "lib/netcore45/SharpCompress.dll": {}
+        },
+        "runtime": {
+          "lib/netcore45/SharpCompress.dll": {}
         }
       },
       "SQLite.Net-PCL/3.1.1": {
@@ -12155,6 +12211,19 @@
         "Newtonsoft.Json.nuspec",
         "package/services/metadata/core-properties/cc8c591d554640789c6a6ef6456f7772.psmdcp",
         "tools/install.ps1"
+      ]
+    },
+    "sharpcompress/0.11.5": {
+      "sha512": "X/70qpJHEz3VnRz4wM1CkehgMMCeqSOYxWl7wMpm83uSIMAeaGQw3ND097rAGy8Tg9YFN1KTvyBbd5nEOUtqeg==",
+      "type": "Package",
+      "files": [
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "lib/net40/SharpCompress.dll",
+        "lib/netcore45/SharpCompress.dll",
+        "lib/portable-net4+sl5+wp8+win8/SharpCompress.dll",
+        "package/services/metadata/core-properties/414089870a1b4e1ca1cc6d0f9f96500e.psmdcp",
+        "sharpcompress.nuspec"
       ]
     },
     "SQLite.Net-PCL/3.1.1": {
@@ -14899,6 +14968,7 @@
     "": [
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
       "Newtonsoft.Json >= 8.0.2",
+      "sharpcompress >= 0.11.5",
       "SQLite.Net.Async-PCL >= 3.1.1",
       "SQLite.Net-PCL >= 3.1.1"
     ],
