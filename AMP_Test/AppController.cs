@@ -49,23 +49,18 @@ namespace AMP_Test
             {
                 String collectionIdentifier = "seoul-november-2014";
 
-                AuthenticationHeaderValue authorizationHeader = CollectionAuthStore.Get( collectionIdentifier );
+                AuthenticationHeaderValue authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "admin@anfe.ma", "test", "http://bireise-dev.anfema.com/client/v1/login" );
+                // Or using BasicAuth
+                //AuthenticationHeaderValue authenticationHeader = BasicAuth.GetAuthHeaderValue("admin@anfe.ma", "test");
 
-                if ( authorizationHeader == null )
-                {
-                    authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "admin@anfe.ma", "test", "http://bireise-dev.anfema.com/client/v1/login" );
-                    // Or using BasicAuth
-                    //AuthenticationHeaderValue authenticationHeader = BasicAuth.GetAuthHeaderValue("admin@anfe.ma", "test");
-                }
-
-                // Store authorization header
-                CollectionAuthStore.Set( collectionIdentifier, authorizationHeader );
-
-                AmpConfig config = new AmpConfig("http://bireise-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, authorizationHeader, 120, 100, false);
+                AmpConfig config = new AmpConfig("http://bireise-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, "default", authorizationHeader, 120, 100, false);
                 
                 // Only testing purpose TODO: remove
                 _ampConfig = config;
-                _loggedIn = true;
+
+                // Set the loggedIn bool
+                _loggedIn = authorizationHeader != null;
+
                 return config;
             }
 

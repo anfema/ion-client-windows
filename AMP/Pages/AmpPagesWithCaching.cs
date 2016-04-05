@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Anfema.Amp.Pages
 {
-    public class AmpPagesWithCaching : IAmpPages
+    public class AmpPagesWithCaching : IAmpPages, IAmpConfigUpdateable
     {
         // Config associated with this collection of pages
         private AmpConfig _config;
@@ -191,6 +191,17 @@ namespace Anfema.Amp.Pages
             List<PagePreview> filteredPagePreviews = collection.pages.FindAll(filter);
 
             return filteredPagePreviews;
+        }
+
+
+        /// <summary>
+        /// Updates the AmpConfig file
+        /// </summary>
+        /// <param name="config"></param>
+        public void updateConfig( AmpConfig config )
+        {
+            _dataClient = new DataClient( config ); // TODO: check this for intense use of GC
+            _config = config;
         }
 
         

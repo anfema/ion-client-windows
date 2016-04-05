@@ -112,5 +112,15 @@ namespace Anfema.Amp.FullTextSearch
 
             return searchTermModified;
         }
+
+
+        /// <summary>
+        /// Updates the AmpConfig file
+        /// </summary>
+        /// <param name="config"></param>
+        public void updateConfig( AmpConfig config )
+        {
+            _config = config;
+        }
     }
 }

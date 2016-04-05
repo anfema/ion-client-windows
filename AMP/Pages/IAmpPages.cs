@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Anfema.Amp.Pages
 {
-    public interface IAmpPages
+    public interface IAmpPages : IAmpConfigUpdateable
     {
         Task<AmpCollection> getCollectionAsync();
         Task<AmpPage> getPageAsync(string pageIdentifier);

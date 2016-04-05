@@ -75,6 +75,17 @@ namespace Anfema.Amp.MediaFiles
             return returnFile;
         }
 
+
+        /// <summary>
+        /// Updates the AmpConfig file
+        /// </summary>
+        /// <param name="config"></param>
+        public void updateConfig( AmpConfig config )
+        {
+            _config = config;
+        }
+
+
         private async Task<bool> IsFileUpToDate(String url, String checksum)
         {
             FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve(url, _config.collectionIdentifier).ConfigureAwait(false);

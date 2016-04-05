@@ -12,7 +12,7 @@ using Windows.Storage;
 
 namespace Anfema.Amp
 {
-    public class Amp
+    public class Amp : IAmpConfigUpdateable
     {
         // Dictionary for all the possible instances bound to a specific config
         private static Dictionary<AmpConfig, Amp> instances = new Dictionary<AmpConfig, Amp>();
@@ -27,17 +27,19 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static Amp getInstance(AmpConfig config)
+        public static Amp getInstance( AmpConfig config )
         {
             Amp storedClient;
 
-            if (instances.TryGetValue(config, out storedClient))
+            if( instances.TryGetValue( config, out storedClient ) )
             {
+                // Eventually update the config file saved in the stored client with the given one that might contain new or updated parameters
+                storedClient.updateConfig( config );
                 return storedClient;
             }
 
-            Amp amp = new Amp(config);
-            instances.Add(config, amp);
+            Amp amp = new Amp( config );
+            instances.Add( config, amp );
             return amp;
         }
 
@@ -46,11 +48,11 @@ namespace Anfema.Amp
         /// Constructor with a config file for initialization
         /// </summary>
         /// <param name="config"></param>
-        public Amp(AmpConfig config)
+        private Amp( AmpConfig config )
         {
-            _ampPages = new AmpPagesWithCaching(config);
-            _ampFiles = new AmpFilesWithCaching(config);
-            _ampFts = new AmpFtsImpl(_ampPages, _ampFiles, config);
+            _ampPages = new AmpPagesWithCaching( config );
+            _ampFiles = new AmpFilesWithCaching( config );
+            _ampFts = new AmpFtsImpl( _ampPages, _ampFiles, config );
         }
 
 
@@ -60,11 +62,11 @@ namespace Anfema.Amp
         /// <param name="name"></param>
         /// <param name="callback"></param>
         /// <returns>AmpPage with the desired name</returns>
-        public async Task<AmpPage> getPageAsync(string name, Action callback)
+        public async Task<AmpPage> getPageAsync( string name, Action callback )
         {
-            AmpPage page = await _ampPages.getPageAsync(name).ConfigureAwait( false );
+            AmpPage page = await _ampPages.getPageAsync( name ).ConfigureAwait( false );
 
-            if (callback != null)
+            if( callback != null )
             {
                 callback();
             }
@@ -78,11 +80,11 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>List of AmpPagees</returns>
-        public async Task<List<AmpPage>> getPagesAsync(Predicate<PagePreview> filter, Action callback = null)
+        public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback = null )
         {
-            List<AmpPage> pagesList = await _ampPages.getPagesAsync(filter).ConfigureAwait(false);
+            List<AmpPage> pagesList = await _ampPages.getPagesAsync( filter ).ConfigureAwait( false );
 
-            if (callback != null)
+            if( callback != null )
             {
                 callback();
             }
@@ -97,7 +99,7 @@ namespace Anfema.Amp
         /// <returns>List of identifier</returns>
         public async Task<List<string>> getAllPageIdentifierAsync()
         {
-            return await _ampPages.getAllPagesIdentifierAsync().ConfigureAwait(false);
+            return await _ampPages.getAllPagesIdentifierAsync().ConfigureAwait( false );
         }
 
 
@@ -106,11 +108,11 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>List of PagePreview elements</returns>
-        public async Task<List<PagePreview>> getPagePreviewsAsync(Predicate<PagePreview> filter, Action callback = null)
+        public async Task<List<PagePreview>> getPagePreviewsAsync( Predicate<PagePreview> filter, Action callback = null )
         {
-            List<PagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync(filter).ConfigureAwait(false);
+            List<PagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync( filter ).ConfigureAwait( false );
 
-            if (callback != null)
+            if( callback != null )
             {
                 callback();
             }
@@ -125,20 +127,20 @@ namespace Anfema.Amp
         /// <param name="identifier"></param>
         /// <param name="callback"></param>
         /// <returns>PagePreview</returns>
-        public async Task<PagePreview> getPagePreviewAsync(string identifier, Action callback = null)
+        public async Task<PagePreview> getPagePreviewAsync( string identifier, Action callback = null )
         {
-            List<PagePreview> searchResult = await _ampPages.getPagePreviewsAsync(PageFilter.identifierEquals(identifier)).ConfigureAwait(false);
+            List<PagePreview> searchResult = await _ampPages.getPagePreviewsAsync( PageFilter.identifierEquals( identifier ) ).ConfigureAwait( false );
 
             // If no PagePreview was found throw a not found exception
-            if (searchResult.Count == 0)
+            if( searchResult.Count == 0 )
             {
-                throw new PagePreviewNotFoundException(identifier);
+                throw new PagePreviewNotFoundException( identifier );
             }
 
             // Get first result
             PagePreview pagePreview = searchResult[0];
 
-            if (callback != null)
+            if( callback != null )
             {
                 callback();
             }
@@ -149,32 +151,44 @@ namespace Anfema.Amp
 
         public async Task<String> DownloadSearchDatabase()
         {
-            return await _ampFts.DownloadSearchDatabase().ConfigureAwait(false);
+            return await _ampFts.DownloadSearchDatabase().ConfigureAwait( false );
         }
 
 
-        public async Task<List<SearchResult>> FullTextSearch(String searchTerm, String locale, String pageLayout = null)
+        public async Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null )
         {
-            return await _ampFts.FullTextSearch(searchTerm, locale, pageLayout).ConfigureAwait(false);
+            return await _ampFts.FullTextSearch( searchTerm, locale, pageLayout ).ConfigureAwait( false );
         }
 
 
-        public async Task<StorageFile> Request(String url, String checksum, Boolean ignoreCaching = false)
+        public async Task<StorageFile> Request( String url, String checksum, Boolean ignoreCaching = false )
         {
-            return await _ampFiles.Request(url, checksum, ignoreCaching).ConfigureAwait(false);
+            return await _ampFiles.Request( url, checksum, ignoreCaching ).ConfigureAwait( false );
         }
 
-        public async Task LoadContentFiles(AmpPageObservableCollection content)
+        public async Task LoadContentFiles( AmpPageObservableCollection content )
         {
-            foreach (AmpImageContent ampImageContent in content.imageContent)
+            foreach( AmpImageContent ampImageContent in content.imageContent )
             {
-                await ampImageContent.loadImage(this).ConfigureAwait(false);
+                await ampImageContent.loadImage( this ).ConfigureAwait( false );
             }
 
-            foreach (AmpFileContent ampFileContent in content.fileContent)
+            foreach( AmpFileContent ampFileContent in content.fileContent )
             {
-                await ampFileContent.loadFile(this).ConfigureAwait(false);
+                await ampFileContent.loadFile( this ).ConfigureAwait( false );
             }
+        }
+
+
+        /// <summary>
+        /// Called to update the config file of all relevant elements
+        /// </summary>
+        /// <param name="config"></param>
+        public void updateConfig( AmpConfig config )
+        {
+            _ampPages.updateConfig( config );
+            _ampFiles.updateConfig( config );
+            _ampFts.updateConfig( config );
         }
     }
 }
