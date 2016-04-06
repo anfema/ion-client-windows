@@ -55,7 +55,11 @@ namespace AMP_Test
             Button pressedButton = (Button)e.Parameter;
             showData((string)pressedButton.DataContext);
 
-            HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
+            if( Windows.Foundation.Metadata.ApiInformation.IsTypePresent( "Windows.Phone.UI.Input.HardwareButtons" ) )
+            {
+                HardwareButtons.BackPressed += this.HardwareButtons_BackPressed;
+            }
+
         }
 
         private async void fileContent_Click(object sender, RoutedEventArgs e)
@@ -102,7 +106,10 @@ namespace AMP_Test
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            HardwareButtons.BackPressed -= this.HardwareButtons_BackPressed;
+            if( Windows.Foundation.Metadata.ApiInformation.IsTypePresent( "Windows.Phone.UI.Input.HardwareButtons" ) )
+            {
+                HardwareButtons.BackPressed -= this.HardwareButtons_BackPressed;
+            }
         }
 
 
@@ -303,5 +310,18 @@ namespace AMP_Test
 
 
 
+        private void keyboardListener( object sender, KeyRoutedEventArgs e )
+        {
+            if(e.Key == VirtualKey.Space )
+            {
+                Debug.WriteLine( "Button pressed" );
+                Frame frame = Window.Current.Content as Frame;
+                if( frame.CanGoBack )
+                {
+                    frame.GoBack();
+                    e.Handled = true;
+                }
+            }
+        }
     }
 }
