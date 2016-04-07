@@ -35,7 +35,7 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public bool IsOutdated( String serverChecksum )
         {
-            return String.Equals( this.checksum, serverChecksum );
+            return !String.Equals( this.checksum, serverChecksum );
         }
 
         /// <summary>
