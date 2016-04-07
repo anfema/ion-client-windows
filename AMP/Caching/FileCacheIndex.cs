@@ -21,7 +21,7 @@ namespace Anfema.Ion.Caching
             this.checksum = checksum;
             this.lastUpdated = lastUpdated;
         }
-        
+
         public FileCacheIndex( Uri requestUrl, String checksum, DateTime lastUpdated ) : base( requestUrl )
         {
             this.checksum = checksum;
@@ -46,8 +46,8 @@ namespace Anfema.Ion.Caching
         /// <returns>FileCacheIndex object or null, if the index isn't found</returns>
         public static async Task<FileCacheIndex> retrieve( String requestUrl, String collectionIdentifier )
         {
-            return await CacheIndexStore.retrieve<FileCacheIndex>( requestUrl, collectionIdentifier ).ConfigureAwait(false);
-	    }
+            return await CacheIndexStore.retrieve<FileCacheIndex>( requestUrl, collectionIdentifier ).ConfigureAwait( false );
+        }
 
         /// <summary>
         /// Saves a FileCacheIndex object to the cache
@@ -59,18 +59,18 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public static async Task<bool> save( String requestUrl, Stream file, IonConfig config, String checksum )
         {
-            if ( file == null )
+            if( file == null )
             {
                 return false;
             }
 
-            if ( checksum == null )
+            if( checksum == null )
             {
                 checksum = "sha256:" + HashUtils.GetSHA256Hash( file );
             }
 
             FileCacheIndex cacheIndex = new FileCacheIndex( requestUrl, checksum, DateTime.Now );
-            await CacheIndexStore.save<FileCacheIndex>( requestUrl, cacheIndex, config ).ConfigureAwait(false);
+            await CacheIndexStore.save<FileCacheIndex>( requestUrl, cacheIndex, config ).ConfigureAwait( false );
 
             return true;
         }

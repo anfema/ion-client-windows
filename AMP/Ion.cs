@@ -161,9 +161,17 @@ namespace Anfema.Ion
         }
 
 
-        public async Task<StorageFile> Request( String url, String checksum, Boolean ignoreCaching = false )
+        /// <summary>
+        /// Requests a element from the server/cache with a specific url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="checksum"></param>
+        /// <param name="content"></param>
+        /// <param name="ignoreCaching"></param>
+        /// <returns>Storage file including the desired element</returns>
+        public async Task<StorageFile> Request( String url, String checksum, IonContent content, Boolean ignoreCaching = false )
         {
-            return await _ampFiles.Request( url, checksum, ignoreCaching ).ConfigureAwait( false );
+            return await _ampFiles.request( url, checksum, content, ignoreCaching ).ConfigureAwait( false );
         }
 
         public async Task LoadContentFiles( IonPageObservableCollection content )
@@ -177,6 +185,17 @@ namespace Anfema.Ion
             {
                 await ampFileContent.loadFile( this ).ConfigureAwait( false );
             }
+        }
+
+
+        /// <summary>
+        /// Loads a archive file from a given url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns>Storage file including the archive file</returns>
+        public async Task<StorageFile> loadArchive( string url )
+        {
+            return await _ampFiles.requestArchiveFile( url );
         }
 
 

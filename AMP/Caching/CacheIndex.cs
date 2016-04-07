@@ -20,7 +20,7 @@ namespace Anfema.Ion.Caching
         // Use MD5 of request uri as filename
         public CacheIndex( Uri requestUrl )
         {
-            filename = FilePaths.GetFileName(requestUrl.AbsoluteUri);
+            filename = FilePaths.getFileName(requestUrl.AbsoluteUri);
         }
     }
 }

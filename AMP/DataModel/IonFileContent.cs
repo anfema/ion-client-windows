@@ -26,7 +26,7 @@ namespace Anfema.Ion.DataModel
 
         public async Task loadFile( Ion amp )
         {
-            this.storageFile = await amp.Request( this.fileURL, null );
+            this.storageFile = await amp.Request( this.fileURL, checksum, this );
         }
     }
 }

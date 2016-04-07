@@ -26,52 +26,106 @@ namespace Anfema.Ion.MediaFiles
             _dataClient = new DataClient( config );
         }
 
+
         /// <summary>
-        /// Request file from url
+        /// Request a element from a given url
         /// </summary>
         /// <param name="url"></param>
         /// <param name="checksum"></param>
         /// <param name="ignoreCaching"></param>
         /// <param name="inTargetFile"></param>
         /// <returns></returns>
-        public async Task<StorageFile> Request( String url, String checksum, Boolean ignoreCaching )
+        public async Task<StorageFile> request( String url, String checksum, IonContent content, Boolean ignoreCaching )
         {
-            String targetFile = FilePaths.GetMediaFilePath( url, _config );
-            //if ( ignoreCaching )
-            //{
-            //    return await _dataClient.PerformRequest( new Uri( url ) );
-            //}
+            String targetPath = "other";
+            string contentType = content.type;
 
+            switch( contentType )
+            {
+                case "imagecontent":
+                    {
+                        targetPath = FilePaths.getMediaFilePath( url, _config );
+                        break;
+                    }
+
+                case "filecontent":
+                    {
+                        targetPath = FilePaths.getFileFilePath( url, _config );
+                        break;
+                    }
+
+                case "mediacontent":
+                    {
+                        targetPath = FilePaths.getMediaFilePath( url, _config );
+                        break;
+                    }
+            }
+
+            return await request( url, targetPath, checksum, ignoreCaching );
+        }
+
+
+        /// <summary>
+        /// Requests a archive file from a given url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="checksum"></param>
+        /// <param name="ignoreCaching"></param>
+        /// <returns>Archive file</returns>
+        public async Task<StorageFile> requestArchiveFile( string url )
+        {
+            string targetFile = FilePaths.getArchiveFilePath( url, _config );
+            return await request( url, targetFile, "", false );
+        }
+
+
+        /// <summary>
+        /// Requests a file from a specific url and saves it to the given filePath
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="filePath"></param>
+        /// <param name="checksum"></param>
+        /// <param name="ignoreCaching"></param>
+        /// <returns></returns>
+        private async Task<StorageFile> request( String url, string filePath, String checksum, Boolean ignoreCaching )
+        {
             StorageFile returnFile = null;
             using( await downloadLocks.ObtainLock( url ).LockAsync().ConfigureAwait( false ) )
             {
                 // fetch file from local storage or download it?
-                if( await FileUtils.Exists( targetFile ) && await IsFileUpToDate( url, checksum ).ConfigureAwait( false ) )
+                bool fileExists = await FileUtils.Exists( filePath ).ConfigureAwait( false );
+                bool upToDate = await IsFileUpToDate( url, checksum ).ConfigureAwait( false );
+
+                if( fileExists && upToDate )
                 {
                     // retrieve current version from cache
-                    returnFile = await FileUtils.ReadFromFile( targetFile ).ConfigureAwait( false );
+                    returnFile = await FileUtils.ReadFromFile( filePath ).ConfigureAwait( false );
                 }
+
                 else if( NetworkUtils.isOnline() )
                 {
                     // download media file
                     MemoryStream saveStream = await _dataClient.PerformRequest( new Uri( url ) ).ConfigureAwait( false );
 
                     // save data to file
-                    returnFile = await FileUtils.WriteToFile( saveStream, targetFile ).ConfigureAwait( false );
+                    returnFile = await FileUtils.WriteToFile( saveStream, filePath ).ConfigureAwait( false );
                     await FileCacheIndex.save( url, saveStream, _config, checksum ).ConfigureAwait( false );
                 }
-                else if( await FileUtils.Exists( targetFile ).ConfigureAwait( false ) )
+                else if( await FileUtils.Exists( filePath ).ConfigureAwait( false ) )
                 {
                     // TODO notify app that data might be outdated
                     // no network: use old version from cache (even if no cache index entry exists)
-                    returnFile = await FileUtils.ReadFromFile( targetFile );
+                    returnFile = await FileUtils.ReadFromFile( filePath );
                 }
             }
+
             downloadLocks.ReleaseLock( url );
+
             if( returnFile == null )
             {
                 throw new Exception( "Media file " + url + " is not in cache and no internet connection is available." );
             }
+
             return returnFile;
         }
 

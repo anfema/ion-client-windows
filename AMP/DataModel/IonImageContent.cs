@@ -46,12 +46,13 @@ namespace Anfema.Ion.DataModel
         public int width { get; set; }
         public int height { get; set; }
         public double scale { get; set; }
+        public string checksum { get; set; }
 
         public StorageFile storageFile { get; set; }
 
         public async Task loadImage( Ion amp )
         {
-            this.storageFile = await amp.Request( this.imageURL, null );
+            this.storageFile = await amp.Request( this.imageURL, checksum, this );
         }
     }
 }
