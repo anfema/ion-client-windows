@@ -1,4 +1,4 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Ion.DataModel;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
@@ -6,26 +6,26 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 
-namespace Anfema.Amp.Parsing
+namespace Anfema.Ion.Parsing
 {
     public static class DataParser
     {
         /// <summary>
-        /// Parses a given raw json to a AmpPage
+        /// Parses a given raw json to a IonPage
         /// </summary>
         /// <param name="pageRaw"></param>
-        /// <returns>AmpPage without the generic data types</returns>
-        public static async Task<AmpPage> parsePage(HttpResponseMessage response)
+        /// <returns>IonPage without the generic data types</returns>
+        public static async Task<IonPage> parsePage(HttpResponseMessage response)
         {
             // Extract the json string from the content of the response message
             string responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             // Parse the page to a raw page container
-            AmpPage pageParsed = new AmpPage();
+            IonPage pageParsed = new IonPage();
 
             try
             {
-                AMPPageRoot pageParsedNew = JsonConvert.DeserializeObject<AMPPageRoot>(responseString);
+                IonPageRoot pageParsedNew = JsonConvert.DeserializeObject<IonPageRoot>(responseString);
                 pageParsed = pageParsedNew.page[0];
             }
             catch (Exception e)
@@ -42,7 +42,7 @@ namespace Anfema.Amp.Parsing
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static async Task<AmpCollection> parseCollection( HttpResponseMessage response )
+        public static async Task<IonCollection> parseCollection( HttpResponseMessage response )
         {
             return JsonConvert.DeserializeObject<CollectionRoot>( await response.Content.ReadAsStringAsync().ConfigureAwait(false) ).collection[0];
         }

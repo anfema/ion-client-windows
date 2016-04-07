@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class PagePreview
+    public class IonPagePreview
     {
         public string identifier { get; set; }
         public string collection_identifier { get; set; }

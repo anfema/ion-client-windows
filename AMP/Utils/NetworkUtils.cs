@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Networking.Connectivity;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class NetworkUtils
     {

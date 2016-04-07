@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Parsing
+namespace Anfema.Ion.Parsing
 {
     public class CollectionPageMeta
     {

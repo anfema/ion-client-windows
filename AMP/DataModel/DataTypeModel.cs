@@ -1,4 +1,4 @@
-﻿namespace Anfema.Amp.DataModel
+﻿namespace Anfema.Ion.DataModel
 {
     public class DataTypeModel
     {        

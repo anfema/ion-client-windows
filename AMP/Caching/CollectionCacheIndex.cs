@@ -1,11 +1,11 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Pages;
-using Anfema.Amp.Utils;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Pages;
+using Anfema.Ion.Utils;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     public class CollectionCacheIndex : CacheIndex
     {
@@ -25,7 +25,7 @@ namespace Anfema.Amp.Caching
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public bool isOutdated( AmpConfig config )
+        public bool isOutdated( IonConfig config )
         {
             return lastUpdated < (DateTime.Now.ToUniversalTime().AddMinutes(-config.minutesUntilCollectionRefresh));
         }
@@ -66,7 +66,7 @@ namespace Anfema.Amp.Caching
             return await CacheIndexStore.retrieve<CollectionCacheIndex>(requestURL, collectionIdentifier).ConfigureAwait(false);
         }
 
-        public static async Task<CollectionCacheIndex> retrieve( AmpConfig config )
+        public static async Task<CollectionCacheIndex> retrieve( IonConfig config )
         {
             String requestUrl = PagesURLs.getCollectionURL( config );
             return await CacheIndexStore.retrieve<CollectionCacheIndex>( requestUrl, config.collectionIdentifier ).ConfigureAwait(false);
@@ -79,7 +79,7 @@ namespace Anfema.Amp.Caching
         /// <param name="config"></param>
         /// <param name="lastModified"></param>
         /// <returns></returns>
-        public static async Task<bool> save( AmpConfig config, DateTime lastModified )
+        public static async Task<bool> save( IonConfig config, DateTime lastModified )
         {
             string collectionURL = PagesURLs.getCollectionURL(config);
             CollectionCacheIndex cacheIndex = new CollectionCacheIndex(collectionURL, DateTimeUtils.now().ToUniversalTime(), lastModified);

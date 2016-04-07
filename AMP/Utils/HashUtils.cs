@@ -5,7 +5,7 @@ using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class HashUtils
     {

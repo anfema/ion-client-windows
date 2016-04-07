@@ -1,9 +1,9 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Utils;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
 using System;
 
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     public class FilePaths
     {
@@ -25,7 +25,7 @@ namespace Anfema.Amp.Caching
         /// <param name="url"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static String GetMediaFilePath( String url, AmpConfig config )
+        public static String GetMediaFilePath( String url, IonConfig config )
         {
             return GetMediaFilePath( url, config, false );
         }
@@ -37,7 +37,7 @@ namespace Anfema.Amp.Caching
         /// <param name="config"></param>
         /// <param name="tempCollectionFolder"></param>
         /// <returns></returns>
-        public static String GetMediaFilePath( String url, AmpConfig config, bool tempCollectionFolder )
+        public static String GetMediaFilePath( String url, IonConfig config, bool tempCollectionFolder )
         {
             String mediaFolderPath = GetMediaFolderPath( config, tempCollectionFolder );
             String filename = GetFileName( url );
@@ -50,7 +50,7 @@ namespace Anfema.Amp.Caching
         /// <param name="config"></param>
         /// <param name="tempCollectionFolder"></param>
         /// <returns></returns>
-        public static String GetMediaFolderPath( AmpConfig config, bool tempCollectionFolder )
+        public static String GetMediaFolderPath( IonConfig config, bool tempCollectionFolder )
         {
             return config.collectionIdentifier + FileUtils.SLASH + AppendTemp( "media", tempCollectionFolder );
         }

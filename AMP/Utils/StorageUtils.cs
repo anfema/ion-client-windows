@@ -1,6 +1,6 @@
-﻿using Anfema.Amp.Caching;
-using Anfema.Amp.DataModel;
-using Anfema.Amp.Parsing;
+﻿using Anfema.Ion.Caching;
+using Anfema.Ion.DataModel;
+using Anfema.Ion.Parsing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class StorageUtils
     {
@@ -70,7 +70,7 @@ namespace Anfema.Amp.Utils
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static async Task saveCollectionToIsolatedStorage( AmpCollection collection )
+        public static async Task saveCollectionToIsolatedStorage( IonCollection collection )
         {
             String fileName = collection.identifier + ".json";
             String filePath = collection.identifier + FileUtils.SLASH + fileName;
@@ -103,7 +103,7 @@ namespace Anfema.Amp.Utils
         /// </summary>
         /// <param name="collectionIdentifier"></param>
         /// <returns>The collection or null, if the collection isn't found</returns>
-        public static async Task<AmpCollection> loadCollectionFromIsolatedStorage( string collectionIdentifier )
+        public static async Task<IonCollection> loadCollectionFromIsolatedStorage( string collectionIdentifier )
         {
             try
             {
@@ -117,14 +117,14 @@ namespace Anfema.Amp.Utils
                 }
                 fileLocks.ReleaseLock( collectionIdentifier );
 
-                AmpCollection collection = null;
+                IonCollection collection = null;
                 using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
                 {
                     StorageFile file = await folder.GetFileAsync( fileName );
 
                     string content = await FileIO.ReadTextAsync( file );
 
-                    collection = JsonConvert.DeserializeObject<AmpCollection>( content );
+                    collection = JsonConvert.DeserializeObject<IonCollection>( content );
                 }
                 fileLocks.ReleaseLock( filePath );
 
@@ -144,7 +144,7 @@ namespace Anfema.Amp.Utils
         /// </summary>
         /// <param name="page"></param>
         /// <returns></returns>
-        public static async Task savePageToIsolatedStorage(AmpPage page)
+        public static async Task savePageToIsolatedStorage(IonPage page)
         {
             String localeFolderPath = page.collection + FileUtils.SLASH + page.locale;
             String fileName = page.identifier + ".json";
@@ -188,7 +188,7 @@ namespace Anfema.Amp.Utils
         /// <param name="locale"></param>
         /// <param name="pageIdentifier"></param>
         /// <returns>The desired page or null, if the page wasn't found in the isolated folder</returns>
-        public static async Task<AmpPage> loadPageFromIsolatedStorage( string collectionIdentifier, string locale, string pageIdentifier )
+        public static async Task<IonPage> loadPageFromIsolatedStorage( string collectionIdentifier, string locale, string pageIdentifier )
         {
             try
             {
@@ -210,14 +210,14 @@ namespace Anfema.Amp.Utils
                 }
                 fileLocks.ReleaseLock( localeFolderPath );
 
-                AmpPage page = null;
+                IonPage page = null;
                 using ( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait(false))
                 {
                     StorageFile file = await localeFolder.GetFileAsync(fileName);
 
                     string content = await FileIO.ReadTextAsync(file);
 
-                    page = JsonConvert.DeserializeObject<AmpPage>( content );
+                    page = JsonConvert.DeserializeObject<IonPage>( content );
                 }
                 fileLocks.ReleaseLock( filePath );
                 

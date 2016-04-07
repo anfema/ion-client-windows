@@ -1,11 +1,11 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Ion.DataModel;
 using System.Collections.Generic;
 
-namespace Anfema.Amp.Parsing
+namespace Anfema.Ion.Parsing
 {
     public class CollectionRoot
     {
         public CollectionMeta meta { get; set; }
-        public List<AmpCollection> collection { get; set; }
+        public List<IonCollection> collection { get; set; }
     }
 }

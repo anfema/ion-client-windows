@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class DateTimeUtils
     {

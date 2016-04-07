@@ -6,41 +6,41 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpImageContent : AmpContent
+    public class IonImageContent : IonContent
     {
-        [JsonProperty("mime_type")]
+        [JsonProperty( "mime_type" )]
         public string mimeType { get; set; }
 
-        [JsonProperty("image")]
+        [JsonProperty( "image" )]
         public string imageURL { get; set; }
 
-        [JsonProperty("file_size")]
+        [JsonProperty( "file_size" )]
         public int fileSize { get; set; }
 
-        [JsonProperty("original_mime_type")]
+        [JsonProperty( "original_mime_type" )]
         public string originalMimeType { get; set; }
 
-        [JsonProperty("original_image")]
+        [JsonProperty( "original_image" )]
         public string originalImageURL { get; set; }
 
-        [JsonProperty("original_width")]
+        [JsonProperty( "original_width" )]
         public int originalWidth { get; set; }
 
-        [JsonProperty("original_height")]
+        [JsonProperty( "original_height" )]
         public int originalHeight { get; set; }
 
-        [JsonProperty("original_file_size")]
+        [JsonProperty( "original_file_size" )]
         public int originalFileSize { get; set; }
 
-        [JsonProperty("translation_x")]
+        [JsonProperty( "translation_x" )]
         public int translationX { get; set; }
 
-        [JsonProperty("translation_y")]
+        [JsonProperty( "translation_y" )]
         public int translationY { get; set; }
 
-        [JsonProperty("original_checksum")]
+        [JsonProperty( "original_checksum" )]
         public string originalChecksum { get; set; }
 
         public int width { get; set; }
@@ -49,9 +49,9 @@ namespace Anfema.Amp.DataModel
 
         public StorageFile storageFile { get; set; }
 
-        public async Task loadImage(Amp amp)
+        public async Task loadImage( Ion amp )
         {
-            this.storageFile = await amp.Request(this.imageURL, null);
+            this.storageFile = await amp.Request( this.imageURL, null );
         }
     }
 }

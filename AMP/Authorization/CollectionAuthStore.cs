@@ -1,9 +1,9 @@
-﻿using Anfema.Amp.Utils;
+﻿using Anfema.Ion.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 
-namespace Anfema.Amp.Authorization
+namespace Anfema.Ion.Authorization
 {
     public class CollectionAuthStore
     {

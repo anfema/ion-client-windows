@@ -1,4 +1,4 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Ion.DataModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 
-namespace Anfema.Amp.Authorization
+namespace Anfema.Ion.Authorization
 {
     public class TokenAuthorization
     {

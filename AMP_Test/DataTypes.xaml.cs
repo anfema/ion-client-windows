@@ -1,5 +1,5 @@
-﻿using Anfema.Amp;
-using Anfema.Amp.DataModel;
+﻿using Anfema.Ion;
+using Anfema.Ion.DataModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace AMP_Test
             /*
             ObservableCollection<DataTypeModel> oc = new ObservableCollection<DataTypeModel>();
 
-            Dictionary<string, string> dataTypes = Amp.Instance.ApiCalls;
+            Dictionary<string, string> dataTypes = Ion.Instance.ApiCalls;
 
             for (int i = 0; i < dataTypes.Count; i++)
             {

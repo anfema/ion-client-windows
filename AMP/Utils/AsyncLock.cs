@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     // Taken from http://www.hanselman.com/blog/ComparingTwoTechniquesInNETAsynchronousCoordinationPrimitives.aspx
     public sealed class AsyncLock

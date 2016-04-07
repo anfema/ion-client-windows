@@ -1,5 +1,5 @@
-﻿using Anfema.Amp;
-using Anfema.Amp.DataModel;
+﻿using Anfema.Ion;
+using Anfema.Ion.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,7 +25,7 @@ namespace AMP_Test
         }
 
         // Config file for the current data context
-        AmpConfig _ampConfig;
+        IonConfig _ampConfig;
 
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -53,7 +53,7 @@ namespace AMP_Test
 
         private async Task<bool> getPageNames()
         {
-            List<string> pageNames = await Amp.getInstance(_ampConfig).getAllPageIdentifierAsync();
+            List<string> pageNames = await Ion.getInstance(_ampConfig).getAllPageIdentifierAsync();
 
             allPagesList.DataContext = pageNames;
 

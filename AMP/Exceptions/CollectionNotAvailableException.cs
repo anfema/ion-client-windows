@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
 
-namespace Anfema.Amp.Exceptions
+namespace Anfema.Ion.Exceptions
 {
     public class CollectionNotAvailableException : IOException
     {

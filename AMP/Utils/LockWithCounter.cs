@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class OperationLocks
     {

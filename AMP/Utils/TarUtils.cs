@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class TarUtils
     {

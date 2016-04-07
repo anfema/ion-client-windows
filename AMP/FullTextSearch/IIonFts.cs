@@ -1,11 +1,11 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Ion.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.FullTextSearch
+namespace Anfema.Ion.FullTextSearch
 {
-    public interface IAmpFts : IAmpConfigUpdateable
+    public interface IIonFts : IIonConfigUpdateable
     {
         Task<String> DownloadSearchDatabase();
         Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null );

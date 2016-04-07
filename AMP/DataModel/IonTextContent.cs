@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
 
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpTextContent : AmpContent
+    public class IonTextContent : IonContent
     {
-        [JsonProperty("mime_type")]
+        [JsonProperty( "mime_type" )]
         public string mimeType { get; set; }
 
-        [JsonProperty("is_multiline")]
+        [JsonProperty( "is_multiline" )]
         public bool multiLine { get; set; }
 
         public string text { get; set; }

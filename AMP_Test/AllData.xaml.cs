@@ -1,8 +1,8 @@
-﻿using Anfema.Amp;
-using Anfema.Amp.DataModel;
-using Anfema.Amp.FullTextSearch;
-using Anfema.Amp.Parsing;
-using Anfema.Amp.Utils;
+﻿using Anfema.Ion;
+using Anfema.Ion.DataModel;
+using Anfema.Ion.FullTextSearch;
+using Anfema.Ion.Parsing;
+using Anfema.Ion.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -38,7 +38,7 @@ namespace AMP_Test
     /// </summary>
     public sealed partial class AllData : Page
     {
-        private AmpPageObservableCollection _allContent = new AmpPageObservableCollection();
+        private IonPageObservableCollection _allContent = new IonPageObservableCollection();
 
         public AllData()
         {
@@ -64,7 +64,7 @@ namespace AMP_Test
 
         private async void fileContent_Click(object sender, RoutedEventArgs e)
         {
-            AmpFileContent fileContent = ((AmpFileContent)((Button)sender).DataContext);
+            IonFileContent fileContent = ((IonFileContent)((Button)sender).DataContext);
             bool success = await Windows.System.Launcher.LaunchFileAsync(fileContent.storageFile);
         }
 
@@ -72,15 +72,15 @@ namespace AMP_Test
         {
             try
             {
-                AmpPage page = await Amp.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
+                IonPage page = await Ion.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
 
                 _allContent = DataConverters.convertContent(page.getContent());
 
                 // Load files for page content
-                await Amp.getInstance(AppController.instance.ampConfig).LoadContentFiles(_allContent);
+                await Ion.getInstance(AppController.instance.ampConfig).LoadContentFiles(_allContent);
 
-                //await Amp.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
-                //List<SearchResult> results = await Amp.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");
+                //await Ion.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
+                //List<SearchResult> results = await Ion.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");
 
                 // Set the data context of the lists
                 imageContentList.DataContext = _allContent.imageContent;
@@ -260,7 +260,7 @@ namespace AMP_Test
         private void mediaContent_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             MediaElement me = (MediaElement)sender;
-            AmpMediaContent mc = (AmpMediaContent)me.DataContext;
+            IonMediaContent mc = (IonMediaContent)me.DataContext;
 
             // This is the fallback in case the media file is simply an image
             if (mc.mimeType.Contains("image/") && mc.mediaURI != null)

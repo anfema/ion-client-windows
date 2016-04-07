@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMP_Test", "AMP_Test\AMP_Test.csproj", "{D6AE0DCB-C652-47C0-B2DE-642C160D58F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ION_Test", "AMP_Test\ION_Test.csproj", "{D6AE0DCB-C652-47C0-B2DE-642C160D58F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMP", "AMP\AMP.csproj", "{1685F181-ACC4-464F-B7F3-75397539C774}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ION", "AMP\ION.csproj", "{1685F181-ACC4-464F-B7F3-75397539C774}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Headers;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpConfig
+    public class IonConfig
     {
         public string baseUrl { get; set; }
         public string collectionIdentifier { get; set; }
@@ -25,7 +25,7 @@ namespace Anfema.Amp.DataModel
         /// <param name="minutesUntilCollectionRefresh"></param>
         /// <param name="pagesMemCacheSize"></param>
         /// <param name="archiveDownloads"></param>
-        public AmpConfig( string baseUrl, string locale, string collectionIdentifier, string variation, AuthenticationHeaderValue authenticationHeader, int minutesUntilCollectionRefresh, int pagesMemCacheSize, bool archiveDownloads )
+        public IonConfig( string baseUrl, string locale, string collectionIdentifier, string variation, AuthenticationHeaderValue authenticationHeader, int minutesUntilCollectionRefresh, int pagesMemCacheSize, bool archiveDownloads )
         {
             this.baseUrl = baseUrl;
             this.collectionIdentifier = collectionIdentifier;
@@ -48,11 +48,11 @@ namespace Anfema.Amp.DataModel
         /// <param name="minutesUntilCollectionRefresh"></param>
         /// <param name="pagesMemCacheSize"></param>
         /// <param name="archiveDownloads"></param>
-        public AmpConfig( string baseUrl, string locale, string collectionIdentifier, AuthenticationHeaderValue authenticationHeader, int minutesUntilCollectionRefresh, int pagesMemCacheSize, bool archiveDownloads )
+        public IonConfig( string baseUrl, string locale, string collectionIdentifier, AuthenticationHeaderValue authenticationHeader, int minutesUntilCollectionRefresh, int pagesMemCacheSize, bool archiveDownloads )
             : this( baseUrl, locale, collectionIdentifier, "default", authenticationHeader, minutesUntilCollectionRefresh, pagesMemCacheSize, archiveDownloads )
         { }
 
-        
+
         /// <summary>
         /// Checks the given Ampconfig for equality based uppon the content of both AmpConfigs
         /// </summary>
@@ -70,8 +70,8 @@ namespace Anfema.Amp.DataModel
                 return false;
             }
 
-            // Cast to AmpConfig for accessing the elements
-            AmpConfig config = (AmpConfig)obj;
+            // Cast to IonConfig for accessing the elements
+            IonConfig config = (IonConfig)obj;
 
             return config.baseUrl.Equals( baseUrl )
                 && config.collectionIdentifier.Equals( collectionIdentifier )

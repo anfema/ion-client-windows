@@ -139,9 +139,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AMP\AMP.csproj">
+    <ProjectReference Include="..\AMP\ION.csproj">
       <Project>{1685f181-acc4-464f-b7f3-75397539c774}</Project>
-      <Name>AMP</Name>
+      <Name>ION</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

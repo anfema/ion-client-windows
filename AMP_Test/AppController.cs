@@ -1,9 +1,9 @@
-﻿using Anfema.Amp.Authorization;
-using Anfema.Amp.Caching;
-using Anfema.Amp.DataModel;
-using Anfema.Amp.FullTextSearch;
-using Anfema.Amp.MediaFiles;
-using Anfema.Amp.Utils;
+﻿using Anfema.Ion.Authorization;
+using Anfema.Ion.Caching;
+using Anfema.Ion.DataModel;
+using Anfema.Ion.FullTextSearch;
+using Anfema.Ion.MediaFiles;
+using Anfema.Ion.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace AMP_Test
     {
         private static AppController _instance;
 
-        private AmpConfig _ampConfig;
+        private IonConfig _ampConfig;
 
         private bool _loggedIn;
 
@@ -43,7 +43,7 @@ namespace AMP_Test
         }
         
 
-        public async Task<AmpConfig> loginAsync()
+        public async Task<IonConfig> loginAsync()
         {
             if ( !_loggedIn )
             {
@@ -53,7 +53,7 @@ namespace AMP_Test
                 // Or using BasicAuth
                 //AuthenticationHeaderValue authenticationHeader = BasicAuth.GetAuthHeaderValue("admin@anfe.ma", "test");
 
-                AmpConfig config = new AmpConfig("http://bireise-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, "default", authorizationHeader, 120, 100, false);
+                IonConfig config = new IonConfig("http://bireise-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, "default", authorizationHeader, 120, 100, false);
                 
                 // Only testing purpose TODO: remove
                 _ampConfig = config;
@@ -68,7 +68,7 @@ namespace AMP_Test
         }
 
 
-        public AmpConfig ampConfig
+        public IonConfig ampConfig
         {
             get
             {

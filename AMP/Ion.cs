@@ -1,35 +1,35 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Exceptions;
-using Anfema.Amp.FullTextSearch;
-using Anfema.Amp.MediaFiles;
-using Anfema.Amp.Pages;
-using Anfema.Amp.Utils;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Exceptions;
+using Anfema.Ion.FullTextSearch;
+using Anfema.Ion.MediaFiles;
+using Anfema.Ion.Pages;
+using Anfema.Ion.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Anfema.Amp
+namespace Anfema.Ion
 {
-    public class Amp : IAmpConfigUpdateable
+    public class Ion : IIonConfigUpdateable
     {
         // Dictionary for all the possible instances bound to a specific config
-        private static Dictionary<AmpConfig, Amp> instances = new Dictionary<AmpConfig, Amp>();
+        private static Dictionary<IonConfig, Ion> instances = new Dictionary<IonConfig, Ion>();
 
         /// Organizes all the data handling for pages and collections
-        private IAmpPages _ampPages;
-        private IAmpFiles _ampFiles;
-        private IAmpFts _ampFts;
+        private IIonPages _ampPages;
+        private IIonFiles _ampFiles;
+        private IIonFts _ampFts;
 
         /// <summary>
-        /// Is used to get a instance of Amp corresponding to the given configuration
+        /// Is used to get a instance of Ion corresponding to the given configuration
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static Amp getInstance( AmpConfig config )
+        public static Ion getInstance( IonConfig config )
         {
-            Amp storedClient;
+            Ion storedClient;
 
             if( instances.TryGetValue( config, out storedClient ) )
             {
@@ -38,7 +38,7 @@ namespace Anfema.Amp
                 return storedClient;
             }
 
-            Amp amp = new Amp( config );
+            Ion amp = new Ion( config );
             instances.Add( config, amp );
             return amp;
         }
@@ -48,23 +48,23 @@ namespace Anfema.Amp
         /// Constructor with a config file for initialization
         /// </summary>
         /// <param name="config"></param>
-        private Amp( AmpConfig config )
+        private Ion( IonConfig config )
         {
-            _ampPages = new AmpPagesWithCaching( config );
-            _ampFiles = new AmpFilesWithCaching( config );
-            _ampFts = new AmpFtsImpl( _ampPages, _ampFiles, config );
+            _ampPages = new IonPagesWithCaching( config );
+            _ampFiles = new IonFilesWithCaching( config );
+            _ampFts = new IonFtsImpl( _ampPages, _ampFiles, config );
         }
 
 
         /// <summary>
-        /// Returns a whole AmpPage with the desired name and calls the given callback method after retrieving the page
+        /// Returns a whole IonPage with the desired name and calls the given callback method after retrieving the page
         /// </summary>
         /// <param name="name"></param>
         /// <param name="callback"></param>
-        /// <returns>AmpPage with the desired name</returns>
-        public async Task<AmpPage> getPageAsync( string name, Action callback )
+        /// <returns>IonPage with the desired name</returns>
+        public async Task<IonPage> getPageAsync( string name, Action callback )
         {
-            AmpPage page = await _ampPages.getPageAsync( name ).ConfigureAwait( false );
+            IonPage page = await _ampPages.getPageAsync( name ).ConfigureAwait( false );
 
             if( callback != null )
             {
@@ -80,9 +80,9 @@ namespace Anfema.Amp
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>List of AmpPagees</returns>
-        public async Task<List<AmpPage>> getPagesAsync( Predicate<PagePreview> filter, Action callback = null )
+        public async Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter, Action callback = null )
         {
-            List<AmpPage> pagesList = await _ampPages.getPagesAsync( filter ).ConfigureAwait( false );
+            List<IonPage> pagesList = await _ampPages.getPagesAsync( filter ).ConfigureAwait( false );
 
             if( callback != null )
             {
@@ -107,10 +107,10 @@ namespace Anfema.Amp
         /// Used to get a list of PagePreviews matching the given filter
         /// </summary>
         /// <param name="filter"></param>
-        /// <returns>List of PagePreview elements</returns>
-        public async Task<List<PagePreview>> getPagePreviewsAsync( Predicate<PagePreview> filter, Action callback = null )
+        /// <returns>List of IonPagePreview elements</returns>
+        public async Task<List<IonPagePreview>> getPagePreviewsAsync( Predicate<IonPagePreview> filter, Action callback = null )
         {
-            List<PagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync( filter ).ConfigureAwait( false );
+            List<IonPagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync( filter ).ConfigureAwait( false );
 
             if( callback != null )
             {
@@ -122,23 +122,23 @@ namespace Anfema.Amp
 
 
         /// <summary>
-        /// Used to search for a specific PagePreview with the exact identifier
+        /// Used to search for a specific IonPagePreview with the exact identifier
         /// </summary>
         /// <param name="identifier"></param>
         /// <param name="callback"></param>
-        /// <returns>PagePreview</returns>
-        public async Task<PagePreview> getPagePreviewAsync( string identifier, Action callback = null )
+        /// <returns>IonPagePreview</returns>
+        public async Task<IonPagePreview> getPagePreviewAsync( string identifier, Action callback = null )
         {
-            List<PagePreview> searchResult = await _ampPages.getPagePreviewsAsync( PageFilter.identifierEquals( identifier ) ).ConfigureAwait( false );
+            List<IonPagePreview> searchResult = await _ampPages.getPagePreviewsAsync( PageFilter.identifierEquals( identifier ) ).ConfigureAwait( false );
 
-            // If no PagePreview was found throw a not found exception
+            // If no IonPagePreview was found throw a not found exception
             if( searchResult.Count == 0 )
             {
                 throw new PagePreviewNotFoundException( identifier );
             }
 
             // Get first result
-            PagePreview pagePreview = searchResult[0];
+            IonPagePreview pagePreview = searchResult[0];
 
             if( callback != null )
             {
@@ -166,14 +166,14 @@ namespace Anfema.Amp
             return await _ampFiles.Request( url, checksum, ignoreCaching ).ConfigureAwait( false );
         }
 
-        public async Task LoadContentFiles( AmpPageObservableCollection content )
+        public async Task LoadContentFiles( IonPageObservableCollection content )
         {
-            foreach( AmpImageContent ampImageContent in content.imageContent )
+            foreach( IonImageContent ampImageContent in content.imageContent )
             {
                 await ampImageContent.loadImage( this ).ConfigureAwait( false );
             }
 
-            foreach( AmpFileContent ampFileContent in content.fileContent )
+            foreach( IonFileContent ampFileContent in content.fileContent )
             {
                 await ampFileContent.loadFile( this ).ConfigureAwait( false );
             }
@@ -184,7 +184,7 @@ namespace Anfema.Amp
         /// Called to update the config file of all relevant elements
         /// </summary>
         /// <param name="config"></param>
-        public void updateConfig( AmpConfig config )
+        public void updateConfig( IonConfig config )
         {
             _ampPages.updateConfig( config );
             _ampFiles.updateConfig( config );

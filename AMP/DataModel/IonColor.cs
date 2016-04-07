@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Windows.UI;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpColorContent : AmpContent
+    public class IonColorContent : IonContent
     {
         public int r { get; set; }
         public int g { get; set; }

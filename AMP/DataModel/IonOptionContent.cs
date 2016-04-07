@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpOptionContent : AmpContent
+    public class IonOptionContent : IonContent
     {
         public string value { get; set; }
 

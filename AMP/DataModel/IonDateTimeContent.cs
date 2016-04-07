@@ -1,9 +1,9 @@
 ﻿using System;
 
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpDateTimeContent : AmpContent
+    public class IonDateTimeContent : IonContent
     {
         public DateTime dateTime { get; set; }
     }

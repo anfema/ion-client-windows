@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.FullTextSearch
+namespace Anfema.Ion.FullTextSearch
 {
     public class SearchResult
     {

@@ -1,9 +1,9 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Pages;
-using Anfema.Amp.Parsing;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Pages;
+using Anfema.Ion.Parsing;
 
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     public class MemoryCache
     {
@@ -11,10 +11,10 @@ namespace Anfema.Amp.Caching
         private static long _pageMemoryCacheSize;
         
         // Holds the cached collection
-        public AmpCollection collection { get; set; }
+        public IonCollection collection { get; set; }
 
         // Holds all cached pages
-        private LRUCache<string, AmpPage> _pageMemoryCache;
+        private LRUCache<string, IonPage> _pageMemoryCache;
 
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Anfema.Amp.Caching
         {
             _pageMemoryCacheSize = pageMemoryCacheSize;
             collection = null;
-            _pageMemoryCache = new LRUCache<string, AmpPage>(pageMemoryCacheSize);
+            _pageMemoryCache = new LRUCache<string, IonPage>(pageMemoryCacheSize);
         }
 
 
@@ -34,9 +34,9 @@ namespace Anfema.Amp.Caching
         /// </summary>
         /// <param name="pageURL"></param>
         /// <returns></returns>
-        private AmpPage getPage( string pageURL )
+        private IonPage getPage( string pageURL )
         {
-            AmpPage page = _pageMemoryCache.get(pageURL);
+            IonPage page = _pageMemoryCache.get(pageURL);
             return page;
         }
 
@@ -47,7 +47,7 @@ namespace Anfema.Amp.Caching
         /// <param name="pageIdentifier"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public AmpPage getPage( string pageIdentifier , AmpConfig config )
+        public IonPage getPage( string pageIdentifier , IonConfig config )
         {
             string pageUrl = PagesURLs.getPageURL(config, pageIdentifier);
             return getPage(pageUrl);
@@ -59,7 +59,7 @@ namespace Anfema.Amp.Caching
         /// </summary>
         /// <param name="page"></param>
         /// <param name="config"></param>
-        public void savePage( AmpPage page, AmpConfig config )
+        public void savePage( IonPage page, IonConfig config )
         {
             string pageUrl = PagesURLs.getPageURL(config, page.identifier);
             _pageMemoryCache.add(pageUrl, page);

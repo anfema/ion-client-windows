@@ -1,11 +1,11 @@
-﻿using Anfema.Amp.Parsing;
+﻿using Anfema.Ion.Parsing;
 using System;
 using System.Collections.Generic;
 
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpPage
+    public class IonPage
     {
         public string parent { get; set; }
         public string identifier { get; set; }
@@ -20,7 +20,7 @@ namespace Anfema.Amp.DataModel
 
 
 
-        public AmpPage()
+        public IonPage()
         {
             children = new List<string>();
         }
@@ -29,8 +29,8 @@ namespace Anfema.Amp.DataModel
         /// <summary>
         /// Used to get the complete content of a page
         /// </summary>
-        /// <returns>List of AmpContent</returns>
-        public List<AmpContent> getContent()
+        /// <returns>List of IonContent</returns>
+        public List<IonContent> getContent()
         {
             return contents[0].children;
         }

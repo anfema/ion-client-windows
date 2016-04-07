@@ -1,9 +1,9 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Pages;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Pages;
 using System;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     public class PageCacheIndex : CacheIndex
     {
@@ -45,7 +45,7 @@ namespace Anfema.Amp.Caching
         /// <param name="page"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static async Task<bool> save( AmpPage page, AmpConfig config )
+        public static async Task<bool> save( IonPage page, IonConfig config )
         {
             string url = PagesURLs.getPageURL(config, page.identifier);
             PageCacheIndex cacheIndex = new PageCacheIndex(url, page.last_changed);

@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpPageContent
+    public class IonPageContent
     {
         public string type { get; set; }
         public string variation { get; set; }
         public string outlet { get; set; }
-        public List<AmpPageObservableCollection> children { get; set; }
+        public List<IonPageObservableCollection> children { get; set; }
 
-        public AmpPageContent()
+        public IonPageContent()
         {
-            children = new List<AmpPageObservableCollection>();
+            children = new List<IonPageObservableCollection>();
         }
     }
 }

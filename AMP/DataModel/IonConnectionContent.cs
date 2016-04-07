@@ -1,4 +1,4 @@
-﻿using Anfema.Amp.Parsing;
+﻿using Anfema.Ion.Parsing;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.DataModel
+namespace Anfema.Ion.DataModel
 {
-    public class AmpConnectionContent : AmpContent
+    public class IonConnectionContent : IonContent
     {
-        [JsonProperty("connection_string")]
+        [JsonProperty( "connection_string" )]
         public string connectionString { get; set; }
     }
 }

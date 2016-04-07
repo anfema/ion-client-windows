@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Anfema.Amp.Exceptions
+namespace Anfema.Ion.Exceptions
 {
     public class PagePreviewNotFoundException : NullReferenceException
     {

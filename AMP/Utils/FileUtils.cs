@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Windows.Storage;
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class FileUtils
     {

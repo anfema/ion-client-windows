@@ -1,5 +1,5 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Parsing;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Parsing;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public class DataClient
     {
@@ -16,14 +16,14 @@ namespace Anfema.Amp.Utils
         private HttpClient _client;
 
         // Holds the neccessary data for data retrieval
-        private AmpConfig _config;        
+        private IonConfig _config;        
      
 
         /// <summary>
         /// Constructor with config file for initialization
         /// </summary>
         /// <param name="config"></param>
-        public DataClient( AmpConfig config )
+        public DataClient( IonConfig config )
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Anfema.Amp.Utils
         /// Get a collection for a given identifier
         /// </summary>
         /// <param name="collectionIdentifier"></param>
-        /// <returns>AmpCollection with the desired identifier</returns>
+        /// <returns>IonCollection with the desired identifier</returns>
         public async Task<HttpResponseMessage> getCollectionAsync( string collectionIdentifier )
         {
             return await getCollectionAsync(collectionIdentifier, DateTime.MinValue).ConfigureAwait(false);
@@ -53,7 +53,7 @@ namespace Anfema.Amp.Utils
         /// Used to get a page with a given identifier
         /// </summary>
         /// <param name="identifier"></param>
-        /// <returns>Already parsed AmpPage</returns>
+        /// <returns>Already parsed IonPage</returns>
         public async Task<HttpResponseMessage> getPageAsync( string identifier )
         {
             try

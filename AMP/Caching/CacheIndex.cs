@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     public abstract class CacheIndex
     {

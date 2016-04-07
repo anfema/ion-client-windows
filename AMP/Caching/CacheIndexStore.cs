@@ -1,11 +1,11 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Utils;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     public class CacheIndexStore
     {
@@ -56,7 +56,7 @@ namespace Anfema.Amp.Caching
         /// <param name="cacheIndex"></param>
         /// <param name="config"></param>
         /// <returns></returns>
-        public static async Task<bool> save<T>( string requestURL, T cacheIndex, AmpConfig config ) where T : CacheIndex
+        public static async Task<bool> save<T>( string requestURL, T cacheIndex, IonConfig config ) where T : CacheIndex
         {
             try
             {

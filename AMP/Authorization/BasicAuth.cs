@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Authorization
+namespace Anfema.Ion.Authorization
 {
     public class BasicAuth
     {

@@ -1,5 +1,5 @@
-﻿using Anfema.Amp.DataModel;
-using Anfema.Amp.Utils;
+﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     class FileCacheIndex : CacheIndex
     {
@@ -57,7 +57,7 @@ namespace Anfema.Amp.Caching
         /// <param name="config"></param>
         /// <param name="checksum"></param>
         /// <returns></returns>
-        public static async Task<bool> save( String requestUrl, Stream file, AmpConfig config, String checksum )
+        public static async Task<bool> save( String requestUrl, Stream file, IonConfig config, String checksum )
         {
             if ( file == null )
             {

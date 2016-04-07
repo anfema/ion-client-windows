@@ -1,19 +1,19 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Ion.DataModel;
 using System.Collections.Generic;
 
 
-namespace Anfema.Amp.Utils
+namespace Anfema.Ion.Utils
 {
     public static class DataConverters
     {
         /// <summary>
-        /// Helps to convert a list of AmpContent to a PageObservableCollection
+        /// Helps to convert a list of IonContent to a PageObservableCollection
         /// </summary>
         /// <param name="list"></param>
         /// <returns>ObservableCollection with all the content of the list given</returns>
-        public static AmpPageObservableCollection convertContent( List<AmpContent> list )
+        public static IonPageObservableCollection convertContent( List<IonContent> list )
         {
-            AmpPageObservableCollection oc = new AmpPageObservableCollection();
+            IonPageObservableCollection oc = new IonPageObservableCollection();
 
             for( int i=0; i< list.Count; i++ )
             {
@@ -27,52 +27,52 @@ namespace Anfema.Amp.Utils
                 {
                     case "textcontent":
                         {
-                            oc.textContent.Add((AmpTextContent)list[i]);
+                            oc.textContent.Add((IonTextContent)list[i]);
                             break;
                         }
                     case "imagecontent":
                         {
-                            oc.imageContent.Add((AmpImageContent)list[i]);
+                            oc.imageContent.Add((IonImageContent)list[i]);
                             break;
                         }
                     case "colorcontent":
                         {
-                            oc.colorContent.Add((AmpColorContent)list[i]);
+                            oc.colorContent.Add((IonColorContent)list[i]);
                             break;
                         }
                     case "datetimecontent":
                         {
-                            oc.dateTimeContent.Add((AmpDateTimeContent)list[i]);
+                            oc.dateTimeContent.Add((IonDateTimeContent)list[i]);
                             break;
                         }
                     case "filecontent":
                         {
-                            oc.fileContent.Add((AmpFileContent)list[i]);
+                            oc.fileContent.Add((IonFileContent)list[i]);
                             break;
                         }
                     case "flagcontent":
                         {
-                            oc.flagContent.Add((AmpFlagContent)list[i]);
+                            oc.flagContent.Add((IonFlagContent)list[i]);
                             break;
                         }
                     case "mediacontent":
                         {
-                            oc.mediaContent.Add((AmpMediaContent)list[i]);
+                            oc.mediaContent.Add((IonMediaContent)list[i]);
                             break;
                         }
                     case "optioncontent":
                         {
-                            oc.optionContent.Add((AmpOptionContent)list[i]);
+                            oc.optionContent.Add((IonOptionContent)list[i]);
                             break;
                         }
                     case "numbercontent":
                         {
-                            oc.numberContent.Add((AmpNumberContent)list[i]);
+                            oc.numberContent.Add((IonNumberContent)list[i]);
                             break;
                         }
                     case "connectioncontent":
                         {
-                            oc.connectionContent.Add((AmpConnectionContent)list[i]);
+                            oc.connectionContent.Add((IonConnectionContent)list[i]);
                             break;
                         }
                 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace Anfema.Amp.Caching
+namespace Anfema.Ion.Caching
 {
     public class LRUCache<K, V>
     {

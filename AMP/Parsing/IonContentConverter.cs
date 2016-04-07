@@ -1,75 +1,75 @@
-﻿using Anfema.Amp.DataModel;
+﻿using Anfema.Ion.DataModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using Newtonsoft.Json.Converters;
 
 
-namespace Anfema.Amp.Parsing
+namespace Anfema.Ion.Parsing
 {
-    public class AmpContentConverter : CustomCreationConverter<AmpContent>
+    public class IonContentConverter : CustomCreationConverter<IonContent>
     {
-        public override AmpContent Create(Type objectType)
+        public override IonContent Create( Type objectType )
         {
             throw new NotImplementedException();
         }
 
 
         /// <summary>
-        /// Creates a new Class that derives from AmpContent. Which class is being generated depends on the type-property
+        /// Creates a new Class that derives from IonContent. Which class is being generated depends on the type-property
         /// </summary>
         /// <param name="objectType"></param>
         /// <param name="jObject"></param>
-        /// <returns>Class defined by the type-property of the giben AmpContent</returns>
-        protected AmpContent Create(Type objectType, JObject jObject)
+        /// <returns>Class defined by the type-property of the giben IonContent</returns>
+        protected IonContent Create( Type objectType, JObject jObject )
         {
-            string objectTypeString = (string)jObject.Property("type");
+            string objectTypeString = (string)jObject.Property( "type" );
 
-            switch (objectTypeString)
+            switch( objectTypeString )
             {
                 case "textcontent":
                     {
-                        return new AmpTextContent();
+                        return new IonTextContent();
                     }
                 case "imagecontent":
                     {
-                        return new AmpImageContent();
+                        return new IonImageContent();
                     }
                 case "colorcontent":
                     {
-                        return new AmpColorContent();
+                        return new IonColorContent();
                     }
                 case "datetimecontent":
                     {
-                        return new AmpDateTimeContent();
+                        return new IonDateTimeContent();
                     }
                 case "filecontent":
                     {
-                        return new AmpFileContent();
+                        return new IonFileContent();
                     }
                 case "flagcontent":
                     {
-                        return new AmpFlagContent();
+                        return new IonFlagContent();
                     }
                 case "mediacontent":
                     {
-                        return new AmpMediaContent();
+                        return new IonMediaContent();
                     }
                 case "optioncontent":
                     {
-                        return new AmpOptionContent();
+                        return new IonOptionContent();
                     }
                 case "numbercontent":
                     {
-                        return new AmpNumberContent();
+                        return new IonNumberContent();
                     }
                 case "connectioncontent":
                     {
-                        return new AmpConnectionContent();
+                        return new IonConnectionContent();
                     }
             }
 
-            throw new JsonReaderException(string.Format("The datetype " + objectTypeString + " is not defined for AmpContent") );
+            throw new JsonReaderException( string.Format( "The datetype " + objectTypeString + " is not defined for AmpContent" ) );
         }
 
 
@@ -81,29 +81,29 @@ namespace Anfema.Amp.Parsing
         /// <param name="existingValue"></param>
         /// <param name="serializer"></param>
         /// <returns>Populated object with the data of the node</returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson( JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer )
         {
             // Load JObject from stream
-            JObject jObject = JObject.Load(reader);
+            JObject jObject = JObject.Load( reader );
 
             // Create target object based on JObject
-            var target = Create(objectType, jObject);
+            var target = Create( objectType, jObject );
 
             try
             {
                 // Populate the object properties
-                serializer.Populate(jObject.CreateReader(), target);
+                serializer.Populate( jObject.CreateReader(), target );
 
                 return target;
             }
-            catch ( JsonSerializationException e)
+            catch( JsonSerializationException e )
             {
                 // This sets a dateTime with value null to the minimal available time. This null is caused by a AMP bug!!!
-                if( target.GetType() == typeof(AmpDateTimeContent))
+                if( target.GetType() == typeof( IonDateTimeContent ) )
                 {
                     return DateTime.MinValue;
                 }
-                throw new JsonSerializationException("Error reading JSON-token " + target + " with value " + jObject.ToString(), e);
+                throw new JsonSerializationException( "Error reading JSON-token " + target + " with value " + jObject.ToString(), e );
             }
         }
     }
