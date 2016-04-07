@@ -8,6 +8,7 @@ namespace Anfema.Ion.Caching
     public class FilePaths
     {
         private static readonly String _ftsDbFolderPath = "ftsDbs";
+        private static readonly string _mediaPath = "media";
 
         /// <summary>
         /// Get filename for a url as its MD5 hash
@@ -45,14 +46,14 @@ namespace Anfema.Ion.Caching
         }
 
         /// <summary>
-        /// Get local file cache folder path for an amp configuration/collection
+        /// Get local file cache folder path for an Ion configuration/collection
         /// </summary>
         /// <param name="config"></param>
         /// <param name="tempCollectionFolder"></param>
         /// <returns></returns>
         public static String GetMediaFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + FileUtils.SLASH + AppendTemp( "media", tempCollectionFolder );
+            return config.collectionIdentifier + FileUtils.SLASH + _mediaPath + FileUtils.SLASH + AppendTemp( "media", tempCollectionFolder );
         }
 
         private static String AppendTemp( String path, bool appendTemp )
