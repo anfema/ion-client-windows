@@ -221,14 +221,7 @@ namespace Anfema.Ion.Pages
                 // Add page to cache, if it is not null
                 if( page != null )
                 {
-                    // Memory cache
-                    _memoryCache.savePage( page, _config );
-
-                    // Local storage cache
-                    await StorageUtils.savePageToIsolatedStorage( page ).ConfigureAwait( false );
-
-                    // Save page cache index
-                    await PageCacheIndex.save( page, _config ).ConfigureAwait( false );
+                    await savePageToCachesAsync( page, _config );
                 }
 
                 return page;
@@ -238,6 +231,25 @@ namespace Anfema.Ion.Pages
                 Debug.WriteLine( "Error getting page " + pageIdentifier + " from server! " + e.Message );
                 return null;
             }
+        }
+
+
+        /// <summary>
+        /// Used to save a page to the memory and isolated storage cache
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public async Task savePageToCachesAsync( IonPage page, IonConfig config )
+        {
+            // Memory cache
+            _memoryCache.savePage( page, _config );
+
+            // Local storage cache
+            await StorageUtils.savePageToIsolatedStorage( page ).ConfigureAwait( false );
+
+            // Save page cache index
+            await PageCacheIndex.save( page, _config ).ConfigureAwait( false );
         }
 
 

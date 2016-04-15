@@ -50,7 +50,7 @@ namespace Anfema.Ion.MediaFiles
 
                 case "filecontent":
                     {
-                        targetPath = FilePaths.getFileFilePath( url, _config );
+                        targetPath = FilePaths.getMediaFilePath( url, _config );
                         break;
                     }
 

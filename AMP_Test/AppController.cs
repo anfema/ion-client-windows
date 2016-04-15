@@ -47,13 +47,13 @@ namespace AMP_Test
         {
             if ( !_loggedIn )
             {
-                String collectionIdentifier = "seoul-november-2014";
+                String collectionIdentifier = "lookbook";
 
-                AuthenticationHeaderValue authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "admin@anfe.ma", "test", "http://bireise-dev.anfema.com/client/v1/login" );
+                AuthenticationHeaderValue authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "knauf-translator@anfe.ma", "Jdt9y9qHt3", "https://lookbook-dev.anfema.com/client/v1/login" );
                 // Or using BasicAuth
                 //AuthenticationHeaderValue authenticationHeader = BasicAuth.GetAuthHeaderValue("admin@anfe.ma", "test");
 
-                IonConfig config = new IonConfig("http://bireise-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, "default", authorizationHeader, 120, 100, false);
+                IonConfig config = new IonConfig( "https://lookbook-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, "default", authorizationHeader, 120, 100, false);
                 
                 // Only testing purpose TODO: remove
                 _ampConfig = config;

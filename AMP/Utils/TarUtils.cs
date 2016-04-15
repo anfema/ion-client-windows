@@ -8,25 +8,27 @@ namespace Anfema.Ion.Utils
 {
     public class TarUtils
     {
-        public async static Task ExtractTarArchiveAsync(Stream archiveStream, StorageFolder destinationFolder)
+        public async static Task ExtractTarArchiveAsync( Stream archiveStream, StorageFolder destinationFolder )
         {
-            using (var reader = TarReader.Open(archiveStream))
+            using( TarReader reader = TarReader.Open( archiveStream ) )
             {
-                while (reader.MoveToNextEntry())
+                while( reader.MoveToNextEntry() )
                 {
-                    if ( !reader.Entry.IsDirectory )
+                    if( !reader.Entry.IsDirectory )
                     {
-                        using ( var entryStream = reader.OpenEntryStream() )
+                        using( var entryStream = reader.OpenEntryStream() )
                         {
-                            string fileName = Path.GetFileName(reader.Entry.Key);
-                            string folderName = Path.GetDirectoryName(reader.Entry.Key);
+                            string fileName = Path.GetFileName( reader.Entry.Key );
+                            string folderName = Path.GetDirectoryName( reader.Entry.Key );
 
-                            var folder = destinationFolder;
-                            if (string.IsNullOrWhiteSpace( folderName ) == false)
+                            StorageFolder folder = destinationFolder;
+                            if( string.IsNullOrWhiteSpace( folderName ) == false )
+                            {
                                 folder = await destinationFolder.CreateFolderAsync( folderName, CreationCollisionOption.OpenIfExists );
+                            }
 
-                            var file = await folder.CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
-                            using ( var fileStream = await file.OpenStreamForWriteAsync().ConfigureAwait( false ) )
+                            StorageFile file = await folder.CreateFileAsync( fileName, CreationCollisionOption.OpenIfExists );
+                            using( Stream fileStream = await file.OpenStreamForWriteAsync().ConfigureAwait( false ) )
                             {
                                 await entryStream.CopyToAsync( fileStream );
                             }

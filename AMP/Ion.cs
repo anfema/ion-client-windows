@@ -1,14 +1,19 @@
 ﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
+using Anfema.Ion.Caching;
 using Anfema.Ion.Exceptions;
 using Anfema.Ion.FullTextSearch;
 using Anfema.Ion.MediaFiles;
 using Anfema.Ion.Pages;
-using Anfema.Ion.Utils;
+using Anfema.Ion.Parsing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Anfema.Ion.Archive;
 
 namespace Anfema.Ion
 {
@@ -18,9 +23,10 @@ namespace Anfema.Ion
         private static Dictionary<IonConfig, Ion> instances = new Dictionary<IonConfig, Ion>();
 
         /// Organizes all the data handling for pages and collections
-        private IIonPages _ampPages;
-        private IIonFiles _ampFiles;
-        private IIonFts _ampFts;
+        private IIonPages _ionPages;
+        private IIonFiles _ionFiles;
+        private IIonFts _ionFts;
+        private IIonArchive _ionArchive;
 
         /// <summary>
         /// Is used to get a instance of Ion corresponding to the given configuration
@@ -50,9 +56,10 @@ namespace Anfema.Ion
         /// <param name="config"></param>
         private Ion( IonConfig config )
         {
-            _ampPages = new IonPagesWithCaching( config );
-            _ampFiles = new IonFilesWithCaching( config );
-            _ampFts = new IonFtsImpl( _ampPages, _ampFiles, config );
+            _ionPages = new IonPagesWithCaching( config );
+            _ionFiles = new IonFilesWithCaching( config );
+            _ionFts = new IonFtsImpl( _ionPages, _ionFiles, config );
+            _ionArchive = new IonArchiveOperations( config );
         }
 
 
@@ -64,7 +71,7 @@ namespace Anfema.Ion
         /// <returns>IonPage with the desired name</returns>
         public async Task<IonPage> getPageAsync( string name, Action callback )
         {
-            IonPage page = await _ampPages.getPageAsync( name ).ConfigureAwait( false );
+            IonPage page = await _ionPages.getPageAsync( name ).ConfigureAwait( false );
 
             if( callback != null )
             {
@@ -82,7 +89,7 @@ namespace Anfema.Ion
         /// <returns>List of AmpPagees</returns>
         public async Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter, Action callback = null )
         {
-            List<IonPage> pagesList = await _ampPages.getPagesAsync( filter ).ConfigureAwait( false );
+            List<IonPage> pagesList = await _ionPages.getPagesAsync( filter ).ConfigureAwait( false );
 
             if( callback != null )
             {
@@ -99,7 +106,7 @@ namespace Anfema.Ion
         /// <returns>List of identifier</returns>
         public async Task<List<string>> getAllPageIdentifierAsync()
         {
-            return await _ampPages.getAllPagesIdentifierAsync().ConfigureAwait( false );
+            return await _ionPages.getAllPagesIdentifierAsync().ConfigureAwait( false );
         }
 
 
@@ -110,7 +117,7 @@ namespace Anfema.Ion
         /// <returns>List of IonPagePreview elements</returns>
         public async Task<List<IonPagePreview>> getPagePreviewsAsync( Predicate<IonPagePreview> filter, Action callback = null )
         {
-            List<IonPagePreview> pagePreviewList = await _ampPages.getPagePreviewsAsync( filter ).ConfigureAwait( false );
+            List<IonPagePreview> pagePreviewList = await _ionPages.getPagePreviewsAsync( filter ).ConfigureAwait( false );
 
             if( callback != null )
             {
@@ -129,7 +136,7 @@ namespace Anfema.Ion
         /// <returns>IonPagePreview</returns>
         public async Task<IonPagePreview> getPagePreviewAsync( string identifier, Action callback = null )
         {
-            List<IonPagePreview> searchResult = await _ampPages.getPagePreviewsAsync( PageFilter.identifierEquals( identifier ) ).ConfigureAwait( false );
+            List<IonPagePreview> searchResult = await _ionPages.getPagePreviewsAsync( PageFilter.identifierEquals( identifier ) ).ConfigureAwait( false );
 
             // If no IonPagePreview was found throw a not found exception
             if( searchResult.Count == 0 )
@@ -151,13 +158,13 @@ namespace Anfema.Ion
 
         public async Task<String> DownloadSearchDatabase()
         {
-            return await _ampFts.DownloadSearchDatabase().ConfigureAwait( false );
+            return await _ionFts.DownloadSearchDatabase().ConfigureAwait( false );
         }
 
 
         public async Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null )
         {
-            return await _ampFts.FullTextSearch( searchTerm, locale, pageLayout ).ConfigureAwait( false );
+            return await _ionFts.FullTextSearch( searchTerm, locale, pageLayout ).ConfigureAwait( false );
         }
 
 
@@ -171,7 +178,7 @@ namespace Anfema.Ion
         /// <returns>Storage file including the desired element</returns>
         public async Task<StorageFile> Request( String url, String checksum, IonContent content, Boolean ignoreCaching = false )
         {
-            return await _ampFiles.request( url, checksum, content, ignoreCaching ).ConfigureAwait( false );
+            return await _ionFiles.request( url, checksum, content, ignoreCaching ).ConfigureAwait( false );
         }
 
         public async Task LoadContentFiles( IonPageObservableCollection content )
@@ -193,9 +200,9 @@ namespace Anfema.Ion
         /// </summary>
         /// <param name="url"></param>
         /// <returns>Storage file including the archive file</returns>
-        public async Task<StorageFile> loadArchive( string url )
+        public async Task loadArchive( string url, Action callback = null )
         {
-            return await _ampFiles.requestArchiveFile( url );
+            await _ionArchive.loadArchive( _ionFiles, _ionPages, url, callback );
         }
 
 
@@ -205,9 +212,10 @@ namespace Anfema.Ion
         /// <param name="config"></param>
         public void updateConfig( IonConfig config )
         {
-            _ampPages.updateConfig( config );
-            _ampFiles.updateConfig( config );
-            _ampFts.updateConfig( config );
+            _ionPages.updateConfig( config );
+            _ionFiles.updateConfig( config );
+            _ionFts.updateConfig( config );
+            _ionArchive.updateConfig( config );
         }
     }
 }

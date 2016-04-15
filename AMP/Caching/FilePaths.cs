@@ -1,7 +1,7 @@
 ﻿using Anfema.Ion.DataModel;
 using Anfema.Ion.Utils;
 using System;
-
+using Windows.Storage;
 
 namespace Anfema.Ion.Caching
 {
@@ -11,6 +11,9 @@ namespace Anfema.Ion.Caching
         private static readonly string _mediaPath = "media";
         private static readonly string _archiveFolder = "archive";
         private static readonly string _fileFolder = "file";
+        private static readonly string _tempFolder = "temp";
+        private static readonly string _cacheIndicesFolder = "cache_indices";
+        private static readonly string _slash = "\\";
 
         /// <summary>
         /// Get filename for a url as its MD5 hash
@@ -38,20 +41,56 @@ namespace Anfema.Ion.Caching
         }
 
 
-        public static string getFileFilePath( string url, IonConfig config, bool tempCollectionFolder = false )
-        {
-            string fileFolderPath = getFileFolderPath( url, config, tempCollectionFolder );
-            string filename = getFileName( url );
-            return fileFolderPath + filename;
-        }
+        //public static string getFileFilePath( string url, IonConfig config, bool tempCollectionFolder = false )
+        //{
+        //    string fileFolderPath = getFileFolderPath( url, config, tempCollectionFolder );
+        //    string filename = getFileName( url );
+        //    return fileFolderPath + filename;
+        //}
 
 
         public static string getArchiveFilePath( string url, IonConfig config, bool tempCollectionFolder = false )
         {
-            string archiveFolderPath = getArchiveFolderPath( url, config, tempCollectionFolder );
+            string archiveFolderPath = getArchiveFolderPath( config, tempCollectionFolder );
             string filename = getFileName( url );
             return archiveFolderPath + filename;
         }
+        
+
+        public static String GetFtsDbFilePath( String collectionIdentifier )
+        {
+            return _ftsDbFolderPath + FileUtils.SLASH + "fts_" + collectionIdentifier + ".sqlite";
+        }
+
+
+        public static string getTempFolderPath( IonConfig config )
+        {
+            return config.collectionIdentifier + FileUtils.SLASH + _tempFolder;
+        }
+
+
+        /// <summary>
+        /// Returns the folder to which the archives are downloaded
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="config"></param>
+        /// <returns>Archive folder</returns>
+        public static string getArchiveFolderPath( IonConfig config, bool tempCollectionFolder )
+        {
+            return config.collectionIdentifier + FileUtils.SLASH + _archiveFolder + FileUtils.SLASH;
+        }
+
+
+        /// <summary>
+        /// Returns the folder to which the files are downloaded
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="config"></param>
+        /// <returns>File folder</returns>
+        //private static string getFileFolderPath( string url, IonConfig config, bool tempCollectionFolder )
+        //{
+        //    return config.collectionIdentifier + FileUtils.SLASH + _fileFolder + FileUtils.SLASH + AppendTemp( "file", tempCollectionFolder );
+        //}
 
 
         /// <summary>
@@ -60,10 +99,11 @@ namespace Anfema.Ion.Caching
         /// <param name="config"></param>
         /// <param name="tempCollectionFolder"></param>
         /// <returns></returns>
-        private static String getMediaFolderPath( IonConfig config, bool tempCollectionFolder )
+        public static String getMediaFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + FileUtils.SLASH + _mediaPath + FileUtils.SLASH + AppendTemp( "media", tempCollectionFolder );
+            return config.collectionIdentifier + FileUtils.SLASH + _mediaPath + FileUtils.SLASH;
         }
+
 
         private static String AppendTemp( String path, bool appendTemp )
         {
@@ -74,33 +114,37 @@ namespace Anfema.Ion.Caching
             return path;
         }
 
-        public static String GetFtsDbFilePath( String collectionIdentifier )
+
+        /// <summary>
+        /// Folder for cache indices
+        /// </summary>
+        public static string CACHE_FOLDER_IDENTIFIER
         {
-            return _ftsDbFolderPath + FileUtils.SLASH + "fts_" + collectionIdentifier + ".sqlite";
+            get
+            {
+                return _cacheIndicesFolder;
+            }
         }
 
 
         /// <summary>
-        /// Returns the folder to which the archives are downloaded
+        /// Absolut path to the cache indices folder
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="config"></param>
-        /// <returns>Archive folder</returns>
-        private static string getArchiveFolderPath( string url, IonConfig config, bool tempCollectionFolder )
+        public static string absolutCacheIndicesFolderPath( IonConfig config )
         {
-            return config.collectionIdentifier + FileUtils.SLASH + _archiveFolder + FileUtils.SLASH + AppendTemp( "archive", tempCollectionFolder );
+            return ApplicationData.Current.LocalFolder.Path + _slash + config.collectionIdentifier + _slash + _cacheIndicesFolder;
         }
 
 
         /// <summary>
-        /// Returns the folder to which the files are downloaded
+        /// Slash for folder hierarchy
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="config"></param>
-        /// <returns>File folder</returns>
-        private static string getFileFolderPath( string url, IonConfig config, bool tempCollectionFolder )
+        public static string SLASH
         {
-            return config.collectionIdentifier + FileUtils.SLASH + _fileFolder + FileUtils.SLASH + AppendTemp( "file", tempCollectionFolder );
+            get
+            {
+                return _slash;
+            }
         }
     }
 }

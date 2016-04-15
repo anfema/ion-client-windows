@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -38,8 +39,6 @@ namespace AMP_Test
             try
             {
                 _ampConfig = await AppController.instance.loginAsync();
-                this.allDataButton.IsEnabled = true;
-                this.dataTypesButton.IsEnabled = true;
 
                 await this.getPageNames();
             }
@@ -84,6 +83,14 @@ namespace AMP_Test
             // Disable the progress ring
             allPagesProgressRing.IsActive = false;
             allPagesProgressRing.Visibility = Visibility.Collapsed;
+        }
+
+
+        private async void archiveDownloadButton_Click( object sender, RoutedEventArgs e )
+        {
+            Debug.WriteLine( "Starting extraction" );
+            await Ion.getInstance( _ampConfig ).loadArchive( "https://lookbook-dev.anfema.com/client/v1/de_DE/lookbook.tar?variation=default" );
+            Debug.WriteLine( "Extraction finished" );
         }
     }
 }

@@ -82,6 +82,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Archive\IIonArchive.cs" />
+    <Compile Include="DataModel\ArchiveElement.cs" />
+    <Compile Include="Exceptions\NoIonPageRequestException.cs" />
     <Compile Include="Ion.cs" />
     <Compile Include="Authorization\BasicAuth.cs" />
     <Compile Include="Authorization\CollectionAuthStore.cs" />
@@ -126,6 +129,8 @@
     <Compile Include="MediaFiles\IIonFiles.cs" />
     <Compile Include="Pages\IIonPages.cs" />
     <Compile Include="Pages\IonPagesWithCaching.cs" />
+    <Compile Include="Pages\IonRequestInfo.cs" />
+    <Compile Include="Pages\IonRequestType.cs" />
     <Compile Include="Pages\PagesURLs.cs" />
     <Compile Include="Parsing\IonContentConverter.cs" />
     <Compile Include="Parsing\IonPageRoot.cs" />
@@ -137,6 +142,7 @@
     <Compile Include="Parsing\CollectionMeta.cs" />
     <Compile Include="DataModel\IonPageObservableCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Archive\IonArchiveOperations.cs" />
     <Compile Include="Utils\AsyncLock.cs" />
     <Compile Include="Utils\DataClient.cs" />
     <Compile Include="Utils\DataConverters.cs" />
@@ -144,6 +150,7 @@
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HashUtils.cs" />
     <Compile Include="Utils\LockWithCounter.cs" />
+    <Compile Include="Utils\OperationLocks.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />
     <Compile Include="Utils\PagesFilter.cs" />
     <Compile Include="Utils\StorageUtils.cs" />

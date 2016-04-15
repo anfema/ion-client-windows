@@ -35,15 +35,10 @@
         <ScrollViewer Grid.Row="1">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="dataTypesButton"
-                            IsEnabled="False"
-                            Content="DataTypes"
-                            Click="dataTypesButton_Click"
-                            Margin="10, 0, 10, 0"/>
-                    <Button x:Name="allDataButton"
-                            IsEnabled="False"
-                            Content="AllDataTest"
-                            Click="allData_Click"
+                    <Button x:Name="archiveDownloadButton"
+                            IsEnabled="True"
+                            Content="Archive Download"
+                            Click="archiveDownloadButton_Click"
                             Margin="10, 0, 10, 0"/>
                 </StackPanel>
                 <ScrollViewer>

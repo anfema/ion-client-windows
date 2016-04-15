@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 
 namespace Anfema.Ion.Caching
 {
@@ -46,6 +46,9 @@ namespace Anfema.Ion.Caching
         /// <param name="val">Value of the item</param>
         public void add(K key, V val)
         {
+            // Check cache for possible duplicate
+            removePossibleDouplicate( key );
+
             // Generate new LRUCacheItem 
             LRUCacheItem<K, V> cacheItem = new LRUCacheItem<K, V>(key, val);
 
@@ -95,6 +98,30 @@ namespace Anfema.Ion.Caching
 
             // Remove from cache
             cacheMap.Remove(node.Value.key);
+        }
+
+
+        /// <summary>
+        /// Checks the cache for a possible duplicate and removes it
+        /// </summary>
+        /// <param name="key"></param>
+        private void removePossibleDouplicate( K key )
+        {
+            // Check if there is a existing node with the specified key
+            LinkedListNode<LRUCacheItem<K, V>> node;
+            if( cacheMap.TryGetValue( key, out node ) )
+            {
+                // Decrease capacity
+                _capacity -= node.Value.sizeInByte;
+
+                // Remove node from the lruList
+                lruList.Remove( node );
+
+                // Remove key from the cacheMap
+                cacheMap.Remove( key );
+
+                Debug.WriteLine( "Removed duplicate node from LRU-Cache with the key: " + key.ToString() );
+            }
         }
     }
 }

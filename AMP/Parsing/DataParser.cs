@@ -20,17 +20,28 @@ namespace Anfema.Ion.Parsing
             // Extract the json string from the content of the response message
             string responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
+            return parsePage( responseString );
+        }
+
+
+        /// <summary>
+        /// Parses a given pageString to a IonPage
+        /// </summary>
+        /// <param name="pageString"></param>
+        /// <returns>Parsed IonPage</returns>
+        public static IonPage parsePage( string pageString )
+        {
             // Parse the page to a raw page container
             IonPage pageParsed = new IonPage();
 
             try
             {
-                IonPageRoot pageParsedNew = JsonConvert.DeserializeObject<IonPageRoot>(responseString);
+                IonPageRoot pageParsedNew = JsonConvert.DeserializeObject<IonPageRoot>( pageString );
                 pageParsed = pageParsedNew.page[0];
             }
-            catch (Exception e)
+            catch( Exception e )
             {
-                Debug.WriteLine("Error deserializing page json: " + e.Message);
+                Debug.WriteLine( "Error deserializing page json: " + e.Message );
             }
 
             return pageParsed;

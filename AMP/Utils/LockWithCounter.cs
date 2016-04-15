@@ -1,49 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Anfema.Ion.Utils
+﻿namespace Anfema.Ion.Utils
 {
-    public class OperationLocks
+    class LockWithCounter
     {
-        private Dictionary<String, LockWithCounter> ongoingOperations = new Dictionary<string, LockWithCounter>();
-        private readonly object syncLock = new object();
-
-        class LockWithCounter
-        {
-            public int counter { get; set; } = 0;
-            public AsyncLock asyncLock { get; } = new AsyncLock();
-        }
-
-        public AsyncLock ObtainLock( String filePath )
-        {
-            lock ( syncLock )
-            {
-                LockWithCounter lockWithCounter = null;
-                if ( !ongoingOperations.TryGetValue( filePath, out lockWithCounter ) )
-                {
-                    lockWithCounter = new LockWithCounter();
-                    ongoingOperations.Add( filePath, lockWithCounter );
-                }
-                lockWithCounter.counter++;
-                return lockWithCounter.asyncLock;
-            }
-        }
-
-        public void ReleaseLock( String filePath )
-        {
-            lock ( syncLock )
-            {
-                LockWithCounter lockWithCounter = null;
-                if ( ongoingOperations.TryGetValue( filePath, out lockWithCounter ) )
-                {
-                    lockWithCounter.counter--;
-
-                    if ( lockWithCounter.counter <= 0 )
-                    {
-                        ongoingOperations.Remove( filePath );
-                    }
-                }
-            }
-        }
+        public int counter { get; set; } = 0;
+        public AsyncLock asyncLock { get; } = new AsyncLock();
     }
 }
