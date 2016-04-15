@@ -1,4 +1,5 @@
-﻿using Anfema.Ion.DataModel;
+﻿using Anfema.Ion.Caching;
+using Anfema.Ion.DataModel;
 using Anfema.Ion.Exceptions;
 using Anfema.Ion.Utils;
 
@@ -6,11 +7,6 @@ namespace Anfema.Ion.Pages
 {
     public class PagesURLs
     {
-        private static readonly string SLASH = FileUtils.SLASH;
-        private static readonly string QUERY_BEGIN = "?";
-        private static readonly string QUERY_VARIATION = "variation=";
-        private static readonly string[] MEDIA_URL_INDICATORS = { "/media/", "/protected_media/" };
-
         /// <summary>
         /// Composes a collection URL from a given config
         /// </summary>
@@ -87,9 +83,9 @@ namespace Anfema.Ion.Pages
         /// <returns></returns>
         public static bool isMediaRequestUrl( string url )
         {
-            for( int i = 0; i < MEDIA_URL_INDICATORS.Length; i++ )
+            for( int i = 0; i < IonConstants.MediaUrlIndicators.Length; i++ )
             {
-                if( url.Contains( MEDIA_URL_INDICATORS[i] ) )
+                if( url.Contains( IonConstants.MediaUrlIndicators[i] ) )
                 {
                     return true;
                 }

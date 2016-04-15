@@ -12,7 +12,7 @@ namespace Anfema.Ion.Utils
     {
         private static StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
         private static OperationLocks fileLocks = new OperationLocks();
-        private static Windows.Storage.ApplicationDataContainer _settings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        private static ApplicationDataContainer _settings = ApplicationData.Current.LocalSettings;
 
         /// <summary>
         /// Save primitive value to app storage
@@ -65,7 +65,7 @@ namespace Anfema.Ion.Utils
         public static async Task saveCollectionToIsolatedStorage( IonCollection collection )
         {
             String fileName = collection.identifier + ".json";
-            String filePath = collection.identifier + FileUtils.SLASH + fileName;
+            String filePath = collection.identifier + IonConstants.Slash + fileName;
 
             StorageFolder folder = null;
             using( await fileLocks.ObtainLock( collection.identifier ).LockAsync().ConfigureAwait( false ) )
@@ -99,8 +99,8 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                String fileName = collectionIdentifier + ".json";
-                String filePath = collectionIdentifier + FileUtils.SLASH + fileName;
+                String fileName = collectionIdentifier + IonConstants.JsonFileExtension;
+                String filePath = collectionIdentifier + IonConstants.Slash + fileName;
 
                 StorageFolder folder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
@@ -148,9 +148,9 @@ namespace Anfema.Ion.Utils
                 }
 
 
-                String localeFolderPath = page.collection + FileUtils.SLASH + page.locale;
-                String fileName = page.identifier + ".json";
-                String filePath = localeFolderPath + FileUtils.SLASH + fileName;
+                String localeFolderPath = page.collection + IonConstants.Slash + page.locale;
+                String fileName = page.identifier + IonConstants.JsonFileExtension;
+                String filePath = localeFolderPath + IonConstants.Slash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( page.collection ).LockAsync().ConfigureAwait( false ) )
@@ -200,9 +200,9 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                String localeFolderPath = collectionIdentifier + FileUtils.SLASH + locale;
-                String fileName = pageIdentifier + ".json";
-                String filePath = localeFolderPath + FileUtils.SLASH + fileName;
+                String localeFolderPath = collectionIdentifier + IonConstants.Slash + locale;
+                String fileName = pageIdentifier + IonConstants.JsonFileExtension;
+                String filePath = localeFolderPath + IonConstants.Slash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
@@ -251,9 +251,9 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                String cacheFolderPath = collectionIdentifier + FileUtils.SLASH + FilePaths.CACHE_FOLDER_IDENTIFIER;
-                String fileName = FilePaths.getFileName( requestURL ) + ".json";
-                String filePath = cacheFolderPath + FileUtils.SLASH + fileName;
+                String cacheFolderPath = collectionIdentifier + IonConstants.Slash + IonConstants.CacheIndicesFolderIdentifier;
+                String fileName = FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
+                String filePath = cacheFolderPath + IonConstants.Slash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
@@ -266,7 +266,7 @@ namespace Anfema.Ion.Utils
                 StorageFolder cacheFolder = null;
                 using( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync().ConfigureAwait( false ) )
                 {
-                    cacheFolder = await collectionFolder.CreateFolderAsync( FilePaths.CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists );
+                    cacheFolder = await collectionFolder.CreateFolderAsync( IonConstants.CacheIndicesFolderIdentifier, CreationCollisionOption.OpenIfExists );
                 }
                 fileLocks.ReleaseLock( cacheFolderPath );
 
@@ -301,9 +301,9 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                String cacheFolderPath = collectionIdentifier + FileUtils.SLASH + FilePaths.CACHE_FOLDER_IDENTIFIER;
-                String fileName = FilePaths.getFileName( requestURL ) + ".json";
-                String filePath = cacheFolderPath + FileUtils.SLASH + fileName;
+                String cacheFolderPath = collectionIdentifier + IonConstants.Slash + IonConstants.CacheIndicesFolderIdentifier;
+                String fileName = FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
+                String filePath = cacheFolderPath + IonConstants.Slash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
@@ -316,7 +316,7 @@ namespace Anfema.Ion.Utils
                 StorageFolder cacheFolder = null;
                 using( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync().ConfigureAwait( false ) )
                 {
-                    cacheFolder = await collectionFolder.CreateFolderAsync( FilePaths.CACHE_FOLDER_IDENTIFIER, CreationCollisionOption.OpenIfExists );
+                    cacheFolder = await collectionFolder.CreateFolderAsync( IonConstants.CacheIndicesFolderIdentifier, CreationCollisionOption.OpenIfExists );
                 }
                 fileLocks.ReleaseLock( cacheFolderPath );
 

@@ -25,52 +25,52 @@ namespace Anfema.Ion.Utils
 
                 switch (list[i].type)
                 {
-                    case "textcontent":
+                    case IonConstants.TextContentIdentifier:
                         {
                             oc.textContent.Add((IonTextContent)list[i]);
                             break;
                         }
-                    case "imagecontent":
+                    case IonConstants.ImageContentIdentifier:
                         {
                             oc.imageContent.Add((IonImageContent)list[i]);
                             break;
                         }
-                    case "colorcontent":
+                    case IonConstants.ColorContentIdentifier:
                         {
                             oc.colorContent.Add((IonColorContent)list[i]);
                             break;
                         }
-                    case "datetimecontent":
+                    case IonConstants.DateTimeContentIdentifier:
                         {
                             oc.dateTimeContent.Add((IonDateTimeContent)list[i]);
                             break;
                         }
-                    case "filecontent":
+                    case IonConstants.FileContentIdentifier:
                         {
                             oc.fileContent.Add((IonFileContent)list[i]);
                             break;
                         }
-                    case "flagcontent":
+                    case IonConstants.FlagContentIdentifier:
                         {
                             oc.flagContent.Add((IonFlagContent)list[i]);
                             break;
                         }
-                    case "mediacontent":
+                    case IonConstants.MediaContentIdentifier:
                         {
                             oc.mediaContent.Add((IonMediaContent)list[i]);
                             break;
                         }
-                    case "optioncontent":
+                    case IonConstants.OptionContentIdentifier:
                         {
                             oc.optionContent.Add((IonOptionContent)list[i]);
                             break;
                         }
-                    case "numbercontent":
+                    case IonConstants.NumberContentIdentifier:
                         {
                             oc.numberContent.Add((IonNumberContent)list[i]);
                             break;
                         }
-                    case "connectioncontent":
+                    case IonConstants.ConnectionContentIdentifier:
                         {
                             oc.connectionContent.Add((IonConnectionContent)list[i]);
                             break;

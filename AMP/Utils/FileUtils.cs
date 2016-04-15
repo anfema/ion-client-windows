@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Windows.Storage;
@@ -12,7 +9,6 @@ namespace Anfema.Ion.Utils
     {
         private static OperationLocks fileLocks = new OperationLocks();
         private static readonly StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
-        public static readonly String SLASH = "\\";
 
         /// <summary>
         /// Write MemoryStream to file

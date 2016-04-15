@@ -149,6 +149,7 @@
     <Compile Include="Utils\DateTimeUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HashUtils.cs" />
+    <Compile Include="Utils\IonConstants.cs" />
     <Compile Include="Utils\LockWithCounter.cs" />
     <Compile Include="Utils\OperationLocks.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />

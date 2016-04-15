@@ -88,8 +88,8 @@ namespace Anfema.Ion.Archive
                                 {
                                     // Get all the needed folder- and file names
                                     StorageFolder mediaFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync( FilePaths.getMediaFolderPath( _config, false ), CreationCollisionOption.OpenIfExists );
-                                    string sourcePath = tempFolder.Path + FilePaths.SLASH + elementsList[i].name.Replace( '/', (char)FilePaths.SLASH[0] );
-                                    string destinationPath = mediaFolder.Path + FilePaths.SLASH + FilePaths.getFileName( elementsList[i].url );
+                                    string sourcePath = tempFolder.Path + IonConstants.Slash + elementsList[i].name.Replace( '/', (char)IonConstants.Slash[0] );
+                                    string destinationPath = mediaFolder.Path + IonConstants.Slash + FilePaths.getFileName( elementsList[i].url );
 
                                     // Delete a possible existing file
                                     if( File.Exists( destinationPath ) )
@@ -112,7 +112,7 @@ namespace Anfema.Ion.Archive
                             case IonRequestType.PAGE:
                                 {
                                     // Extract the page json from the file
-                                    string pageString = await FileIO.ReadTextAsync( await tempFolder.GetFileAsync( elementsList[i].name.Replace( '/', (char)FileUtils.SLASH[0] ) ) );
+                                    string pageString = await FileIO.ReadTextAsync( await tempFolder.GetFileAsync( elementsList[i].name.Replace( '/', (char)IonConstants.Slash[0] ) ) );
 
                                     // Parse the new page
                                     IonPage page = DataParser.parsePage( pageString );
@@ -143,7 +143,7 @@ namespace Anfema.Ion.Archive
                     if( archiveFile != null )
                     {
                         // Delete index file
-                        string indexFilePath = FilePaths.absolutCacheIndicesFolderPath( _config ) + FilePaths.SLASH + archiveFile.Name + ".json";
+                        string indexFilePath = FilePaths.absolutCacheIndicesFolderPath( _config ) + IonConstants.Slash + archiveFile.Name + IonConstants.JsonFileExtension;
 
                         if( File.Exists( indexFilePath ) )
                         {

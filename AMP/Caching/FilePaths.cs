@@ -7,14 +7,6 @@ namespace Anfema.Ion.Caching
 {
     public class FilePaths
     {
-        private static readonly String _ftsDbFolderPath = "ftsDbs";
-        private static readonly string _mediaPath = "media";
-        private static readonly string _archiveFolder = "archive";
-        private static readonly string _fileFolder = "file";
-        private static readonly string _tempFolder = "temp";
-        private static readonly string _cacheIndicesFolder = "cache_indices";
-        private static readonly string _slash = "\\";
-
         /// <summary>
         /// Get filename for a url as its MD5 hash
         /// </summary>
@@ -59,13 +51,13 @@ namespace Anfema.Ion.Caching
 
         public static String GetFtsDbFilePath( String collectionIdentifier )
         {
-            return _ftsDbFolderPath + FileUtils.SLASH + "fts_" + collectionIdentifier + ".sqlite";
+            return IonConstants.FtsDbFolderIdentifier + IonConstants.Slash + "fts_" + collectionIdentifier + ".sqlite";
         }
 
 
         public static string getTempFolderPath( IonConfig config )
         {
-            return config.collectionIdentifier + FileUtils.SLASH + _tempFolder;
+            return config.collectionIdentifier + IonConstants.Slash + IonConstants.TempFolderIdentifier;
         }
 
 
@@ -77,7 +69,7 @@ namespace Anfema.Ion.Caching
         /// <returns>Archive folder</returns>
         public static string getArchiveFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + FileUtils.SLASH + _archiveFolder + FileUtils.SLASH;
+            return config.collectionIdentifier + IonConstants.Slash + IonConstants.ArchiveFolderIdentifier + IonConstants.Slash;
         }
 
 
@@ -101,7 +93,7 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public static String getMediaFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + FileUtils.SLASH + _mediaPath + FileUtils.SLASH;
+            return config.collectionIdentifier + IonConstants.Slash + IonConstants.MediaFolderIdentifier + IonConstants.Slash;
         }
 
 
@@ -116,35 +108,11 @@ namespace Anfema.Ion.Caching
 
 
         /// <summary>
-        /// Folder for cache indices
-        /// </summary>
-        public static string CACHE_FOLDER_IDENTIFIER
-        {
-            get
-            {
-                return _cacheIndicesFolder;
-            }
-        }
-
-
-        /// <summary>
         /// Absolut path to the cache indices folder
         /// </summary>
         public static string absolutCacheIndicesFolderPath( IonConfig config )
         {
-            return ApplicationData.Current.LocalFolder.Path + _slash + config.collectionIdentifier + _slash + _cacheIndicesFolder;
-        }
-
-
-        /// <summary>
-        /// Slash for folder hierarchy
-        /// </summary>
-        public static string SLASH
-        {
-            get
-            {
-                return _slash;
-            }
+            return ApplicationData.Current.LocalFolder.Path + IonConstants.Slash + config.collectionIdentifier + IonConstants.Slash + IonConstants.CacheIndicesFolderIdentifier;
         }
     }
 }
