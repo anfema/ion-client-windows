@@ -14,8 +14,8 @@ namespace Anfema.Ion.Utils
         private HttpClient _client;
 
         // Holds the neccessary data for data retrieval
-        private IonConfig _config;        
-     
+        private IonConfig _config;
+
 
         /// <summary>
         /// Constructor with config file for initialization
@@ -29,9 +29,9 @@ namespace Anfema.Ion.Utils
                 _client = new HttpClient();
                 _client.DefaultRequestHeaders.Authorization = _config.authenticationHeader;
             }
-            catch (Exception e)
+            catch( Exception e )
             {
-                Debug.WriteLine("Error in configuring the data client: " + e.Message);
+                Debug.WriteLine( "Error in configuring the data client: " + e.Message );
             }
         }
 
@@ -43,7 +43,7 @@ namespace Anfema.Ion.Utils
         /// <returns>IonCollection with the desired identifier</returns>
         public async Task<HttpResponseMessage> getCollectionAsync( string collectionIdentifier )
         {
-            return await getCollectionAsync(collectionIdentifier, DateTime.MinValue).ConfigureAwait(false);
+            return await getCollectionAsync( collectionIdentifier, DateTime.MinValue ).ConfigureAwait( false );
         }
 
 
@@ -56,12 +56,13 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(_config.baseUrl + _config.locale + IonConstants.Slash + _config.collectionIdentifier + IonConstants.Slash + identifier).ConfigureAwait(false);
+                string requestString = _config.baseUrl + _config.locale + IonConstants.Slash + _config.collectionIdentifier + IonConstants.Slash + identifier + IonConstants.QueryBegin + IonConstants.QueryVariation + _config.variation;
+                HttpResponseMessage response = await _client.GetAsync( requestString ).ConfigureAwait( false );
                 return response;
             }
             catch( Exception e )
             {
-                Debug.WriteLine("Error getting page response from server! " + e.Message );
+                Debug.WriteLine( "Error getting page response from server! " + e.Message );
                 return null;
             }
         }
@@ -78,33 +79,33 @@ namespace Anfema.Ion.Utils
             try
             {
                 // Construct request string
-                string requestString = _config.baseUrl + _config.locale + IonConstants.Slash + _config.collectionIdentifier;
+                string requestString = _config.baseUrl + _config.locale + IonConstants.Slash + _config.collectionIdentifier + IonConstants.QueryBegin + IonConstants.QueryVariation + _config.variation;
 
                 // Add the last-modified-header
-                _client.DefaultRequestHeaders.Add("If-Modified-Since", lastModified.ToString("r") );
+                _client.DefaultRequestHeaders.Add( "If-Modified-Since", lastModified.ToString( "r" ) );
 
                 // Recieve the response
-                HttpResponseMessage response = await _client.GetAsync(requestString).ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync( requestString ).ConfigureAwait( false );
 
                 // Remove the last-modified-header
-                _client.DefaultRequestHeaders.Remove("If-Modified-Since");
+                _client.DefaultRequestHeaders.Remove( "If-Modified-Since" );
 
                 return response;
             }
 
             catch( Exception e )
             {
-                Debug.WriteLine("Error getting collection from server: " + e.Message);
+                Debug.WriteLine( "Error getting collection from server: " + e.Message );
                 return null;
-            }                
+            }
         }
 
 
         public async Task<MemoryStream> PerformRequest( Uri uri )
         {
-            Stream stream = await _client.GetStreamAsync( uri ).ConfigureAwait(false);
+            Stream stream = await _client.GetStreamAsync( uri ).ConfigureAwait( false );
             var memStream = new MemoryStream();
-            await stream.CopyToAsync( memStream ).ConfigureAwait(false);
+            await stream.CopyToAsync( memStream ).ConfigureAwait( false );
             memStream.Position = 0;
             return memStream;
         }

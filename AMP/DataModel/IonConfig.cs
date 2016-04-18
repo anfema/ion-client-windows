@@ -70,13 +70,21 @@ namespace Anfema.Ion.DataModel
                 return false;
             }
 
-            // Cast to IonConfig for accessing the elements
-            IonConfig config = (IonConfig)obj;
+            try
+            {
+                // Cast to IonConfig for accessing the elements
+                IonConfig config = (IonConfig)obj;
 
-            return config.baseUrl.Equals( baseUrl )
-                && config.collectionIdentifier.Equals( collectionIdentifier )
-                && config.locale.Equals( locale )
-                && config.variation.Equals( variation );
+                return config.baseUrl.Equals( baseUrl )
+                    && config.collectionIdentifier.Equals( collectionIdentifier )
+                    && config.locale.Equals( locale )
+                    && config.variation.Equals( variation );
+            }
+
+            catch
+            {
+                return false;
+            }
         }
 
 
