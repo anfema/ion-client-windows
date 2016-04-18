@@ -28,8 +28,10 @@
 
 
         // Other constants
-        public const string Slash = "\\";
-        public static string QueryBegin { get { return "?"; } }
+        public const string BackSlash = "\\";
+        public const string Slash = "/";
+        public const char QueryBegin = '?';
+        public const string DefaultVariationIdentifier = "default";
         public static string QueryVariation { get { return "variation="; } }
         public static string[] MediaUrlIndicators { get { return new string[2] { "/media/", "/protected_media/" }; } }
         public static string JsonFileExtension { get { return ".json"; } }

@@ -51,13 +51,13 @@ namespace Anfema.Ion.Caching
 
         public static String GetFtsDbFilePath( String collectionIdentifier )
         {
-            return IonConstants.FtsDbFolderIdentifier + IonConstants.Slash + "fts_" + collectionIdentifier + ".sqlite";
+            return IonConstants.FtsDbFolderIdentifier + IonConstants.BackSlash + "fts_" + collectionIdentifier + ".sqlite";
         }
 
 
         public static string getTempFolderPath( IonConfig config )
         {
-            return config.collectionIdentifier + IonConstants.Slash + IonConstants.TempFolderIdentifier;
+            return config.collectionIdentifier + IonConstants.BackSlash + IonConstants.TempFolderIdentifier;
         }
 
 
@@ -69,7 +69,7 @@ namespace Anfema.Ion.Caching
         /// <returns>Archive folder</returns>
         public static string getArchiveFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + IonConstants.Slash + IonConstants.ArchiveFolderIdentifier + IonConstants.Slash;
+            return config.collectionIdentifier + IonConstants.BackSlash + IonConstants.ArchiveFolderIdentifier + IonConstants.BackSlash;
         }
 
 
@@ -93,7 +93,7 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public static String getMediaFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + IonConstants.Slash + IonConstants.MediaFolderIdentifier + IonConstants.Slash;
+            return config.collectionIdentifier + IonConstants.BackSlash + IonConstants.MediaFolderIdentifier + IonConstants.BackSlash;
         }
 
 
@@ -112,7 +112,7 @@ namespace Anfema.Ion.Caching
         /// </summary>
         public static string absolutCacheIndicesFolderPath( IonConfig config )
         {
-            return ApplicationData.Current.LocalFolder.Path + IonConstants.Slash + config.collectionIdentifier + IonConstants.Slash + IonConstants.CacheIndicesFolderIdentifier;
+            return ApplicationData.Current.LocalFolder.Path + IonConstants.BackSlash + config.collectionIdentifier + IonConstants.BackSlash + IonConstants.CacheIndicesFolderIdentifier;
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Anfema.Ion.Caching;
-using Anfema.Ion.DataModel;
+﻿using Anfema.Ion.DataModel;
 using Anfema.Ion.Exceptions;
 using Anfema.Ion.Utils;
+
 
 namespace Anfema.Ion.Pages
 {
@@ -14,7 +14,7 @@ namespace Anfema.Ion.Pages
         /// <returns>String representing the link to the collection</returns>
         public static string getCollectionURL( IonConfig config )
         {
-            return config.baseUrl + config.locale + "/" + config.collectionIdentifier;
+            return config.baseUrl + config.locale + IonConstants.Slash + config.collectionIdentifier;
         }
 
 
@@ -26,7 +26,7 @@ namespace Anfema.Ion.Pages
         /// <returns>String representing the URL to the desired page</returns>
         public static string getPageURL( IonConfig config, string pageIdentifier )
         {
-            return config.baseUrl + config.locale + "/" + config.collectionIdentifier + "/" + pageIdentifier;
+            return config.baseUrl + config.locale + IonConstants.Slash + config.collectionIdentifier + IonConstants.Slash + pageIdentifier;
         }
 
 
@@ -46,7 +46,7 @@ namespace Anfema.Ion.Pages
                     throw new NoIonPagesRequestException( url );
                 }
                 
-                string[] idPlusVariation = urlPathSegments[urlPathSegments.Length - 1].Split( '?' );
+                string[] idPlusVariation = urlPathSegments[urlPathSegments.Length - 1].Split( IonConstants.QueryBegin );
                 if( idPlusVariation.Length > 2 )
                 {
                     throw new NoIonPagesRequestException( url );
@@ -54,7 +54,7 @@ namespace Anfema.Ion.Pages
 
                 if( idPlusVariation.Length == 1 )
                 {
-                    idPlusVariation = new string[] { idPlusVariation[0], "default" }; // TODO make this a global defined parameter "default"
+                    idPlusVariation = new string[] { idPlusVariation[0], IonConstants.DefaultVariationIdentifier }; 
                 }
 
                 string locale = urlPathSegments[0];

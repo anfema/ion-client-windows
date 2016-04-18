@@ -94,13 +94,14 @@ namespace Anfema.Ion.Utils
 
             try
             {
+                //ApplicationData.Current.LocalFolder.
                 file = await ApplicationData.Current.LocalFolder.GetFileAsync(filePath);
                 fileStream = await file.OpenStreamForReadAsync();
                 fileStream.Dispose();
             }
             catch (FileNotFoundException)
             {
-                // If the file dosn't exits it throws an exception, make fileExists false in this case 
+                // If the file dosn't exits it throws an exception, make fiqleExists false in this case 
                 fileExists = false;
             }
             finally

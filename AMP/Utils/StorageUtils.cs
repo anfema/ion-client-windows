@@ -65,7 +65,7 @@ namespace Anfema.Ion.Utils
         public static async Task saveCollectionToIsolatedStorage( IonCollection collection )
         {
             String fileName = collection.identifier + ".json";
-            String filePath = collection.identifier + IonConstants.Slash + fileName;
+            String filePath = collection.identifier + IonConstants.BackSlash + fileName;
 
             StorageFolder folder = null;
             using( await fileLocks.ObtainLock( collection.identifier ).LockAsync().ConfigureAwait( false ) )
@@ -100,7 +100,7 @@ namespace Anfema.Ion.Utils
             try
             {
                 String fileName = collectionIdentifier + IonConstants.JsonFileExtension;
-                String filePath = collectionIdentifier + IonConstants.Slash + fileName;
+                String filePath = collectionIdentifier + IonConstants.BackSlash + fileName;
 
                 StorageFolder folder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
@@ -148,9 +148,9 @@ namespace Anfema.Ion.Utils
                 }
 
 
-                String localeFolderPath = page.collection + IonConstants.Slash + page.locale;
+                String localeFolderPath = page.collection + IonConstants.BackSlash + page.locale;
                 String fileName = page.identifier + IonConstants.JsonFileExtension;
-                String filePath = localeFolderPath + IonConstants.Slash + fileName;
+                String filePath = localeFolderPath + IonConstants.BackSlash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( page.collection ).LockAsync().ConfigureAwait( false ) )
@@ -200,9 +200,9 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                String localeFolderPath = collectionIdentifier + IonConstants.Slash + locale;
+                String localeFolderPath = collectionIdentifier + IonConstants.BackSlash + locale;
                 String fileName = pageIdentifier + IonConstants.JsonFileExtension;
-                String filePath = localeFolderPath + IonConstants.Slash + fileName;
+                String filePath = localeFolderPath + IonConstants.BackSlash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
@@ -251,9 +251,9 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                String cacheFolderPath = collectionIdentifier + IonConstants.Slash + IonConstants.CacheIndicesFolderIdentifier;
+                String cacheFolderPath = collectionIdentifier + IonConstants.BackSlash + IonConstants.CacheIndicesFolderIdentifier;
                 String fileName = FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
-                String filePath = cacheFolderPath + IonConstants.Slash + fileName;
+                String filePath = cacheFolderPath + IonConstants.BackSlash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
@@ -301,9 +301,9 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                String cacheFolderPath = collectionIdentifier + IonConstants.Slash + IonConstants.CacheIndicesFolderIdentifier;
+                String cacheFolderPath = collectionIdentifier + IonConstants.BackSlash + IonConstants.CacheIndicesFolderIdentifier;
                 String fileName = FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
-                String filePath = cacheFolderPath + IonConstants.Slash + fileName;
+                String filePath = cacheFolderPath + IonConstants.BackSlash + fileName;
 
                 StorageFolder collectionFolder = null;
                 using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )

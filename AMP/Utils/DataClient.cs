@@ -56,7 +56,7 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync(_config.baseUrl + _config.locale + "/" + _config.collectionIdentifier + "/" + identifier).ConfigureAwait(false);
+                HttpResponseMessage response = await _client.GetAsync(_config.baseUrl + _config.locale + IonConstants.Slash + _config.collectionIdentifier + IonConstants.Slash + identifier).ConfigureAwait(false);
                 return response;
             }
             catch( Exception e )
@@ -78,7 +78,7 @@ namespace Anfema.Ion.Utils
             try
             {
                 // Construct request string
-                string requestString = _config.baseUrl + _config.locale + "/" + _config.collectionIdentifier;
+                string requestString = _config.baseUrl + _config.locale + IonConstants.Slash + _config.collectionIdentifier;
 
                 // Add the last-modified-header
                 _client.DefaultRequestHeaders.Add("If-Modified-Since", lastModified.ToString("r") );

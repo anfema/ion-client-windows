@@ -93,7 +93,7 @@ namespace Anfema.Ion.Caching
             }
             else
             {
-                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier + "/" + locale).ConfigureAwait(false);
+                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier + IonConstants.Slash + locale).ConfigureAwait(false);
             }
 
             return true;

@@ -42,19 +42,19 @@ namespace Anfema.Ion.MediaFiles
 
             switch( contentType )
             {
-                case "imagecontent":
+                case IonConstants.ImageContentIdentifier:
                     {
                         targetPath = FilePaths.getMediaFilePath( url, _config );
                         break;
                     }
 
-                case "filecontent":
+                case IonConstants.FileContentIdentifier:
                     {
                         targetPath = FilePaths.getMediaFilePath( url, _config );
                         break;
                     }
 
-                case "mediacontent":
+                case IonConstants.MediaContentIdentifier:
                     {
                         targetPath = FilePaths.getMediaFilePath( url, _config );
                         break;
