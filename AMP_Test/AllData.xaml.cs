@@ -74,7 +74,7 @@ namespace AMP_Test
             {
                 IonPage page = await Ion.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
 
-                _allContent = DataConverters.convertContent(page.getContent());
+                _allContent = DataConverters.convertContent(page.getContents());
 
                 // Load files for page content
                 await Ion.getInstance(AppController.instance.ampConfig).LoadContentFiles(_allContent);
