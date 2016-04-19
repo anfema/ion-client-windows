@@ -142,7 +142,7 @@ namespace Anfema.Ion.MediaFiles
 
         private async Task<bool> IsFileUpToDate( String url, String checksum )
         {
-            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve( url, _config.collectionIdentifier ).ConfigureAwait( false );
+            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve( url, _config ).ConfigureAwait( false );
             if( fileCacheIndex == null )
             {
                 return false;

@@ -15,7 +15,7 @@ namespace Anfema.Ion.Caching
             this.lastChanged = lastChanged;
         }
 
-        
+
         /// <summary>
         /// Checks if the lastChanged DateTime of this object is older than the given parameter
         /// </summary>
@@ -33,9 +33,9 @@ namespace Anfema.Ion.Caching
         /// <param name="requestURL"></param>
         /// <param name="collectionIdentifier"></param>
         /// <returns></returns>
-        public static async Task<PageCacheIndex> retrieve( string requestURL, string collectionIdentifier )
+        public static async Task<PageCacheIndex> retrieve( string requestURL, IonConfig config )
         {
-            return await CacheIndexStore.retrieve<PageCacheIndex>(requestURL, collectionIdentifier).ConfigureAwait(false);
+            return await CacheIndexStore.retrieve<PageCacheIndex>( requestURL, config ).ConfigureAwait( false );
         }
 
 
@@ -47,9 +47,9 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public static async Task<bool> save( IonPage page, IonConfig config )
         {
-            string url = PagesURLs.getPageURL(config, page.identifier);
-            PageCacheIndex cacheIndex = new PageCacheIndex(url, page.last_changed);
-            await CacheIndexStore.save<PageCacheIndex>(url, cacheIndex, config).ConfigureAwait(false);
+            string url = PagesURLs.getPageURL( config, page.identifier );
+            PageCacheIndex cacheIndex = new PageCacheIndex( url, page.last_changed );
+            await CacheIndexStore.save<PageCacheIndex>( url, cacheIndex, config ).ConfigureAwait( false );
 
             return true;
         }

@@ -16,9 +16,9 @@ namespace Anfema.Ion.Caching
         /// <param name="requestUrl"></param>
         /// <param name="collectionIdentifier"></param>
         /// <returns>First it tries to get a index from memoryCache, then from fileCache and after that returns null, if no index is found</returns>
-        public static async Task<T> retrieve<T>( string requestUrl, string collectionIdentifier ) where T : CacheIndex
+        public static async Task<T> retrieve<T>( string requestUrl, IonConfig  config ) where T : CacheIndex
         {
-            T index = MemoryCacheIndex.get<T>(requestUrl, collectionIdentifier);
+            T index = MemoryCacheIndex.get<T>(requestUrl, config.collectionIdentifier);
 
             if( index != null )
             {
@@ -31,7 +31,7 @@ namespace Anfema.Ion.Caching
 
             try
             {
-                index = await StorageUtils.getIndex<T>(requestUrl, collectionIdentifier).ConfigureAwait(false);
+                index = await StorageUtils.getIndex<T>(requestUrl, config ).ConfigureAwait(false);
             }
             catch(Exception e)
             {
@@ -41,7 +41,7 @@ namespace Anfema.Ion.Caching
             // Save to memory cache, if index is not null
             if( index != null )
             {
-                MemoryCacheIndex.put(requestUrl, collectionIdentifier, index);
+                MemoryCacheIndex.put(requestUrl, config.collectionIdentifier, index);
             }
 
             return index;
@@ -64,7 +64,7 @@ namespace Anfema.Ion.Caching
                 MemoryCacheIndex.put<T>(requestURL, config.collectionIdentifier, cacheIndex);
 
                 // save to isolated storage
-                await StorageUtils.saveIndex(requestURL, cacheIndex, config.collectionIdentifier).ConfigureAwait(false);
+                await StorageUtils.saveIndexAsync(requestURL, cacheIndex, config ).ConfigureAwait(false);
             }
             catch( Exception e)
             {
@@ -89,11 +89,11 @@ namespace Anfema.Ion.Caching
             // Clear isolated storage cache
             if (locale == null)
             {
-                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier).ConfigureAwait(false);
+                await StorageUtils.deleteFolderInIsolatedStorageAsync(collectionIdentifier).ConfigureAwait(false);
             }
             else
             {
-                await StorageUtils.deleteFolderInIsolatedStorage(collectionIdentifier + IonConstants.Slash + locale).ConfigureAwait(false);
+                await StorageUtils.deleteFolderInIsolatedStorageAsync(collectionIdentifier + IonConstants.Slash + locale).ConfigureAwait(false);
             }
 
             return true;

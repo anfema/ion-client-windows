@@ -46,7 +46,7 @@ namespace Anfema.Ion.Pages
         public async Task<IonCollection> getCollectionAsync()
         {
             string collectionURL = PagesURLs.getCollectionURL( _config );
-            CollectionCacheIndex cacheIndex = await CollectionCacheIndex.retrieve( collectionURL, _config.collectionIdentifier ).ConfigureAwait( false );
+            CollectionCacheIndex cacheIndex = await CollectionCacheIndex.retrieve( collectionURL, _config ).ConfigureAwait( false );
 
             // Check if there is a not outdated cacheIndex avialible
             bool currentCacheEntry = cacheIndex != null && !cacheIndex.isOutdated( _config );
@@ -90,7 +90,7 @@ namespace Anfema.Ion.Pages
         public async Task<IonPage> getPageAsync( string pageIdentifier )
         {
             string pageURL = PagesURLs.getPageURL( _config, pageIdentifier );
-            PageCacheIndex pageCacheIndex = await PageCacheIndex.retrieve( pageURL, _config.collectionIdentifier ).ConfigureAwait( false );
+            PageCacheIndex pageCacheIndex = await PageCacheIndex.retrieve( pageURL, _config ).ConfigureAwait( false );
             bool isNetworkConnected = NetworkUtils.isOnline();
 
             if( pageCacheIndex == null )
@@ -246,7 +246,7 @@ namespace Anfema.Ion.Pages
             _memoryCache.savePage( page, _config );
 
             // Local storage cache
-            await StorageUtils.savePageToIsolatedStorage( page ).ConfigureAwait( false );
+            await StorageUtils.savePageToIsolatedStorageAsync( page, config ).ConfigureAwait( false );
 
             // Save page cache index
             await PageCacheIndex.save( page, _config ).ConfigureAwait( false );
@@ -277,7 +277,7 @@ namespace Anfema.Ion.Pages
                     _memoryCache.collection = collection;
 
                     // Save collection to isolated storage
-                    await StorageUtils.saveCollectionToIsolatedStorage( collection ).ConfigureAwait( false );
+                    await StorageUtils.saveCollectionToIsolatedStorageAsync( collection, _config ).ConfigureAwait( false );
 
                     // save cacheIndex
                     await saveCollectionCacheIndex( collection.last_changed ).ConfigureAwait( false );
@@ -293,7 +293,7 @@ namespace Anfema.Ion.Pages
                         try
                         {
                             // Get collection from isolated storage
-                            IonCollection collection = await StorageUtils.loadCollectionFromIsolatedStorage( _config.collectionIdentifier ).ConfigureAwait( false );
+                            IonCollection collection = await StorageUtils.loadCollectionFromIsolatedStorageAsync( _config ).ConfigureAwait( false );
 
                             // Add collection to memory cache
                             if( collection != null )
@@ -349,7 +349,7 @@ namespace Anfema.Ion.Pages
             // try to load collection from isolated storage
             try
             {
-                collection = await StorageUtils.loadCollectionFromIsolatedStorage( _config.collectionIdentifier ).ConfigureAwait( false );
+                collection = await StorageUtils.loadCollectionFromIsolatedStorageAsync( _config ).ConfigureAwait( false );
 
                 // Add collection to memory cache
                 if( collection != null )
@@ -383,7 +383,7 @@ namespace Anfema.Ion.Pages
             }
 
             // Try to load page from local storage
-            page = await StorageUtils.loadPageFromIsolatedStorage( _config.collectionIdentifier, _config.locale, pageIdentifier ).ConfigureAwait( false );
+            page = await StorageUtils.loadPageFromIsolatedStorageAsync( _config, pageIdentifier ).ConfigureAwait( false );
 
             // Add page to memory cache
             if( page != null )
@@ -399,11 +399,9 @@ namespace Anfema.Ion.Pages
         /// Saves the collection cache index
         /// </summary>
         /// <param name="lastModified"></param>
-        private async Task<bool> saveCollectionCacheIndex( DateTime lastModified )
+        private async Task saveCollectionCacheIndex( DateTime lastModified )
         {
             await CollectionCacheIndex.save( _config, lastModified ).ConfigureAwait( false );
-
-            return true;
         }
     }
 }

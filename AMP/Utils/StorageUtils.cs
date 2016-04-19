@@ -10,7 +10,7 @@ namespace Anfema.Ion.Utils
 {
     public class StorageUtils
     {
-        private static StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
+        private static readonly StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
         private static OperationLocks fileLocks = new OperationLocks();
         private static ApplicationDataContainer _settings = ApplicationData.Current.LocalSettings;
 
@@ -46,39 +46,32 @@ namespace Anfema.Ion.Utils
         /// </summary>
         /// <param name="folderName"></param>
         /// <returns></returns>
-        public static async Task deleteFolderInIsolatedStorage( string folderName )
+        public static async Task deleteFolderInIsolatedStorageAsync( string folderName )
         {
             using( await fileLocks.ObtainLock( folderName ).LockAsync().ConfigureAwait( false ) )
             {
                 StorageFolder folder = await _localFolder.GetFolderAsync( folderName );
                 await folder.DeleteAsync();
             }
+
             fileLocks.ReleaseLock( folderName );
         }
 
 
         /// <summary>
-        /// Saves a collection to the isolated storage of the device
+        /// Saves a collection to the isolated storage
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        public static async Task saveCollectionToIsolatedStorage( IonCollection collection )
+        public static async Task saveCollectionToIsolatedStorageAsync( IonCollection collection, IonConfig config )
         {
-            String fileName = collection.identifier + ".json";
-            String filePath = collection.identifier + IonConstants.BackSlash + fileName;
-
-            StorageFolder folder = null;
-            using( await fileLocks.ObtainLock( collection.identifier ).LockAsync().ConfigureAwait( false ) )
-            {
-                // Create folder or use existing folder
-                folder = await _localFolder.CreateFolderAsync( collection.identifier, CreationCollisionOption.OpenIfExists );
-            }
-            fileLocks.ReleaseLock( collection.identifier );
+            // Generate filePath for collection file
+            string filePath = FilePaths.getCollectionFolderPath( config ) + collection.identifier + IonConstants.JsonFileExtension;
 
             using( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait( false ) )
             {
                 // Create file or use existing file
-                StorageFile file = await folder.CreateFileAsync( fileName, CreationCollisionOption.ReplaceExisting );
+                StorageFile file = await _localFolder.CreateFileAsync( filePath, CreationCollisionOption.ReplaceExisting );
 
                 // Serialize collection
                 string collectionSerialized = JsonConvert.SerializeObject( collection );
@@ -86,38 +79,36 @@ namespace Anfema.Ion.Utils
                 // Write serialzed collection to file
                 await FileIO.WriteTextAsync( file, collectionSerialized );
             }
+
             fileLocks.ReleaseLock( filePath );
         }
 
 
         /// <summary>
-        /// Loads a collection from the isolated storage folder of the device
+        /// Loads a collection from the isolated storage folder
         /// </summary>
         /// <param name="collectionIdentifier"></param>
         /// <returns>The collection or null, if the collection isn't found</returns>
-        public static async Task<IonCollection> loadCollectionFromIsolatedStorage( string collectionIdentifier )
+        public static async Task<IonCollection> loadCollectionFromIsolatedStorageAsync( IonConfig config )
         {
             try
             {
-                String fileName = collectionIdentifier + IonConstants.JsonFileExtension;
-                String filePath = collectionIdentifier + IonConstants.BackSlash + fileName;
-
-                StorageFolder folder = null;
-                using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
-                {
-                    folder = await _localFolder.GetFolderAsync( collectionIdentifier );
-                }
-                fileLocks.ReleaseLock( collectionIdentifier );
+                // Generate filePath for collection
+                string filePath = FilePaths.getCollectionFolderPath( config ) + config.collectionIdentifier + IonConstants.JsonFileExtension;
 
                 IonCollection collection = null;
                 using( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait( false ) )
                 {
-                    StorageFile file = await folder.GetFileAsync( fileName );
+                    // Open file
+                    StorageFile file = await _localFolder.GetFileAsync( filePath );
 
+                    // Extract content
                     string content = await FileIO.ReadTextAsync( file );
 
+                    // Deserialize collection
                     collection = JsonConvert.DeserializeObject<IonCollection>( content );
                 }
+
                 fileLocks.ReleaseLock( filePath );
 
                 return collection;
@@ -125,66 +116,42 @@ namespace Anfema.Ion.Utils
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error loading collection " + collectionIdentifier + " from isolated storeage" );
+                Debug.WriteLine( "Error loading collection " + config.collectionIdentifier + " from isolated storeage. Message: " + e.Message );
                 return null;
             }
         }
 
 
         /// <summary>
-        /// Saves a page to the isolated storage folder of the device
+        /// Saves a page to the isolated storage folder
         /// </summary>
         /// <param name="page"></param>
         /// <returns></returns>
-        public static async Task savePageToIsolatedStorage( IonPage page )
+        public static async Task savePageToIsolatedStorageAsync( IonPage page, IonConfig config )
         {
             try
             {
-                // Check if the page to be saved was parsed correctly.
-                // TODO: Remove this little fix, caused by an ION Bug
-                if( page.identifier == null )
-                {
-                    return;
-                }
-
-
-                String localeFolderPath = page.collection + IonConstants.BackSlash + page.locale;
-                String fileName = page.identifier + IonConstants.JsonFileExtension;
-                String filePath = localeFolderPath + IonConstants.BackSlash + fileName;
-
-                StorageFolder collectionFolder = null;
-                using( await fileLocks.ObtainLock( page.collection ).LockAsync().ConfigureAwait( false ) )
-                {
-                    // Create folder for collection or use existing folder
-                    collectionFolder = await _localFolder.CreateFolderAsync( page.collection, CreationCollisionOption.OpenIfExists );
-                }
-                fileLocks.ReleaseLock( page.collection );
-
-                StorageFolder localeFolder = null;
-                using( await fileLocks.ObtainLock( localeFolderPath ).LockAsync().ConfigureAwait( false ) )
-                {
-                    // Create folder for locale or use existing folder
-                    localeFolder = await collectionFolder.CreateFolderAsync( page.locale, CreationCollisionOption.OpenIfExists );
-                }
-                fileLocks.ReleaseLock( page.locale );
+                // Generate filePath for page
+                string filePath = FilePaths.getPagesFolderPath( config ) + page.identifier + IonConstants.JsonFileExtension;
 
                 using( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait( false ) )
                 {
                     // Create file or use existing file
-                    StorageFile file = await localeFolder.CreateFileAsync( fileName, CreationCollisionOption.ReplaceExisting );
+                    StorageFile file = await _localFolder.CreateFileAsync( filePath, CreationCollisionOption.ReplaceExisting );
 
                     // Serialize collection
-                    string collectionSerialized = JsonConvert.SerializeObject( page );
+                    string pageSerialized = JsonConvert.SerializeObject( page );
 
                     // Write serialzed collection to file
-                    await FileIO.WriteTextAsync( file, collectionSerialized );
+                    await FileIO.WriteTextAsync( file, pageSerialized );
                 }
+
                 fileLocks.ReleaseLock( filePath );
             }
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error: " + e.Message );
+                Debug.WriteLine( "Error saving page to isolated storage: " + e.Message );
             }
         }
 
@@ -196,44 +163,33 @@ namespace Anfema.Ion.Utils
         /// <param name="locale"></param>
         /// <param name="pageIdentifier"></param>
         /// <returns>The desired page or null, if the page wasn't found in the isolated folder</returns>
-        public static async Task<IonPage> loadPageFromIsolatedStorage( string collectionIdentifier, string locale, string pageIdentifier )
+        public static async Task<IonPage> loadPageFromIsolatedStorageAsync( IonConfig config, string pageIdentifier )
         {
             try
             {
-                String localeFolderPath = collectionIdentifier + IonConstants.BackSlash + locale;
-                String fileName = pageIdentifier + IonConstants.JsonFileExtension;
-                String filePath = localeFolderPath + IonConstants.BackSlash + fileName;
-
-                StorageFolder collectionFolder = null;
-                using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
-                {
-                    collectionFolder = await _localFolder.GetFolderAsync( collectionIdentifier );
-                }
-                fileLocks.ReleaseLock( collectionIdentifier );
-
-                StorageFolder localeFolder = null;
-                using( await fileLocks.ObtainLock( localeFolderPath ).LockAsync().ConfigureAwait( false ) )
-                {
-                    localeFolder = await collectionFolder.GetFolderAsync( locale );
-                }
-                fileLocks.ReleaseLock( localeFolderPath );
+                // Generate filePath for page
+                string filePath = FilePaths.getPagesFolderPath( config ) + pageIdentifier + IonConstants.JsonFileExtension;
 
                 IonPage page = null;
                 using( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait( false ) )
                 {
-                    StorageFile file = await localeFolder.GetFileAsync( fileName );
+                    // Get file from file Path
+                    StorageFile file = await _localFolder.GetFileAsync( filePath );
 
+                    // Read content string
                     string content = await FileIO.ReadTextAsync( file );
 
+                    // Deserialize page
                     page = JsonConvert.DeserializeObject<IonPage>( content );
                 }
+
                 fileLocks.ReleaseLock( filePath );
 
                 return page;
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error loading page " + collectionIdentifier + " from isolated storeage" );
+                Debug.WriteLine( "Error loading page " + pageIdentifier + " of collection " + config.collectionIdentifier + " from isolated storeage. Message: " + e.Message );
                 return null;
             }
         }
@@ -247,32 +203,17 @@ namespace Anfema.Ion.Utils
         /// <param name="cacheIndex"></param>
         /// <param name="collectionIdentifier"></param>
         /// <returns></returns>
-        public static async Task saveIndex<T>( string requestURL, T cacheIndex, string collectionIdentifier ) where T : CacheIndex
+        public static async Task saveIndexAsync<T>( string requestURL, T cacheIndex, IonConfig config ) where T : CacheIndex
         {
             try
             {
-                String cacheFolderPath = collectionIdentifier + IonConstants.BackSlash + IonConstants.CacheIndicesFolderIdentifier;
-                String fileName = FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
-                String filePath = cacheFolderPath + IonConstants.BackSlash + fileName;
-
-                StorageFolder collectionFolder = null;
-                using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
-                {
-                    // Create folder or use existing folder
-                    collectionFolder = await _localFolder.CreateFolderAsync( collectionIdentifier, CreationCollisionOption.OpenIfExists );
-                }
-                fileLocks.ReleaseLock( collectionIdentifier );
-
-                StorageFolder cacheFolder = null;
-                using( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync().ConfigureAwait( false ) )
-                {
-                    cacheFolder = await collectionFolder.CreateFolderAsync( IonConstants.CacheIndicesFolderIdentifier, CreationCollisionOption.OpenIfExists );
-                }
-                fileLocks.ReleaseLock( cacheFolderPath );
+                // Generate filePath for index
+                string filePath = FilePaths.getCacheIndicesFolderPath( config ) + FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
 
                 using( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait( false ) )
                 {
-                    StorageFile file = await cacheFolder.CreateFileAsync( fileName, CreationCollisionOption.ReplaceExisting );
+                    // Open an existing file or create a new one
+                    StorageFile file = await _localFolder.CreateFileAsync( filePath, CreationCollisionOption.ReplaceExisting );
 
                     // Serialize cache índex
                     string cacheIndexSerialized = JsonConvert.SerializeObject( cacheIndex );
@@ -280,12 +221,13 @@ namespace Anfema.Ion.Utils
                     // Write serialzed collection to file
                     await FileIO.WriteTextAsync( file, cacheIndexSerialized );
                 }
+
                 fileLocks.ReleaseLock( filePath );
             }
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error saving cacheIndex to isolated storage" );
+                Debug.WriteLine( "Error saving cacheIndex to isolated storage. Message: " + e.Message );
             }
         }
 
@@ -297,34 +239,18 @@ namespace Anfema.Ion.Utils
         /// <param name="requestURL"></param>
         /// <param name="collectionIdentifier"></param>
         /// <returns>The index file or null, if the index file isn't found</returns>
-        public static async Task<T> getIndex<T>( string requestURL, string collectionIdentifier ) where T : CacheIndex
+        public static async Task<T> getIndex<T>( string requestURL, IonConfig config ) where T : CacheIndex
         {
             try
             {
-                String cacheFolderPath = collectionIdentifier + IonConstants.BackSlash + IonConstants.CacheIndicesFolderIdentifier;
-                String fileName = FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
-                String filePath = cacheFolderPath + IonConstants.BackSlash + fileName;
-
-                StorageFolder collectionFolder = null;
-                using( await fileLocks.ObtainLock( collectionIdentifier ).LockAsync().ConfigureAwait( false ) )
-                {
-                    // Create folder or use existing folder
-                    collectionFolder = await _localFolder.CreateFolderAsync( collectionIdentifier, CreationCollisionOption.OpenIfExists );
-                }
-                fileLocks.ReleaseLock( collectionIdentifier );
-
-                StorageFolder cacheFolder = null;
-                using( await fileLocks.ObtainLock( cacheFolderPath ).LockAsync().ConfigureAwait( false ) )
-                {
-                    cacheFolder = await collectionFolder.CreateFolderAsync( IonConstants.CacheIndicesFolderIdentifier, CreationCollisionOption.OpenIfExists );
-                }
-                fileLocks.ReleaseLock( cacheFolderPath );
+                // Generate filePath for index
+                string filePath = FilePaths.getCacheIndicesFolderPath( config ) + FilePaths.getFileName( requestURL ) + IonConstants.JsonFileExtension;
 
                 T cacheIndex = null;
                 using( await fileLocks.ObtainLock( filePath ).LockAsync().ConfigureAwait( false ) )
                 {
                     // Create file or use existing file
-                    StorageFile file = await cacheFolder.CreateFileAsync( fileName, CreationCollisionOption.OpenIfExists );
+                    StorageFile file = await _localFolder.CreateFileAsync( filePath, CreationCollisionOption.OpenIfExists );
 
                     // Read content of the file
                     string content = await FileIO.ReadTextAsync( file );
@@ -332,6 +258,7 @@ namespace Anfema.Ion.Utils
                     // Deserialize cache index
                     cacheIndex = JsonConvert.DeserializeObject<T>( content );
                 }
+
                 fileLocks.ReleaseLock( filePath );
 
                 return cacheIndex;
@@ -339,7 +266,7 @@ namespace Anfema.Ion.Utils
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error loading cacheIndex from isolated storage" );
+                Debug.WriteLine( "Error loading cacheIndex " + requestURL + " from isolated storage: " + e.Message );
                 return null;
             }
         }

@@ -1,7 +1,7 @@
 ﻿using Anfema.Ion.DataModel;
 using Anfema.Ion.Utils;
 using System;
-using Windows.Storage;
+
 
 namespace Anfema.Ion.Caching
 {
@@ -33,14 +33,13 @@ namespace Anfema.Ion.Caching
         }
 
 
-        //public static string getFileFilePath( string url, IonConfig config, bool tempCollectionFolder = false )
-        //{
-        //    string fileFolderPath = getFileFolderPath( url, config, tempCollectionFolder );
-        //    string filename = getFileName( url );
-        //    return fileFolderPath + filename;
-        //}
-
-
+        /// <summary>
+        /// Retrieves the path to the archive file for a given url
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="config"></param>
+        /// <param name="tempCollectionFolder"></param>
+        /// <returns>File path</returns>
         public static string getArchiveFilePath( string url, IonConfig config, bool tempCollectionFolder = false )
         {
             string archiveFolderPath = getArchiveFolderPath( config, tempCollectionFolder );
@@ -55,9 +54,14 @@ namespace Anfema.Ion.Caching
         }
 
 
+        /// <summary>
+        /// Used to get the folder path for the temp folder
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns>File path</returns>
         public static string getTempFolderPath( IonConfig config )
         {
-            return config.collectionIdentifier + IonConstants.BackSlash + IonConstants.TempFolderIdentifier;
+            return getBasicCollectionFolderPath( config ) + IonConstants.TempFolderIdentifier + IonConstants.BackSlash;
         }
 
 
@@ -69,20 +73,8 @@ namespace Anfema.Ion.Caching
         /// <returns>Archive folder</returns>
         public static string getArchiveFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + IonConstants.BackSlash + IonConstants.ArchiveFolderIdentifier + IonConstants.BackSlash;
+            return getCollectionFolderPath( config ) + IonConstants.ArchiveFolderIdentifier + IonConstants.BackSlash;
         }
-
-
-        /// <summary>
-        /// Returns the folder to which the files are downloaded
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="config"></param>
-        /// <returns>File folder</returns>
-        //private static string getFileFolderPath( string url, IonConfig config, bool tempCollectionFolder )
-        //{
-        //    return config.collectionIdentifier + FileUtils.SLASH + _fileFolder + FileUtils.SLASH + AppendTemp( "file", tempCollectionFolder );
-        //}
 
 
         /// <summary>
@@ -93,7 +85,7 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public static String getMediaFolderPath( IonConfig config, bool tempCollectionFolder )
         {
-            return config.collectionIdentifier + IonConstants.BackSlash + IonConstants.MediaFolderIdentifier + IonConstants.BackSlash;
+            return getBasicCollectionFolderPath( config ) + IonConstants.MediaFolderIdentifier + IonConstants.BackSlash;
         }
 
 
@@ -110,9 +102,42 @@ namespace Anfema.Ion.Caching
         /// <summary>
         /// Absolut path to the cache indices folder
         /// </summary>
-        public static string absolutCacheIndicesFolderPath( IonConfig config )
+        public static string getCacheIndicesFolderPath( IonConfig config )
         {
-            return ApplicationData.Current.LocalFolder.Path + IonConstants.BackSlash + config.collectionIdentifier + IonConstants.BackSlash + IonConstants.CacheIndicesFolderIdentifier;
+            return getCollectionFolderPath( config ) + IonConstants.CacheIndicesFolderIdentifier + IonConstants.BackSlash;
+        }
+
+
+        /// <summary>
+        /// Used to get the basic collection folder path without any deeper hierarchy
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns>FilePath</returns>
+        public static string getBasicCollectionFolderPath( IonConfig config )
+        {
+            return config.collectionIdentifier + IonConstants.BackSlash;
+        }
+
+
+        /// <summary>
+        /// Used to get the folder path for this IonConfig including hierarchy info for locale and variation
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns>FilePath including locale and variation</returns>
+        public static string getCollectionFolderPath( IonConfig config )
+        {
+            return getBasicCollectionFolderPath( config ) + config.locale + IonConstants.BackSlash + config.variation + IonConstants.BackSlash;
+        }
+
+
+        /// <summary>
+        /// Used to get the folder path for this configs pages
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns>FilePath to the pages of this config</returns>
+        public static string getPagesFolderPath( IonConfig config )
+        {
+            return getCollectionFolderPath( config ) + IonConstants.PageFolderIdentifier + IonConstants.BackSlash;
         }
     }
 }

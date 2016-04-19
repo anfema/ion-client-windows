@@ -16,18 +16,18 @@ namespace Anfema.Ion.Utils
         /// <param name="inputStream"></param>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<StorageFile> WriteToFile(MemoryStream inputStream, String targetFilePath)
+        public static async Task<StorageFile> WriteToFile( MemoryStream inputStream, String targetFilePath )
         {
             StorageFile file = null;
-            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
+            using( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
-                file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
-                using (Stream outputStream = await file.OpenStreamForWriteAsync())
+                file = await _localFolder.CreateFileAsync( targetFilePath, CreationCollisionOption.ReplaceExisting );
+                using( Stream outputStream = await file.OpenStreamForWriteAsync() )
                 {
-                    await inputStream.CopyToAsync(outputStream);
+                    await inputStream.CopyToAsync( outputStream );
                 }
             }
-            fileLocks.ReleaseLock(targetFilePath);
+            fileLocks.ReleaseLock( targetFilePath );
             return file;
         }
 
@@ -36,14 +36,14 @@ namespace Anfema.Ion.Utils
         /// </summary>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<StorageFile> ReadFromFile(String targetFilePath)
+        public static async Task<StorageFile> ReadFromFile( String targetFilePath )
         {
             StorageFile file = null;
-            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
+            using( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
-                file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.OpenIfExists);
+                file = await _localFolder.CreateFileAsync( targetFilePath, CreationCollisionOption.OpenIfExists );
             }
-            fileLocks.ReleaseLock(targetFilePath);
+            fileLocks.ReleaseLock( targetFilePath );
             return file;
         }
 
@@ -52,14 +52,14 @@ namespace Anfema.Ion.Utils
         /// </summary>
         /// <param name="text"></param>
         /// <param name="targetFilePath"></param>
-        public static async void WriteTextToFile(String text, String targetFilePath)
+        public static async void WriteTextToFile( String text, String targetFilePath )
         {
-            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
+            using( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
-                StorageFile file = await _localFolder.CreateFileAsync(targetFilePath, CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteTextAsync(file, text);
+                StorageFile file = await _localFolder.CreateFileAsync( targetFilePath, CreationCollisionOption.ReplaceExisting );
+                await FileIO.WriteTextAsync( file, text );
             }
-            fileLocks.ReleaseLock(targetFilePath);
+            fileLocks.ReleaseLock( targetFilePath );
         }
 
         /// <summary>
@@ -67,15 +67,15 @@ namespace Anfema.Ion.Utils
         /// </summary>
         /// <param name="targetFilePath"></param>
         /// <returns></returns>
-        public static async Task<String> ReadTextFromFile(String targetFilePath)
+        public static async Task<String> ReadTextFromFile( String targetFilePath )
         {
             String value = String.Empty;
-            using (await fileLocks.ObtainLock(targetFilePath).LockAsync())
+            using( await fileLocks.ObtainLock( targetFilePath ).LockAsync() )
             {
-                StorageFile file = await _localFolder.GetFileAsync(targetFilePath);
-                value = await FileIO.ReadTextAsync(file);
+                StorageFile file = await _localFolder.GetFileAsync( targetFilePath );
+                value = await FileIO.ReadTextAsync( file );
             }
-            fileLocks.ReleaseLock(targetFilePath);
+            fileLocks.ReleaseLock( targetFilePath );
             return value;
         }
 
@@ -86,7 +86,7 @@ namespace Anfema.Ion.Utils
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public async static Task<bool> Exists(String filePath)
+        public async static Task<bool> Exists( String filePath )
         {
             bool fileExists = true;
             Stream fileStream = null;
@@ -95,18 +95,18 @@ namespace Anfema.Ion.Utils
             try
             {
                 //ApplicationData.Current.LocalFolder.
-                file = await ApplicationData.Current.LocalFolder.GetFileAsync(filePath);
+                file = await ApplicationData.Current.LocalFolder.GetFileAsync( filePath );
                 fileStream = await file.OpenStreamForReadAsync();
                 fileStream.Dispose();
             }
-            catch (FileNotFoundException)
+            catch( FileNotFoundException )
             {
                 // If the file dosn't exits it throws an exception, make fiqleExists false in this case 
                 fileExists = false;
             }
             finally
             {
-                if (fileStream != null)
+                if( fileStream != null )
                 {
                     fileStream.Dispose();
                 }

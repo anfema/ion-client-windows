@@ -32,7 +32,7 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public bool IsOutdated( String serverChecksum )
         {
-            return !String.Equals( this.checksum, serverChecksum );
+            return !String.Equals( checksum, serverChecksum );
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace Anfema.Ion.Caching
         /// <param name="requestURL"></param>
         /// <param name="collectionIdentifier"></param>
         /// <returns>FileCacheIndex object or null, if the index isn't found</returns>
-        public static async Task<FileCacheIndex> retrieve( String requestUrl, String collectionIdentifier )
+        public static async Task<FileCacheIndex> retrieve( string requestUrl, IonConfig config )
         {
-            return await CacheIndexStore.retrieve<FileCacheIndex>( requestUrl, collectionIdentifier ).ConfigureAwait( false );
+            return await CacheIndexStore.retrieve<FileCacheIndex>( requestUrl, config ).ConfigureAwait( false );
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Anfema.Ion.Caching
         /// <param name="config"></param>
         /// <param name="checksum"></param>
         /// <returns></returns>
-        public static async Task<bool> save( String requestUrl, Stream file, IonConfig config, String checksum )
+        public static async Task<bool> save( string requestUrl, Stream file, IonConfig config, string checksum )
         {
             if( file == null )
             {
@@ -67,7 +67,7 @@ namespace Anfema.Ion.Caching
             }
 
             FileCacheIndex cacheIndex = new FileCacheIndex( requestUrl, checksum, DateTime.Now );
-            await CacheIndexStore.save<FileCacheIndex>( requestUrl, cacheIndex, config ).ConfigureAwait( false );
+            await CacheIndexStore.save( requestUrl, cacheIndex, config ).ConfigureAwait( false );
 
             return true;
         }

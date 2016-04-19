@@ -143,7 +143,7 @@ namespace Anfema.Ion.Archive
                     if( archiveFile != null )
                     {
                         // Delete index file
-                        string indexFilePath = FilePaths.absolutCacheIndicesFolderPath( _config ) + IonConstants.BackSlash + archiveFile.Name + IonConstants.JsonFileExtension;
+                        string indexFilePath = FilePaths.getCacheIndicesFolderPath( _config ) + IonConstants.BackSlash + archiveFile.Name + IonConstants.JsonFileExtension;
 
                         if( File.Exists( indexFilePath ) )
                         {

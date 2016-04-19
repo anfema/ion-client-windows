@@ -25,6 +25,7 @@
         public static string FileFolderIdentifier { get { return "file"; } }
         public static string TempFolderIdentifier { get { return "temp"; } }
         public static string CacheIndicesFolderIdentifier { get { return "cache_indices"; } }
+        public static string PageFolderIdentifier { get { return "pages"; } }
 
 
         // Other constants
