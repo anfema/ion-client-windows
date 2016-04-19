@@ -59,14 +59,11 @@ namespace Anfema.Ion.Caching
         /// </summary>
         /// <param name="config"></param>
         /// <param name="lastModified"></param>
-        /// <returns></returns>
-        public static async Task<bool> save( IonConfig config, DateTime lastModified )
+        public static async Task save( IonConfig config, DateTime lastModified )
         {
             string collectionURL = PagesURLs.getCollectionURL( config );
             CollectionCacheIndex cacheIndex = new CollectionCacheIndex( collectionURL, DateTimeUtils.now().ToUniversalTime(), lastModified );
             await CacheIndexStore.save( collectionURL, cacheIndex, config ).ConfigureAwait( false );
-
-            return true;
         }
     }
 }

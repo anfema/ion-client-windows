@@ -44,14 +44,11 @@ namespace Anfema.Ion.Caching
         /// </summary>
         /// <param name="page"></param>
         /// <param name="config"></param>
-        /// <returns></returns>
-        public static async Task<bool> save( IonPage page, IonConfig config )
+        public static async Task save( IonPage page, IonConfig config )
         {
             string url = PagesURLs.getPageURL( config, page.identifier );
             PageCacheIndex cacheIndex = new PageCacheIndex( url, page.last_changed );
             await CacheIndexStore.save<PageCacheIndex>( url, cacheIndex, config ).ConfigureAwait( false );
-
-            return true;
         }
     }
 }

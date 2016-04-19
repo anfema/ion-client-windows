@@ -53,12 +53,11 @@ namespace Anfema.Ion.Caching
         /// <param name="file"></param>
         /// <param name="config"></param>
         /// <param name="checksum"></param>
-        /// <returns></returns>
-        public static async Task<bool> save( string requestUrl, Stream file, IonConfig config, string checksum )
+        public static async Task save( string requestUrl, Stream file, IonConfig config, string checksum )
         {
             if( file == null )
             {
-                return false;
+                return;
             }
 
             if( checksum == null )
@@ -68,8 +67,6 @@ namespace Anfema.Ion.Caching
 
             FileCacheIndex cacheIndex = new FileCacheIndex( requestUrl, checksum, DateTime.Now );
             await CacheIndexStore.save( requestUrl, cacheIndex, config ).ConfigureAwait( false );
-
-            return true;
         }
     }
 }

@@ -55,8 +55,7 @@ namespace Anfema.Ion.Caching
         /// <param name="requestURL"></param>
         /// <param name="cacheIndex"></param>
         /// <param name="config"></param>
-        /// <returns></returns>
-        public static async Task<bool> save<T>( string requestURL, T cacheIndex, IonConfig config ) where T : CacheIndex
+        public static async Task save<T>( string requestURL, T cacheIndex, IonConfig config ) where T : CacheIndex
         {
             try
             {
@@ -70,33 +69,29 @@ namespace Anfema.Ion.Caching
             {
                 Debug.WriteLine("Cache Index " + requestURL + " could not be saved");
             }
-
-            return true;
         }
 
 
         /// <summary>
-        /// Clears the memory and file cache for all indices
+        /// Clears the memory and file caches
         /// </summary>
         /// <param name="collectionIdentifier"></param>
         /// <param name="locale"></param>
-        /// <returns></returns>
-        public static async Task<bool> clear( string collectionIdentifier, string locale )
+        public static async Task clear( string collectionIdentifier )
         {
-            // Clear memory cache
-            MemoryCacheIndex.clear(collectionIdentifier);
+            try
+            {
+                // Clear memory cache
+                MemoryCacheIndex.clear( collectionIdentifier );
 
-            // Clear isolated storage cache
-            if (locale == null)
-            {
-                await StorageUtils.deleteFolderInIsolatedStorageAsync(collectionIdentifier).ConfigureAwait(false);
-            }
-            else
-            {
-                await StorageUtils.deleteFolderInIsolatedStorageAsync(collectionIdentifier + IonConstants.Slash + locale).ConfigureAwait(false);
+                // Clear isolated storage cache
+                await StorageUtils.deleteFolderInIsolatedStorageAsync( collectionIdentifier ).ConfigureAwait( false );
             }
 
-            return true;
+            catch( Exception e )
+            {
+                Debug.WriteLine( "Error cleaning caches: " + e.Message );
+            }
         }
     }
 }
