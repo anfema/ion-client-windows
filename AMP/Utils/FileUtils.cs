@@ -79,40 +79,22 @@ namespace Anfema.Ion.Utils
             return value;
         }
 
-        // TODO: Implement missing functions: move, reset, createDir, deleteRecursive
+        // TODO: Implement missing functions: move, reset
 
         /// <summary>
         /// Check if file exists
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public async static Task<bool> Exists( String filePath )
+        public static bool exists( String filePath )
         {
-            bool fileExists = true;
-            Stream fileStream = null;
-            StorageFile file = null;
+            // Create absolut path to the desired file
+            string absolutFilePath = ApplicationData.Current.LocalFolder.Path + IonConstants.BackSlash + filePath;
 
-            try
-            {
-                //ApplicationData.Current.LocalFolder.
-                file = await ApplicationData.Current.LocalFolder.GetFileAsync( filePath );
-                fileStream = await file.OpenStreamForReadAsync();
-                fileStream.Dispose();
-            }
-            catch( FileNotFoundException )
-            {
-                // If the file dosn't exits it throws an exception, make fiqleExists false in this case 
-                fileExists = false;
-            }
-            finally
-            {
-                if( fileStream != null )
-                {
-                    fileStream.Dispose();
-                }
-            }
+            // Check if the file exists
+            bool fileExists = File.Exists( absolutFilePath );
 
             return fileExists;
-        }
+         }
     }
 }

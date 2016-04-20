@@ -93,7 +93,7 @@ namespace Anfema.Ion.MediaFiles
             using( await downloadLocks.ObtainLock( url ).LockAsync().ConfigureAwait( false ) )
             {
                 // fetch file from local storage or download it?
-                bool fileExists = await FileUtils.Exists( filePath ).ConfigureAwait( false );
+                bool fileExists = FileUtils.exists( filePath );
                 bool upToDate = await IsFileUpToDate( url, checksum ).ConfigureAwait( false );
 
                 if( fileExists && upToDate )
@@ -111,7 +111,7 @@ namespace Anfema.Ion.MediaFiles
                     returnFile = await FileUtils.WriteToFile( saveStream, filePath ).ConfigureAwait( false );
                     await FileCacheIndex.save( url, saveStream, _config, checksum ).ConfigureAwait( false );
                 }
-                else if( await FileUtils.Exists( filePath ).ConfigureAwait( false ) )
+                else if( FileUtils.exists( filePath ) )
                 {
                     // TODO notify app that data might be outdated
                     // no network: use old version from cache (even if no cache index entry exists)
