@@ -69,7 +69,7 @@ namespace Anfema.Ion.Parsing
                     }
             }
 
-            throw new JsonReaderException( string.Format( "The datetype " + objectTypeString + " is not defined for AmpContent" ) );
+            throw new JsonReaderException( string.Format( "The datetype " + objectTypeString + " is not defined for IonContent" ) );
         }
 
 
