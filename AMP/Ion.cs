@@ -65,7 +65,7 @@ namespace Anfema.Ion
         /// <param name="name"></param>
         /// <param name="callback"></param>
         /// <returns>IonPage with the desired name</returns>
-        public async Task<IonPage> getPageAsync( string name, Action callback )
+        public async Task<IonPage> getPageAsync( string name, Action callback = null )
         {
             IonPage page = await _ionPages.getPageAsync( name ).ConfigureAwait( false );
 

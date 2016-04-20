@@ -72,7 +72,7 @@ namespace AMP_Test
         {
             try
             {
-                IonPage page = await Ion.getInstance(AppController.instance.ampConfig).getPageAsync(pageName, null);
+                IonPage page = await Ion.getInstance(AppController.instance.ampConfig).getPageAsync( pageName );
 
                 _allContent = DataConverters.convertContent(page.getContents());
 
