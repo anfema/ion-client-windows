@@ -15,7 +15,7 @@ namespace Anfema.Ion.Parsing
         /// </summary>
         /// <param name="pageRaw"></param>
         /// <returns>IonPage without the generic data types</returns>
-        public static async Task<IonPage> parsePage(HttpResponseMessage response)
+        public static async Task<IonPage> parsePageAsync(HttpResponseMessage response)
         {
             // Extract the json string from the content of the response message
             string responseString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -53,9 +53,20 @@ namespace Anfema.Ion.Parsing
         /// </summary>
         /// <param name="response"></param>
         /// <returns></returns>
-        public static async Task<IonCollection> parseCollection( HttpResponseMessage response )
+        public static async Task<IonCollection> parseCollectionAsync( HttpResponseMessage response )
         {
             return JsonConvert.DeserializeObject<CollectionRoot>( await response.Content.ReadAsStringAsync().ConfigureAwait(false) ).collection[0];
+        }
+
+
+        /// <summary>
+        /// Parses the content of a given string as a collection and returns the first collection in the array
+        /// </summary>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        public static IonCollection parseCollection( string collectionString )
+        {
+            return JsonConvert.DeserializeObject<CollectionRoot>( collectionString ).collection[0];
         }
     }
 }

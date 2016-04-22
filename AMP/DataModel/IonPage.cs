@@ -1,4 +1,5 @@
 ﻿using Anfema.Ion.Parsing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -7,18 +8,37 @@ namespace Anfema.Ion.DataModel
 {
     public class IonPage
     {
+        [JsonProperty( Order = 1 )]
         public string parent { get; set; }
+
+        [JsonProperty( Order = 2 )]
         public string identifier { get; set; }
+
+        [JsonProperty( Order = 3 )]
         public string collection { get; set; }
-        public string locale { get; set; }
-        public List<string> children { get; set; }
-        public List<ContainerContent> contents { get; set; }
+
+        [JsonProperty( Order = 4 )]
         public DateTime last_changed { get; set; }
-        public int position { get; set; }
+
+        [JsonProperty( Order = 5 )]
         public Uri archive { get; set; }
+
+        [JsonProperty( Order = 6 )]
+        public List<ContainerContent> contents { get; set; }
+
+        [JsonProperty( Order = 7 )]
+        public List<string> children { get; set; }
+
+        [JsonProperty( Order = 8 )]
+        public string locale { get; set; }
+
+        [JsonProperty( Order = 9 )]
         public string layout { get; set; }
 
+        [JsonProperty( Order = 10 )]
+        public int position { get; set; }
 
+        
 
         public IonPage()
         {

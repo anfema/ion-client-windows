@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ION_Test", "AMP_Test\ION_Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ION", "AMP\ION.csproj", "{1685F181-ACC4-464F-B7F3-75397539C774}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{553AE71E-F4A2-4473-9D98-FDC5DF18E373}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,26 @@ Global
 		{1685F181-ACC4-464F-B7F3-75397539C774}.Release|x64.ActiveCfg = Release|x86
 		{1685F181-ACC4-464F-B7F3-75397539C774}.Release|x86.ActiveCfg = Release|x86
 		{1685F181-ACC4-464F-B7F3-75397539C774}.Release|x86.Build.0 = Release|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|ARM.ActiveCfg = Debug|ARM
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|ARM.Build.0 = Debug|ARM
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|ARM.Deploy.0 = Debug|ARM
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|x64.ActiveCfg = Debug|x64
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|x64.Build.0 = Debug|x64
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|x64.Deploy.0 = Debug|x64
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|x86.ActiveCfg = Debug|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|x86.Build.0 = Debug|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Debug|x86.Deploy.0 = Debug|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|Any CPU.ActiveCfg = Release|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|ARM.ActiveCfg = Release|ARM
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|ARM.Build.0 = Release|ARM
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|ARM.Deploy.0 = Release|ARM
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|x64.ActiveCfg = Release|x64
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|x64.Build.0 = Release|x64
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|x64.Deploy.0 = Release|x64
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|x86.ActiveCfg = Release|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|x86.Build.0 = Release|x86
+		{553AE71E-F4A2-4473-9D98-FDC5DF18E373}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

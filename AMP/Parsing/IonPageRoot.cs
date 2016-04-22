@@ -7,5 +7,11 @@ namespace Anfema.Ion.Parsing
     public class IonPageRoot
     {
         public List<IonPage> page { get; set; }
+
+
+        public IonPageRoot()
+        {
+            page = new List<IonPage>();
+        }
     }
 }

@@ -216,7 +216,7 @@ namespace Anfema.Ion.Pages
             {
                 // Retrieve the page from the server
                 HttpResponseMessage response = await _dataClient.getPageAsync( pageIdentifier ).ConfigureAwait( false );
-                IonPage page = await DataParser.parsePage( response ).ConfigureAwait( false );
+                IonPage page = await DataParser.parsePageAsync( response ).ConfigureAwait( false );
 
                 // Add page to cache, if it is not null
                 if( page != null )
@@ -271,7 +271,7 @@ namespace Anfema.Ion.Pages
                 if( !( response.StatusCode == System.Net.HttpStatusCode.NotModified ) )
                 {
                     // Parse collection
-                    IonCollection collection = await DataParser.parseCollection( response ).ConfigureAwait( false );
+                    IonCollection collection = await DataParser.parseCollectionAsync( response ).ConfigureAwait( false );
 
                     // Add collection to memory cache
                     _memoryCache.collection = collection;
