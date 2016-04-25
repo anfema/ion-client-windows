@@ -44,22 +44,28 @@ namespace Anfema.Ion.DataModel
         /// </summary>
         private void initialize()
         {
-            Uri uri = new Uri( _connectionString );
+            // Validate uri
+            Uri uri;
+            bool validUri = Uri.TryCreate( _connectionString, UriKind.Absolute, out uri );
 
-            _scheme = uri.Scheme;
-            _collectionIdentifier = uri.Host;
-
-            for( int i = 0; i < uri.Segments.Length; i++ )
+            // If uri is valid then parse the desired content from it
+            if( validUri )
             {
-                _pageIdentifierPath.Add( uri.Segments[i] );
-            }
+                _scheme = uri.Scheme;
+                _collectionIdentifier = uri.Host;
 
-            if( _pageIdentifierPath != null && _pageIdentifierPath.Count != 0 )
-            {
-                _pageIdentifier = _pageIdentifierPath[_pageIdentifierPath.Count - 1];
-            }
+                for( int i = 0; i < uri.Segments.Length; i++ )
+                {
+                    _pageIdentifierPath.Add( uri.Segments[i] );
+                }
 
-            _contentIdentifier = uri.Fragment;
+                if( _pageIdentifierPath != null && _pageIdentifierPath.Count != 0 )
+                {
+                    _pageIdentifier = _pageIdentifierPath[_pageIdentifierPath.Count - 1];
+                }
+
+                _contentIdentifier = uri.Fragment;
+            }
         }
 
 
@@ -70,6 +76,49 @@ namespace Anfema.Ion.DataModel
         public override string ToString()
         {
             return base.ToString() + " + [scheme = " + scheme + ", collection = " + collectionIdentifier + ", page = " + pageIdentifier + ", content = " + collectionIdentifier + "]";
+        }
+
+
+        /// <summary>
+        /// Check for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>true if equal and false otherwise</returns>
+        public override bool Equals( object obj )
+        {
+            // Basic IonContent equality check
+            if( !base.Equals( obj ) )
+            {
+                return false;
+            }
+
+            try
+            {
+                // Try to cast to this type
+                IonConnectionContent content = (IonConnectionContent)obj;
+
+                return connectionString.Equals( content.connectionString )
+                    && scheme.Equals( content.scheme )
+                    && collectionIdentifier.Equals( content.collectionIdentifier )
+                    && pageIdentifierPath.Equals( content.pageIdentifierPath )
+                    && pageIdentifier.Equals( content.pageIdentifier )
+                    && contentIdentifier.Equals( content.contentIdentifier );
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns the exact hashCode that the base class would do
+        /// </summary>
+        /// <returns>HashCode</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

@@ -17,5 +17,43 @@ namespace Anfema.Ion.DataModel
         {
             get { return new Color { R = (byte)r, G = (byte)g, B = (byte)b, A = (byte)a }; }
         }
+
+
+        /// <summary>
+        /// Checks the given IonColor for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>True if both IonColors are equal</returns>
+        public override bool Equals( object obj )
+        {
+            // Basic IonContent equality check
+            if( !base.Equals( obj ) )
+            {
+                return false;
+            }
+            
+            try
+            {
+                // Try to cast to color and check for equality
+                Color otherColor = (Color)obj;
+
+                return color.Equals( otherColor ); ;
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns the exact hashCode that the base class would do
+        /// </summary>
+        /// <returns>HashCode</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

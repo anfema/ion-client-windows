@@ -62,5 +62,57 @@ namespace Anfema.Ion.DataModel
                 }
             }
         }
+
+
+        /// <summary>
+        /// Checks for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>True if all elements are equal, false otherwise</returns>
+        public override bool Equals( object obj )
+        {
+            // Basic IonContent equality check
+            if( !base.Equals( obj ) )
+            {
+                return false;
+            }
+
+            try
+            {
+                // Try to cast
+                IonMediaContent content = (IonMediaContent)obj;
+
+                // Check each parameter for equality
+                return mimeType.Equals( content.mimeType )
+                    && originalMimeType.Equals( content.originalMimeType )
+                    && fileURL.Equals( content.fileURL )
+                    && originalFileURL.Equals( content.originalFileURL )
+                    && originalWidth == content.originalWidth
+                    && originalHeight == content.originalHeight
+                    && fileSize == content.fileSize
+                    && originalFileSize == content.originalFileSize
+                    && originalChecksum.Equals( content.originalChecksum )
+                    && originalLength == content.originalLength
+                    && width == content.width
+                    && height == content.height
+                    && checksum.Equals( content.checksum )
+                    && length == content.length;
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns the exact hashCode that the base class would do
+        /// </summary>
+        /// <returns>HashCode</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

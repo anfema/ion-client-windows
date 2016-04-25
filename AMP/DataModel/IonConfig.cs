@@ -54,7 +54,7 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Checks the given Ampconfig for equality based uppon the content of both AmpConfigs
+        /// Checks the given IonConfig for equality based uppon the content of both IonConfigs
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>True if the content is equal and false otherwise</returns>

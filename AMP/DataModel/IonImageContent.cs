@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.UI.Xaml.Media.Imaging;
+
 
 namespace Anfema.Ion.DataModel
 {
@@ -50,9 +47,64 @@ namespace Anfema.Ion.DataModel
 
         public StorageFile storageFile { get; set; }
 
+
         public async Task loadImage( Ion amp )
         {
             this.storageFile = await amp.Request( this.imageURL, checksum, this );
+        }
+
+
+        /// <summary>
+        /// Checks for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>True if equal, false otherwise</returns>
+        public override bool Equals( object obj )
+        {
+            // Basic IonContent equality check
+            if( !base.Equals( obj ) )
+            {
+                return false;
+            }
+
+            try
+            {
+                // Try to cast
+                IonImageContent content = (IonImageContent)obj;
+
+                // Compare all elements
+                return mimeType.Equals( content.mimeType )
+                    && imageURL.Equals( content.imageURL )
+                    && fileSize == content.fileSize
+                    && originalMimeType.Equals( content.originalMimeType )
+                    && originalImageURL.Equals( content.originalImageURL )
+                    && originalWidth == content.originalWidth
+                    && originalHeight == content.originalHeight
+                    && originalFileSize == content.originalFileSize
+                    && translationX == content.translationX
+                    && translationY == content.translationY
+                    && originalChecksum.Equals( content.originalChecksum )
+                    && width == content.width
+                    && height == content.height
+                    && scale == content.scale
+                    && checksum.Equals( content.checksum )
+                    && storageFile.Equals( content.storageFile );
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns the exact hashCode that the base class would do
+        /// </summary>
+        /// <returns>HashCode</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
