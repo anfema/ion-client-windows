@@ -71,7 +71,7 @@ namespace UnitTests
 
 
         [TestMethod]
-        public void ionColorContentEqualsCheck()
+        public void colorContentEqualsCheck()
         {
             string colorString = "{\"type\":\"colorcontent\",\"a\":255,\"is_searchable\":false,\"outlet\":\"information-color\",\"b\":39,\"r\":39,\"variation\":\"default\",\"g\":39}";
 
@@ -84,7 +84,7 @@ namespace UnitTests
 
         
         [TestMethod]
-        public void ionConnectionContentEqualsCheck()
+        public void connectionContentEqualsCheck()
         {
             string connectionString = "{\"position\":0,\"type\":\"connectioncontent\",\"connection_string\":\"//lookbook/material-thermatex-dummy\",\"is_searchable\":false,\"outlet\":\"materials\",\"variation\":\"default\"}";
 
@@ -93,6 +93,110 @@ namespace UnitTests
             IonConnectionContent connection2 = JsonConvert.DeserializeObject<IonConnectionContent>( connectionString2 );
 
             Assert.AreEqual( connection, connection2 );
+        }
+
+
+        [TestMethod]
+        public void dateTimeContentEqualsCheck()
+        {
+            string dateTimeString = "{\"variation\":\"default\",\"is_searchable\":false,\"outlet\":\"end-date\",\"datetime\":\"2014 - 11 - 05T11: 05:29Z\",\"type\":\"datetimecontent\"}";
+
+            IonDateTimeContent dateTime = JsonConvert.DeserializeObject<IonDateTimeContent>( dateTimeString );
+            string dateTimeString2 = JsonConvert.SerializeObject( dateTime );
+            IonDateTimeContent dateTime2 = JsonConvert.DeserializeObject<IonDateTimeContent>( dateTimeString2 );
+
+            Assert.AreEqual( dateTime, dateTime2 );
+        }
+
+
+        [TestMethod]
+        public void fileContentEqualsCheck()
+        {
+            string fileString = "{\"is_searchable\":false,\"outlet\":\"files\",\"file\":\"https://bireise-dev.anfema.com/protected_media/files/baaab979-37a5-4fc1-85aa-885ed2b96be9/testpdf_01.pdf\",\"position\":0,\"checksum\":\"sha256:d7415d339314185bcce7e8e829b12becdf36cad8788645c5de4bb1ebd8f6aa17\",\"type\":\"filecontent\",\"file_size\":467985,\"name\":\"testpdf_01.pdf\",\"variation\":\"default\",\"mime_type\":\"application/octet-stream\"}";
+
+            IonFileContent file = JsonConvert.DeserializeObject<IonFileContent>( fileString );
+            string fileString2 = JsonConvert.SerializeObject( file );
+            IonFileContent file2 = JsonConvert.DeserializeObject<IonFileContent>( fileString2 );
+
+            Assert.AreEqual( file, file2 );
+        }
+
+
+        [TestMethod]
+        public void flagContentEqualsCheck()
+        {
+            string flagString = "{\"is_searchable\":false,\"is_enabled\":false,\"type\":\"flagcontent\",\"variation\":\"default\",\"outlet\":\"flag\"}";
+
+            IonFlagContent flag = JsonConvert.DeserializeObject<IonFlagContent>( flagString );
+            string flagString2 = JsonConvert.SerializeObject( flag );
+            IonFlagContent flag2 = JsonConvert.DeserializeObject<IonFlagContent>( flagString2 );
+
+            Assert.AreEqual( flag, flag2 );
+        }
+
+
+        [TestMethod]
+        public void imageContentEqualsCheck()
+        {
+            string imageString = "{\"width\":624,\"scale\":0,\"is_searchable\":false,\"height\":349,\"type\":\"imagecontent\",\"mime_type\":\"image/jpeg\",\"checksum\":\"sha256:9cc5a94d656ea9a28712b91bf182681f742fea03f9371b6a4188c5526696f7bd\",\"original_file_size\":39234,\"original_checksum\":\"sha256:9cc5a94d656ea9a28712b91bf182681f742fea03f9371b6a4188c5526696f7bd\",\"file_size\":39234,\"original_image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-25.jpg\",\"outlet\":\"images\",\"original_width\":624,\"position\":2,\"variation\":\"default\",\"translation_y\":0,\"image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-25.jpg\",\"original_height\":349,\"translation_x\":0,\"original_mime_type\":\"image/jpeg\"}";
+
+            IonImageContent image = JsonConvert.DeserializeObject<IonImageContent>( imageString );
+            string imageString2 = JsonConvert.SerializeObject( image );
+            IonImageContent image2 = JsonConvert.DeserializeObject<IonImageContent>( imageString2 );
+
+            Assert.AreEqual( image, image2 );
+        }
+
+
+        [TestMethod]
+        public void mediaContentEqualsCheck()
+        {
+            string mediaString = "{\"original_length\":16280,\"original_mime_type\":\"video/mp4\",\"original_file_size\":730851,\"height\":360,\"width\":234,\"is_searchable\":false,\"mime_type\":\"video/mp4\",\"outlet\":\"videos\",\"original_file\":\"https://bireise-dev.anfema.com/protected_media/files/baaab979-37a5-4fc1-85aa-885ed2b96be9/a8Mo3xd_460sv_kTQmsWb.mp4\",\"file\":\"https://bireise-dev.anfema.com/protected_media/files/baaab979-37a5-4fc1-85aa-885ed2b96be9/a8Mo3xd_460sv.mp4.converted.mp4\",\"position\":0,\"checksum\":\"sha256:6c9f9e6adce81888ef1ebb9e7e9cf808411100df7bed3bfdcad3d55195ee8cbd\",\"type\":\"mediacontent\",\"file_size\":478799,\"name\":\"a8Mo3xd_460sv.mp4\",\"variation\":\"default\",\"length\":16280,\"original_height\":360,\"original_checksum\":\"sha256:243a7054cc4d3abd8cc574db293b026a075ab24a703a2c67bad28dfdeca242bf\",\"original_width\":234}";
+
+            IonMediaContent media = JsonConvert.DeserializeObject<IonMediaContent>( mediaString );
+            string mediaString2 = JsonConvert.SerializeObject( media );
+            IonMediaContent media2 = JsonConvert.DeserializeObject<IonMediaContent>( mediaString2 );
+
+            Assert.AreEqual( media, media2 );
+        }
+
+
+        [TestMethod]
+        public void numberContentEqualsCheck()
+        {
+            string numberString = "{\"is_searchable\":false,\"type\":\"numbercontent\",\"variation\":\"default\",\"value\":123456,\"outlet\":\"number\"}";
+
+            IonNumberContent number = JsonConvert.DeserializeObject<IonNumberContent>( numberString );
+            string numberString2 = JsonConvert.SerializeObject( number );
+            IonNumberContent number2 = JsonConvert.DeserializeObject<IonNumberContent>( numberString2 );
+
+            Assert.AreEqual( number, number2 );
+        }
+
+
+        [TestMethod]
+        public void optionContentEqualsCheck()
+        {
+            string optionString = "{\"type\":\"optioncontent\",\"variation\":\"default\",\"value\":\"2\",\"outlet\":\"option\"}";
+
+            IonOptionContent option = JsonConvert.DeserializeObject<IonOptionContent>( optionString );
+            string optionString2 = JsonConvert.SerializeObject( option );
+            IonOptionContent option2 = JsonConvert.DeserializeObject<IonOptionContent>( optionString2 );
+
+            Assert.AreEqual( option, option2 );
+        }
+
+
+        [TestMethod]
+        public void textContentEqualsCheck()
+        {
+            string textString = "{\"mime_type\":\"text/plain\",\"type\":\"textcontent\",\"variation\":\"default\",\"is_searchable\":true,\"outlet\":\"text\",\"is_multiline\":true,\"text\":\"Donecullamcorpernullanonmetusauctorfringilla.Duismollis,estnoncommodoluctus,nisierat\n\t\t\tporttitorligula,egetlaciniaodiosemnecelit.Vivamussagittislacusvelauguelaoreetrutrumfaucibus\n\t\t\tdolorauctor.Donecsedodiodui.\"}";
+
+            IonTextContent text = JsonConvert.DeserializeObject<IonTextContent>( textString );
+            string textString2 = JsonConvert.SerializeObject( text );
+            IonTextContent text2 = JsonConvert.DeserializeObject<IonTextContent>( textString2 );
+
+            Assert.AreEqual( text, text2 );
         }
     }
 }

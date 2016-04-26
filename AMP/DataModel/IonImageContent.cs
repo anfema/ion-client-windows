@@ -72,6 +72,23 @@ namespace Anfema.Ion.DataModel
                 // Try to cast
                 IonImageContent content = (IonImageContent)obj;
 
+                // Special check for the storage file, which can be null
+                bool storageFileEqual = false;
+
+                if( storageFile == null )
+                {
+                    if( content.storageFile == null )
+                    {
+                        // If both are null, then they are "equal"
+                        storageFileEqual = true;
+                    }
+                    else
+                    {
+                        // If only this imageFile is null then return false
+                        return false;
+                    }
+                }
+
                 // Compare all elements
                 return mimeType.Equals( content.mimeType )
                     && imageURL.Equals( content.imageURL )
@@ -88,7 +105,7 @@ namespace Anfema.Ion.DataModel
                     && height == content.height
                     && scale == content.scale
                     && checksum.Equals( content.checksum )
-                    && storageFile.Equals( content.storageFile );
+                    && storageFileEqual;
             }
 
             catch
