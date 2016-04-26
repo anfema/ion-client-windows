@@ -147,6 +147,7 @@
     <Compile Include="Utils\DataClient.cs" />
     <Compile Include="Utils\DataConverters.cs" />
     <Compile Include="Utils\DateTimeUtils.cs" />
+    <Compile Include="Utils\EqualsUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HashUtils.cs" />
     <Compile Include="Utils\IonConstants.cs" />

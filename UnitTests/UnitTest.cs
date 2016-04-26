@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using System.Net.Http.Headers;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Anfema.Ion.DataModel;
 using Anfema.Ion.Parsing;
 using Newtonsoft.Json;
-
+using System.Net.Http.Headers;
+using Anfema.Ion.Authorization;
+using System.Threading.Tasks;
 
 namespace UnitTests
 {
@@ -26,7 +26,7 @@ namespace UnitTests
             Assert.AreEqual( collectionStringOriginal, collectionStringResult );
         }
 
-
+        /*
         [TestMethod]
         public void pageTestMethod()
         {
@@ -42,20 +42,57 @@ namespace UnitTests
             Assert.AreEqual( pageStringOriginal, pageStringResult );
         }
 
-
+        
         [TestMethod]
-        public void pageOcjectTestMethod()
+        public void pageObjectTestMethod()
         {
             string pageStringOriginal = "{\"parent\":\"education\",\"identifier\":\"grundschule-am-arnulfpark\",\"collection\":\"lookbook\",\"locale\":\"de_DE\",\"children\":[],\"contents\":[{\"type\":\"containercontent\",\"variation\":\"default\",\"outlet\":\"project\",\"children\":[{\"mime_type\":\"image/jpeg\",\"image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-25.jpg\",\"file_size\":39234,\"original_mime_type\":\"image/jpeg\",\"original_image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-25.jpg\",\"original_width\":624,\"original_height\":349,\"original_file_size\":39234,\"translation_x\":0,\"translation_y\":0,\"original_checksum\":\"sha256:9cc5a94d656ea9a28712b91bf182681f742fea03f9371b6a4188c5526696f7bd\",\"width\":624,\"height\":349,\"scale\":0.0,\"checksum\":\"sha256:9cc5a94d656ea9a28712b91bf182681f742fea03f9371b6a4188c5526696f7bd\",\"storageFile\":null,\"variation\":\"default\",\"outlet\":\"images\",\"is_searchable\":false,\"position\":2,\"type\":\"imagecontent\",\"is_available\":true},{\"mime_type\":\"image/jpeg\",\"image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-24.jpg\",\"file_size\":53338,\"original_mime_type\":\"image/jpeg\",\"original_image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-24.jpg\",\"original_width\":1014,\"original_height\":453,\"original_file_size\":53338,\"translation_x\":0,\"translation_y\":0,\"original_checksum\":\"sha256:aee9dab7f706bb54cd5698e33534261a6f92750fc41f40483079fa340fcb1fc2\",\"width\":1014,\"height\":453,\"scale\":0.0,\"checksum\":\"sha256:aee9dab7f706bb54cd5698e33534261a6f92750fc41f40483079fa340fcb1fc2\",\"storageFile\":null,\"variation\":\"default\",\"outlet\":\"images\",\"is_searchable\":false,\"position\":1,\"type\":\"imagecontent\",\"is_available\":true},{\"mime_type\":\"image/jpeg\",\"image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-23.jpg\",\"file_size\":87550,\"original_mime_type\":\"image/jpeg\",\"original_image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-23.jpg\",\"original_width\":1094,\"original_height\":752,\"original_file_size\":87550,\"translation_x\":0,\"translation_y\":0,\"original_checksum\":\"sha256:38800d303efaabe86809f33e787ac580f748ca28e840ea0ddea515654a893f5c\",\"width\":1094,\"height\":752,\"scale\":0.0,\"checksum\":\"sha256:38800d303efaabe86809f33e787ac580f748ca28e840ea0ddea515654a893f5c\",\"storageFile\":null,\"variation\":\"default\",\"outlet\":\"images\",\"is_searchable\":false,\"position\":0,\"type\":\"imagecontent\",\"is_available\":true},{\"mime_type\":\"text/html\",\"is_multiline\":true,\"text\":\"<p>Grundschule am Arnulfpark,<br>Mu¨nchen, Deutschland,<br>HERADESIGN® super fine </p>\",\"variation\":\"default\",\"outlet\":\"description\",\"is_searchable\":false,\"position\":0,\"type\":\"textcontent\",\"is_available\":true},{\"connection_string\":\"\",\"scheme\":\"\",\"collectionIdentifier\":\"\",\"pageIdentifierPath\":[],\"pageIdentifier\":\"\",\"contentIdentifier\":\"\",\"variation\":\"default\",\"outlet\":\"materials\",\"is_searchable\":false,\"position\":0,\"type\":\"connectioncontent\",\"is_available\":false},{\"mime_type\":null,\"name\":null,\"file_size\":0,\"checksum\":null,\"file\":null,\"storageFile\":null,\"variation\":\"default\",\"outlet\":\"project-pdf\",\"is_searchable\":false,\"position\":0,\"type\":\"filecontent\",\"is_available\":false}]}],\"last_changed\":\"2016-04-18T16:56:52Z\",\"position\":1,\"archive\":\"https://lookbook-dev.anfema.com/client/v1/de_DE/lookbook/grundschule-am-arnulfpark.tar\",\"layout\":\"project\"}";
 
-            IonPage page = DataParser.parsePage( pageStringOriginal );
+            IonPage page = JsonConvert.DeserializeObject<IonPage>( pageStringOriginal );
+            string pageStringResult = JsonConvert.SerializeObject( page );
+            IonPage page2 = JsonConvert.DeserializeObject<IonPage>( pageStringResult );
 
-            IonPageRoot rootPage = new IonPageRoot();
-            rootPage.page.Add( page );
+            Assert.AreEqual( page, page2 );
+        }*/
 
-            string pageStringResult = JsonConvert.SerializeObject( rootPage );
+        [TestMethod]
+        public async Task configEqualsCheck()
+        {
+            string collectionIdentifier = "lookbook";
+            AuthenticationHeaderValue authorizationHeader = await TokenAuthorization.GetAuthHeaderValue( "knauf-translator@anfe.ma", "Jdt9y9qHt3", "https://lookbook-dev.anfema.com/client/v1/login" );
+            IonConfig config = new IonConfig( "https://lookbook-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier, "default", authorizationHeader, 120, 100, false );
 
-            Assert.AreEqual( pageStringOriginal, pageStringResult );
+            string collectionIdentifier2 = "lookbook";
+            AuthenticationHeaderValue authorizationHeader2 = await TokenAuthorization.GetAuthHeaderValue( "knauf-translator@anfe.ma", "Jdt9y9qHt3", "https://lookbook-dev.anfema.com/client/v1/login" );
+            IonConfig config2 = new IonConfig( "https://lookbook-dev.anfema.com/client/v1/", "de_DE", collectionIdentifier2, "default", authorizationHeader2, 120, 100, false );
+
+            Assert.IsTrue( config2.Equals( config ) );
+        }
+
+
+        [TestMethod]
+        public void ionColorContentEqualsCheck()
+        {
+            string colorString = "{\"type\":\"colorcontent\",\"a\":255,\"is_searchable\":false,\"outlet\":\"information-color\",\"b\":39,\"r\":39,\"variation\":\"default\",\"g\":39}";
+
+            IonColorContent color = JsonConvert.DeserializeObject<IonColorContent>( colorString );
+            string colorString2 = JsonConvert.SerializeObject( color );
+            IonColorContent color2 = JsonConvert.DeserializeObject<IonColorContent>( colorString2 );
+
+            Assert.AreEqual( color, color2 );
+        }
+
+        
+        [TestMethod]
+        public void ionConnectionContentEqualsCheck()
+        {
+            string connectionString = "{\"position\":0,\"type\":\"connectioncontent\",\"connection_string\":\"//lookbook/material-thermatex-dummy\",\"is_searchable\":false,\"outlet\":\"materials\",\"variation\":\"default\"}";
+
+            IonConnectionContent connection = JsonConvert.DeserializeObject<IonConnectionContent>( connectionString );
+            string connectionString2 = JsonConvert.SerializeObject( connection );
+            IonConnectionContent connection2 = JsonConvert.DeserializeObject<IonConnectionContent>( connectionString2 );
+
+            Assert.AreEqual( connection, connection2 );
         }
     }
 }

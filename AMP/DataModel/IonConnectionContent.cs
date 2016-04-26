@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Anfema.Ion.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -22,10 +23,20 @@ namespace Anfema.Ion.DataModel
         }
 
         // Public properties to access the generated parameters from the connection string
+
+        [JsonIgnore]
         public string scheme { get { return _scheme; } }
+
+        [JsonIgnore]
         public string collectionIdentifier { get { return _collectionIdentifier; } }
+
+        [JsonIgnore]
         public List<string> pageIdentifierPath { get { return _pageIdentifierPath; } }
+
+        [JsonIgnore]
         public string pageIdentifier { get { return _pageIdentifier; } }
+
+        [JsonIgnore]
         public string contentIdentifier { get { return _contentIdentifier; } }
 
         // Original connection string
@@ -54,6 +65,9 @@ namespace Anfema.Ion.DataModel
                 _scheme = uri.Scheme;
                 _collectionIdentifier = uri.Host;
 
+                // Clear list to ensure that there are no other elements inside
+                _pageIdentifierPath.Clear();
+
                 for( int i = 0; i < uri.Segments.Length; i++ )
                 {
                     _pageIdentifierPath.Add( uri.Segments[i] );
@@ -66,16 +80,6 @@ namespace Anfema.Ion.DataModel
 
                 _contentIdentifier = uri.Fragment;
             }
-        }
-
-
-        /// <summary>
-        /// Used to get a string representation of all parameters of this connection content
-        /// </summary>
-        /// <returns>String containing all informations for this connection content</returns>
-        public override string ToString()
-        {
-            return base.ToString() + " + [scheme = " + scheme + ", collection = " + collectionIdentifier + ", page = " + pageIdentifier + ", content = " + collectionIdentifier + "]";
         }
 
 
@@ -100,7 +104,7 @@ namespace Anfema.Ion.DataModel
                 return connectionString.Equals( content.connectionString )
                     && scheme.Equals( content.scheme )
                     && collectionIdentifier.Equals( content.collectionIdentifier )
-                    && pageIdentifierPath.Equals( content.pageIdentifierPath )
+                    && EqualsUtils.UnorderedEqual( pageIdentifierPath, content.pageIdentifierPath )
                     && pageIdentifier.Equals( content.pageIdentifier )
                     && contentIdentifier.Equals( content.contentIdentifier );
             }

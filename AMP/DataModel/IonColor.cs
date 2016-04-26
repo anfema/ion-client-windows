@@ -35,9 +35,13 @@ namespace Anfema.Ion.DataModel
             try
             {
                 // Try to cast to color and check for equality
-                Color otherColor = (Color)obj;
+                IonColorContent otherColor = (IonColorContent)obj;
 
-                return color.Equals( otherColor ); ;
+                return color.Equals( otherColor.color )
+                    && r == otherColor.r
+                    && g == otherColor.g
+                    && b == otherColor.b
+                    && a == otherColor.a;
             }
 
             catch

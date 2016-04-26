@@ -136,5 +136,58 @@ namespace Anfema.Ion.DataModel
 
             return "";
         }
+
+
+        /// <summary>
+        /// Checks for equality
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>True if pages are equal, false otherwise</returns>
+        public override bool Equals( object obj )
+        {
+            if( obj == this )
+            {
+                return true;
+            }
+
+            if( obj == null )
+            {
+                return false;
+            }
+
+            try
+            {
+                // Try to cast
+                IonPage page = (IonPage)obj;
+
+                // Compare each value
+                return parent.Equals( page.parent )
+                    && identifier.Equals( page.identifier )
+                    && collection.Equals( page.collection )
+                    && last_changed == page.last_changed
+                    && archive.Equals( page.archive )
+                    && contents.Equals( page.contents )
+                    && children.Equals( page.children )
+                    && locale.Equals( page.locale )
+                    && layout.Equals( page.layout )
+                    && position == page.position;
+            }
+
+            catch
+            {
+                return false;
+            }
+
+        }
+
+
+        /// <summary>
+        /// Returns the exact hashCode that the base class would do
+        /// </summary>
+        /// <returns>HashCode</returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
