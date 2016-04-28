@@ -38,11 +38,16 @@ namespace Anfema.Ion.DataModel
         [JsonProperty( Order = 10 )]
         public int position { get; set; }
 
-        
+        [JsonProperty( Order = 11 )]
+        public List<IonContent> emptyContent { get; set; }
+
+
+
 
         public IonPage()
         {
             children = new List<string>();
+            emptyContent = new List<IonContent>();
         }
 
 
@@ -135,6 +140,41 @@ namespace Anfema.Ion.DataModel
             }
 
             return "";
+        }
+
+
+        /// <summary>
+        /// Sorts out empty content and moves it to the emptyContent list
+        /// </summary>
+        public void sortOutEmptyContent()
+        {
+            for( int i = 0; i < contents[0].children.Count; i++ )
+            {
+                if( !contents[0].children[i].isAvailable )
+                {
+                    // Add empty content to list of empty contents
+                    emptyContent.Add( contents[0].children[i] );
+
+                    // Remove the empty content from the content list
+                    contents[0].children.RemoveAt( i );
+
+                    // Decrease the counter, because we removed an item from the list we're working on
+                    --i;
+                }
+            }
+
+
+            foreach( IonContent content in contents[0].children )
+            {
+                if( !content.isAvailable )
+                {
+                    // Add empty content to list of empty contents
+                    emptyContent.Add( content );
+
+                    // Remove the empty content from the content list
+                    contents[0].children.Remove( content );
+                }
+            }
         }
 
 

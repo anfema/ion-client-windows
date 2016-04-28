@@ -36,8 +36,14 @@ namespace Anfema.Ion.Parsing
 
             try
             {
+                // Deserialize page
                 IonPageRoot pageParsedNew = JsonConvert.DeserializeObject<IonPageRoot>( pageString );
+
+                // Set the first element of the root to be the page
                 pageParsed = pageParsedNew.page[0];
+
+                // Sort out empty content
+                pageParsed.sortOutEmptyContent();
             }
             catch( Exception e )
             {
