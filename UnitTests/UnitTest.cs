@@ -26,22 +26,6 @@ namespace UnitTests
             Assert.AreEqual( collectionStringOriginal, collectionStringResult );
         }
 
-        /*
-        [TestMethod]
-        public void pageTestMethod()
-        {
-            string pageStringOriginal = "{\"page\":[{\"parent\":\"education\",\"identifier\":\"grundschule-am-arnulfpark\",\"collection\":\"lookbook\",\"last_changed\":\"2016-04-18T16:56:52Z\",\"archive\":\"https://lookbook-dev.anfema.com/client/v1/de_DE/lookbook/grundschule-am-arnulfpark.tar\",\"contents\":[{\"outlet\":\"project\",\"type\":\"containercontent\",\"children\":[{\"width\":624,\"scale\":0,\"is_searchable\":false,\"height\":349,\"type\":\"imagecontent\",\"mime_type\":\"image/jpeg\",\"checksum\":\"sha256:9cc5a94d656ea9a28712b91bf182681f742fea03f9371b6a4188c5526696f7bd\",\"original_file_size\":39234,\"original_checksum\":\"sha256:9cc5a94d656ea9a28712b91bf182681f742fea03f9371b6a4188c5526696f7bd\",\"file_size\":39234,\"original_image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-25.jpg\",\"outlet\":\"images\",\"original_width\":624,\"position\":2,\"variation\":\"default\",\"translation_y\":0,\"image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-25.jpg\",\"original_height\":349,\"translation_x\":0,\"original_mime_type\":\"image/jpeg\"},{\"width\":1014,\"scale\":0,\"is_searchable\":false,\"height\":453,\"type\":\"imagecontent\",\"mime_type\":\"image/jpeg\",\"checksum\":\"sha256:aee9dab7f706bb54cd5698e33534261a6f92750fc41f40483079fa340fcb1fc2\",\"original_file_size\":53338,\"original_checksum\":\"sha256:aee9dab7f706bb54cd5698e33534261a6f92750fc41f40483079fa340fcb1fc2\",\"file_size\":53338,\"original_image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-24.jpg\",\"outlet\":\"images\",\"original_width\":1014,\"position\":1,\"variation\":\"default\",\"translation_y\":0,\"image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-24.jpg\",\"original_height\":453,\"translation_x\":0,\"original_mime_type\":\"image/jpeg\"},{\"width\":1094,\"scale\":0,\"is_searchable\":false,\"height\":752,\"type\":\"imagecontent\",\"mime_type\":\"image/jpeg\",\"checksum\":\"sha256:38800d303efaabe86809f33e787ac580f748ca28e840ea0ddea515654a893f5c\",\"original_file_size\":87550,\"original_checksum\":\"sha256:38800d303efaabe86809f33e787ac580f748ca28e840ea0ddea515654a893f5c\",\"file_size\":87550,\"original_image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-23.jpg\",\"outlet\":\"images\",\"original_width\":1094,\"position\":0,\"variation\":\"default\",\"translation_y\":0,\"image\":\"https://lookbook-dev.anfema.com/protected_media/images/e9fb32e5-2fa2-4628-b778-4dfbe7b682aa/AMF_Inspirationen_Lookbook_04-23.jpg\",\"original_height\":752,\"translation_x\":0,\"original_mime_type\":\"image/jpeg\"},{\"type\":\"textcontent\",\"mime_type\":\"text/html\",\"is_multiline\":true,\"is_searchable\":false,\"outlet\":\"description\",\"text\":\"<p>GrundschuleamArnulfpark,<br>Mu¨nchen,Deutschland,<br>HERADESIGN®superfine</p>\",\"variation\":\"default\"},{\"type\":\"connectioncontent\",\"is_searchable\":false,\"outlet\":\"materials\",\"is_available\":false,\"variation\":\"default\"},{\"type\":\"filecontent\",\"is_searchable\":false,\"outlet\":\"project-pdf\",\"is_available\":false,\"variation\":\"default\"}],\"variation\":\"default\"}],\"children\":[],\"locale\":\"de_DE\",\"layout\":\"project\",\"position\":1}]}";
-
-            IonPage page = DataParser.parsePage( pageStringOriginal );
-
-            IonPageRoot rootPage = new IonPageRoot();
-            rootPage.page.Add( page );
-
-            string pageStringResult = JsonConvert.SerializeObject( rootPage );
-
-            Assert.AreEqual( pageStringOriginal, pageStringResult );
-        }*/
-
         
         [TestMethod]
         public void pageEqualsCheck()
