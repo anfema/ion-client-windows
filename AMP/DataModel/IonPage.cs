@@ -1,4 +1,5 @@
 ﻿using Anfema.Ion.Parsing;
+using Anfema.Ion.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -162,19 +163,6 @@ namespace Anfema.Ion.DataModel
                     --i;
                 }
             }
-
-
-            foreach( IonContent content in contents[0].children )
-            {
-                if( !content.isAvailable )
-                {
-                    // Add empty content to list of empty contents
-                    emptyContent.Add( content );
-
-                    // Remove the empty content from the content list
-                    contents[0].children.Remove( content );
-                }
-            }
         }
 
 
@@ -206,8 +194,8 @@ namespace Anfema.Ion.DataModel
                     && collection.Equals( page.collection )
                     && last_changed == page.last_changed
                     && archive.Equals( page.archive )
-                    && contents.Equals( page.contents )
-                    && children.Equals( page.children )
+                    && EqualsUtils.UnorderedEqual( contents, page.contents )
+                    && EqualsUtils.UnorderedEqual( children, page.children )
                     && locale.Equals( page.locale )
                     && layout.Equals( page.layout )
                     && position == page.position;

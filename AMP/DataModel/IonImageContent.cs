@@ -116,12 +116,12 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Returns the exact hashCode that the base class would do
+        /// Returns the hascode computed by its elements
         /// </summary>
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return imageURL.GetHashCode();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -45,7 +46,7 @@ namespace Anfema.Ion.Parsing
                 // Compare every value
                 return outlet.Equals( content.outlet )
                     && type.Equals( content.type )
-                    && children.Equals( content.children )
+                    && EqualsUtils.UnorderedEqual( children, content.children )
                     && variation.Equals( content.variation );
             }
 
@@ -57,12 +58,12 @@ namespace Anfema.Ion.Parsing
 
 
         /// <summary>
-        /// Returns the exact hashCode that the base class would do
+        /// Returns the hashCode that is computed by its member values
         /// </summary>
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return ( outlet + type + variation ).GetHashCode();
         }
     }
 }

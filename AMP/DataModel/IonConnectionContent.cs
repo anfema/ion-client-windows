@@ -122,7 +122,7 @@ namespace Anfema.Ion.DataModel
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return connectionString.GetHashCode();
         }
     }
 }

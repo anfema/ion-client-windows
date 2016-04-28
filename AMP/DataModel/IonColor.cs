@@ -35,13 +35,13 @@ namespace Anfema.Ion.DataModel
             try
             {
                 // Try to cast to color and check for equality
-                IonColorContent otherColor = (IonColorContent)obj;
+                IonColorContent content = (IonColorContent)obj;
 
-                return color.Equals( otherColor.color )
-                    && r == otherColor.r
-                    && g == otherColor.g
-                    && b == otherColor.b
-                    && a == otherColor.a;
+                return color.Equals( content.color )
+                    && r == content.r
+                    && g == content.g
+                    && b == content.b
+                    && a == content.a;
             }
 
             catch
@@ -52,12 +52,12 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Returns the exact hashCode that the base class would do
+        /// Returns the hashCode calculated for the elements values
         /// </summary>
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return ( r + g + b + a ).GetHashCode();
         }
     }
 }

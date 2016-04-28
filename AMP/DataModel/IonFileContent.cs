@@ -67,8 +67,7 @@ namespace Anfema.Ion.DataModel
                         return false;
                     }
                 }
-
-
+                
                 return mimeType.Equals( content.mimeType )
                     && name.Equals( content.name )
                     && fileSize == content.fileSize
@@ -85,12 +84,12 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Returns the exact hashCode that the base class would do
+        /// Returns the hascode computed by its elements
         /// </summary>
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return fileURL.GetHashCode();
         }
     }
 }
