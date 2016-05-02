@@ -88,6 +88,10 @@ namespace Anfema.Ion.DataModel
                         return false;
                     }
                 }
+                else
+                {
+                    storageFileEqual = storageFile.Equals( content.storageFile );
+                }
 
                 // Compare all elements
                 return mimeType.Equals( content.mimeType )
