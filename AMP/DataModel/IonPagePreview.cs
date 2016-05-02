@@ -108,5 +108,88 @@ namespace Anfema.Ion.DataModel
                 return "";
             }
         }
+
+
+        /// <summary>
+        /// Checks a given pagePreview for equality with this pagePreview
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>True if they both are equal, false otherwise</returns>
+        public override bool Equals( object obj )
+        {
+            // If the object is the exact this object
+            if( obj == this )
+            {
+                return true;
+            }
+
+            // If the given object is null then it can't be equal too
+            if( obj == null )
+            {
+                return false;
+            }
+
+            try
+            {
+                // Try to cast the object
+                IonPagePreview content = (IonPagePreview)obj;
+
+                // Special treatment for parent, which can be null
+                bool parentEqual = false;
+                if( parent == null )
+                {
+                    if( content.parent == null )
+                    {
+                        parentEqual = true;
+                    }
+                    else
+                    {
+                        return false;
+                    }                        
+                }
+                else
+                {
+                    parentEqual = parent.Equals( content.parent );
+                }
+
+
+                bool identifierBool = identifier.Equals( content.identifier );
+                bool collectionIdentifierBool = collection_identifier.Equals( content.collection_identifier );
+                bool versionNumberBool = version_number == content.version_number;
+                bool lastchangedBool = lastChanged == content.lastChanged;
+                bool layoutBool = layout.Equals( content.layout );
+                bool localeBool = locale.Equals( content.locale );
+
+                string metaString = meta.ToString();
+                bool metaBool = meta.ToString().Equals( content.meta.ToString() );
+
+
+
+                // Check all elements for equality
+                return identifier.Equals( content.identifier )
+                    && collection_identifier.Equals( content.collection_identifier )
+                    && version_number == content.version_number
+                    && lastChanged == content.lastChanged
+                    && layout.Equals( content.layout )
+                    && locale.Equals( content.locale )
+                    && parentEqual
+                    && meta.ToString().Equals( content.meta.ToString() );
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Calculates the hashCode for this pagePreview based on his identifier
+        /// </summary>
+        /// <returns>HashCode</returns>
+        public override int GetHashCode()
+        {
+            return identifier.GetHashCode();
+        }
     }
 }

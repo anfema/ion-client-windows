@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Anfema.Ion.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -29,6 +30,63 @@ namespace Anfema.Ion.DataModel
         public DateTime getPageLastChanged( string pageIdentifier )
         {
             return pages.Find( x => x.identifier.Equals( pageIdentifier ) ).lastChanged;
+        }
+
+
+        /// <summary>
+        /// Checks a given collection's property for equality with this collection
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>True if collections are equal, false otherwise</returns>
+        public override bool Equals( object obj )
+        {
+            // If the object is the exact this object
+            if( obj == this )
+            {
+                return true;
+            }
+
+            // If the given object is null then it can't be equal too
+            if( obj == null )
+            {
+                return false;
+            }
+
+            try
+            {
+                // Try to cast the object
+                IonCollection content = (IonCollection)obj;
+
+                bool identifierBool = identifier.Equals( content.identifier );
+                bool defaultLocaleBool = default_locale.Equals( content.default_locale );
+                bool lastChangedBool = last_changed == content.last_changed;
+                bool ftsBool = fts_db.Equals( content.fts_db );
+                bool archiveBool = archive.Equals( content.archive );
+                bool pagesBool = EqualsUtils.UnorderedEqual( pages, content.pages );
+
+                // Check all elements for equality
+                return identifier.Equals( content.identifier )
+                    && default_locale.Equals( content.default_locale )
+                    && last_changed == content.last_changed
+                    && fts_db.Equals( content.fts_db )
+                    && archive.Equals( content.archive )
+                    && EqualsUtils.UnorderedEqual( pages, content.pages );
+            }
+
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Calculates the hashCode of this collection by its unique identifier
+        /// </summary>
+        /// <returns>HashCode</returns>
+        public override int GetHashCode()
+        {
+            return identifier.GetHashCode();
         }
     }
 }
