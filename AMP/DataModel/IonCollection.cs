@@ -52,6 +52,12 @@ namespace Anfema.Ion.DataModel
                 return false;
             }
 
+            // If the object's type is not equal to this type
+            if( GetType() != obj.GetType() )
+            {
+                return false;
+            }
+
             try
             {
                 // Try to cast the object
@@ -79,7 +85,7 @@ namespace Anfema.Ion.DataModel
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return identifier.GetHashCode();
+            return EqualsUtils.calcHashCode( identifier, default_locale );
         }
     }
 }

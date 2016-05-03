@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Anfema.Ion.Utils;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -125,7 +126,7 @@ namespace Anfema.Ion.DataModel
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return imageURL.GetHashCode();
+            return EqualsUtils.calcHashCode( outlet, type, imageURL );
         }
     }
 }

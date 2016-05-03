@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Anfema.Ion.Utils;
+using Newtonsoft.Json;
 using System;
 
 namespace Anfema.Ion.DataModel
@@ -112,7 +113,7 @@ namespace Anfema.Ion.DataModel
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return mediaURI.GetHashCode();
+            return EqualsUtils.calcHashCode( fileURL, outlet, type );
         }
     }
 }

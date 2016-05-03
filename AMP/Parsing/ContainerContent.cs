@@ -38,6 +38,12 @@ namespace Anfema.Ion.Parsing
                 return false;
             }
 
+            // If the object's type is not equal to this type
+            if( GetType() != obj.GetType() )
+            {
+                return false;
+            }
+
             try
             {
                 // Try to cast

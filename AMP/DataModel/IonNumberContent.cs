@@ -1,4 +1,6 @@
-﻿namespace Anfema.Ion.DataModel
+﻿using Anfema.Ion.Utils;
+
+namespace Anfema.Ion.DataModel
 {
     public class IonNumberContent : IonContent
     {
@@ -40,7 +42,7 @@
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return ( outlet + value.ToString() ).GetHashCode();
+            return EqualsUtils.calcHashCode( value, outlet, type );
         }
     }
 }

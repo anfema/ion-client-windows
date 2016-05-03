@@ -117,12 +117,12 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Returns the exact hashCode that the base class would do
+        /// Returns the hashCode for this connectionContent
         /// </summary>
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return connectionString.GetHashCode();
+            return EqualsUtils.calcHashCode( connectionString, outlet, type );
         }
     }
 }

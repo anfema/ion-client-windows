@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Anfema.Ion.Utils;
+using System;
 
 
 namespace Anfema.Ion.DataModel
@@ -42,7 +43,7 @@ namespace Anfema.Ion.DataModel
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return dateTime.GetHashCode();
+            return EqualsUtils.calcHashCode( dateTime, outlet, type );
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Anfema.Ion.Utils;
+using Newtonsoft.Json;
 
 namespace Anfema.Ion.DataModel
 {
@@ -48,7 +49,7 @@ namespace Anfema.Ion.DataModel
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return ( outlet + value.ToString() ).GetHashCode();
+            return EqualsUtils.calcHashCode( value, outlet, type );
         }
     }
 }

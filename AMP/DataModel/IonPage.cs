@@ -183,6 +183,12 @@ namespace Anfema.Ion.DataModel
                 return false;
             }
 
+            // If the object's type is not equal to this type
+            if( GetType() != obj.GetType() )
+            {
+                return false;
+            }
+
             try
             {
                 // Try to cast
@@ -210,12 +216,12 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Returns the exact hashCode that the base class would do
+        /// Returns the hashCode calculated for this page
         /// </summary>
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return EqualsUtils.calcHashCode( identifier, collection, locale );
         }
     }
 }

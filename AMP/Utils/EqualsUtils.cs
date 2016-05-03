@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace Anfema.Ion.Utils
@@ -72,6 +73,31 @@ namespace Anfema.Ion.Utils
 
             // 6: We know the collections are equal
             return true;
+        }
+
+
+        /// <summary>
+        /// Calculates a hashCode for up to three given parameters
+        /// </summary>
+        /// <param name="obj1"></param>
+        /// <param name="obj2"></param>
+        /// <param name="obj3"></param>
+        /// <returns>Integer hashCode</returns>
+        public static int calcHashCode( object obj1, object obj2 = null, object obj3 = null )
+        {
+            unchecked
+            {
+                // Choose large primes to avoid hashing collisions
+                const int hashingBase = (int)2166136261;
+                const int hashingMultiplier = 16777619;
+
+                int hash = hashingBase;
+                hash = ( hash * hashingMultiplier ) ^ ( !Object.ReferenceEquals( null, obj1 ) ? obj1.GetHashCode() : 0 );
+                hash = ( hash * hashingMultiplier ) ^ ( !Object.ReferenceEquals( null, obj2 ) ? obj2.GetHashCode() : 0 );
+                hash = ( hash * hashingMultiplier ) ^ ( !Object.ReferenceEquals( null, obj3 ) ? obj3.GetHashCode() : 0 );
+
+                return hash;
+            }
         }
     }
 }

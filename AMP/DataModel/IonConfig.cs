@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using Anfema.Ion.Utils;
+using System.Net.Http.Headers;
 
 namespace Anfema.Ion.DataModel
 {
@@ -39,7 +40,7 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Constructor with all parameters except "variation§
+        /// Constructor with all parameters except "variation"
         /// </summary>
         /// <param name="baseUrl"></param>
         /// <param name="locale"></param>
@@ -89,12 +90,12 @@ namespace Anfema.Ion.DataModel
 
 
         /// <summary>
-        /// Returns the exact hashCode that the base class would do
+        /// Returns the hashCode for the config
         /// </summary>
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return EqualsUtils.calcHashCode( baseUrl, collectionIdentifier, locale );
         }
     }
 }
