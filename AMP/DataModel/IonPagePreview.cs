@@ -152,19 +152,6 @@ namespace Anfema.Ion.DataModel
                     parentEqual = parent.Equals( content.parent );
                 }
 
-
-                bool identifierBool = identifier.Equals( content.identifier );
-                bool collectionIdentifierBool = collection_identifier.Equals( content.collection_identifier );
-                bool versionNumberBool = version_number == content.version_number;
-                bool lastchangedBool = lastChanged == content.lastChanged;
-                bool layoutBool = layout.Equals( content.layout );
-                bool localeBool = locale.Equals( content.locale );
-
-                string metaString = meta.ToString();
-                bool metaBool = meta.ToString().Equals( content.meta.ToString() );
-
-
-
                 // Check all elements for equality
                 return identifier.Equals( content.identifier )
                     && collection_identifier.Equals( content.collection_identifier )

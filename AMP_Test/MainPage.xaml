@@ -40,6 +40,9 @@
                             Content="Archive Download"
                             Click="archiveDownloadButton_Click"
                             Margin="10, 0, 10, 0"/>
+                    <ProgressRing x:Name="archiveDownloadProgressRing"
+                                  IsActive="False"
+                                  />
                 </StackPanel>
                 <ScrollViewer>
                     <StackPanel>

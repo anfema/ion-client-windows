@@ -49,7 +49,7 @@ Get page
 
 Get pages
 
-    async Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter, Action callback = null )
+    async Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter = null, Action callback = null )
 
 
 Get all pageIdentifier
@@ -60,9 +60,9 @@ Get pagePreview
 
     async Task<IonPagePreview> getPagePreviewAsync( string identifier, Action callback = null )
 
-Get pagePrevies
+Get pagePreviews
 
-    async Task<List<IonPagePreview>> getPagePreviewsAsync( Predicate<IonPagePreview> filter, Action callback = null )
+    async Task<List<IonPagePreview>> getPagePreviewsAsync( Predicate<IonPagePreview> filter = null, Action callback = null )
 
 Load archive and save to cache
 

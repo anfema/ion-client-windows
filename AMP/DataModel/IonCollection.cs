@@ -57,13 +57,6 @@ namespace Anfema.Ion.DataModel
                 // Try to cast the object
                 IonCollection content = (IonCollection)obj;
 
-                bool identifierBool = identifier.Equals( content.identifier );
-                bool defaultLocaleBool = default_locale.Equals( content.default_locale );
-                bool lastChangedBool = last_changed == content.last_changed;
-                bool ftsBool = fts_db.Equals( content.fts_db );
-                bool archiveBool = archive.Equals( content.archive );
-                bool pagesBool = EqualsUtils.UnorderedEqual( pages, content.pages );
-
                 // Check all elements for equality
                 return identifier.Equals( content.identifier )
                     && default_locale.Equals( content.default_locale )

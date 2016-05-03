@@ -82,7 +82,9 @@ namespace AMP_Test
         private async void archiveDownloadButton_Click( object sender, RoutedEventArgs e )
         {
             Debug.WriteLine( "Starting extraction" );
+            archiveDownloadProgressRing.IsActive = true;
             await Ion.getInstance( _ampConfig ).loadArchive( "https://lookbook-dev.anfema.com/client/v1/de_DE/lookbook.tar?variation=default" );
+            archiveDownloadProgressRing.IsActive = false;
             Debug.WriteLine( "Extraction finished" );
         }
     }
