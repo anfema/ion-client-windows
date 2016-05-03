@@ -85,7 +85,7 @@ namespace Anfema.Ion.DataModel
             {
                 return getMetaString( metaKey );
             }
-            catch( Exception e )
+            catch
             {
                 return null;
             }
@@ -103,7 +103,7 @@ namespace Anfema.Ion.DataModel
             {
                 return getMetaString( metaKey );
             }
-            catch( Exception e )
+            catch
             {
                 return "";
             }

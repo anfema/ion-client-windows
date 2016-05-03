@@ -50,10 +50,10 @@ namespace AMP_Test
         /// </summary>
         /// <param name="e">Event data that describes how this page was reached.
         /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Button pressedButton = (Button)e.Parameter;
-            showData((string)pressedButton.DataContext);
+            await showData((string)pressedButton.DataContext);
 
             if( Windows.Foundation.Metadata.ApiInformation.IsTypePresent( "Windows.Phone.UI.Input.HardwareButtons" ) )
             {

@@ -35,7 +35,7 @@ namespace Anfema.Ion.Caching
             }
             catch(Exception e)
             {
-                Debug.WriteLine("Index lookup " + requestUrl + " is not in isolated storage");
+                Debug.WriteLine("Index lookup " + requestUrl + " is not in isolated storage. Message: " + e.Message );
             }
 
             // Save to memory cache, if index is not null
@@ -67,7 +67,7 @@ namespace Anfema.Ion.Caching
             }
             catch( Exception e)
             {
-                Debug.WriteLine("Cache Index " + requestURL + " could not be saved");
+                Debug.WriteLine("Cache Index " + requestURL + " could not be saved. Message: " + e.Message );
             }
         }
 

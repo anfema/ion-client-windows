@@ -308,7 +308,7 @@ namespace Anfema.Ion.Pages
                         }
                         catch( Exception e )
                         {
-                            Debug.WriteLine( "Error getting collection from isolated storage." );
+                            Debug.WriteLine( "Error getting collection from isolated storage. Message: " + e.Message );
                             return null;
                         }
                     }
@@ -359,7 +359,7 @@ namespace Anfema.Ion.Pages
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error getting collection from isolated storage." );
+                Debug.WriteLine( "Error getting collection from isolated storage. Message: " + e.Message );
             }
 
             return collection;

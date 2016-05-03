@@ -83,8 +83,14 @@ namespace Anfema.Ion
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>List of AmpPagees</returns>
-        public async Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter, Action callback = null )
+        public async Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter = null, Action callback = null )
         {
+            // In case there is no filter predicate given then set "all" as default
+            if( filter == null )
+            {
+                filter = PageFilter.all;
+            }
+
             List<IonPage> pagesList = await _ionPages.getPagesAsync( filter ).ConfigureAwait( false );
 
             if( callback != null )
@@ -111,8 +117,14 @@ namespace Anfema.Ion
         /// </summary>
         /// <param name="filter"></param>
         /// <returns>List of IonPagePreview elements</returns>
-        public async Task<List<IonPagePreview>> getPagePreviewsAsync( Predicate<IonPagePreview> filter, Action callback = null )
+        public async Task<List<IonPagePreview>> getPagePreviewsAsync( Predicate<IonPagePreview> filter = null, Action callback = null )
         {
+            // If the filter is set to null, then set it manualy to "all"
+            if( filter == null )
+            {
+                filter = PageFilter.all;
+            }
+
             List<IonPagePreview> pagePreviewList = await _ionPages.getPagePreviewsAsync( filter ).ConfigureAwait( false );
 
             if( callback != null )
@@ -152,13 +164,13 @@ namespace Anfema.Ion
         }
 
 
-        public async Task<String> DownloadSearchDatabase()
+        public async Task<string> DownloadSearchDatabase()
         {
             return await _ionFts.DownloadSearchDatabase().ConfigureAwait( false );
         }
 
 
-        public async Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null )
+        public async Task<List<SearchResult>> FullTextSearch( string searchTerm, string locale, string pageLayout = null )
         {
             return await _ionFts.FullTextSearch( searchTerm, locale, pageLayout ).ConfigureAwait( false );
         }
