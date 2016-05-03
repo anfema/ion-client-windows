@@ -25,8 +25,10 @@ namespace AMP_Test
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
+
         // Config file for the current data context
         IonConfig _ampConfig;
+
 
         /// <summary>
         /// Invoked when this page is about to be displayed in a Frame.
@@ -50,6 +52,7 @@ namespace AMP_Test
             }
         }
 
+
         private async Task<bool> getPageNames()
         {
             List<string> pageNames = await Ion.getInstance(_ampConfig).getAllPageIdentifierAsync();
@@ -61,16 +64,6 @@ namespace AMP_Test
             return true;
         }
 
-
-        private void dataTypesButton_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(DataTypes));
-        }
-
-        private void allData_Click(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(AllData));
-        }
 
         private void pageButton_Click(object sender, RoutedEventArgs e)
         {

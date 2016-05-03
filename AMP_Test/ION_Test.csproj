@@ -89,12 +89,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppController.cs" />
-    <Compile Include="DataTypeDetails.xaml.cs">
-      <DependentUpon>DataTypeDetails.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="DataTypes.xaml.cs">
-      <DependentUpon>DataTypes.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -119,14 +113,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="AllData.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DataTypeDetails.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DataTypes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
