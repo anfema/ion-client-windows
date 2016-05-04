@@ -101,7 +101,7 @@ namespace Anfema.Ion.Archive
                                     File.Move( sourcePath, destinationPath );
 
                                     // Create index for file
-                                    FileCacheIndex index = new FileCacheIndex( elementsList[i].url, elementsList[i].checksum, DateTime.Now );
+                                    FileCacheIndex index = new FileCacheIndex( elementsList[i].url, elementsList[i].checksum, DateTimeUtils.now() );
 
                                     // Save file index
                                     await CacheIndexStore.save( elementsList[i].url, index, _config ).ConfigureAwait( false );

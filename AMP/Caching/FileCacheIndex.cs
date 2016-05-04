@@ -65,7 +65,7 @@ namespace Anfema.Ion.Caching
                 checksum = "sha256:" + HashUtils.GetSHA256Hash( file );
             }
 
-            FileCacheIndex cacheIndex = new FileCacheIndex( requestUrl, checksum, DateTime.Now );
+            FileCacheIndex cacheIndex = new FileCacheIndex( requestUrl, checksum, DateTimeUtils.now() );
             await CacheIndexStore.save( requestUrl, cacheIndex, config ).ConfigureAwait( false );
         }
     }

@@ -26,7 +26,7 @@ namespace Anfema.Ion.Caching
         /// <returns></returns>
         public bool isOutdated( IonConfig config )
         {
-            return lastUpdated < ( DateTime.Now.ToUniversalTime().AddMinutes( -config.minutesUntilCollectionRefresh ) );
+            return lastUpdated < ( DateTimeUtils.now().ToUniversalTime().AddMinutes( -config.minutesUntilCollectionRefresh ) );
         }
 
 
