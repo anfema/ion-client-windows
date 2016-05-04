@@ -41,7 +41,7 @@ namespace Anfema.Ion.Caching
         /// <param name="requestURL"></param>
         /// <param name="collectionIdentifier"></param>
         /// <returns>FileCacheIndex object or null, if the index isn't found</returns>
-        public static async Task<FileCacheIndex> retrieve( string requestUrl, IonConfig config )
+        public static async Task<FileCacheIndex> retrieveAsync( string requestUrl, IonConfig config )
         {
             return await CacheIndexStore.retrieve<FileCacheIndex>( requestUrl, config ).ConfigureAwait( false );
         }
@@ -53,7 +53,7 @@ namespace Anfema.Ion.Caching
         /// <param name="file"></param>
         /// <param name="config"></param>
         /// <param name="checksum"></param>
-        public static async Task save( string requestUrl, Stream file, IonConfig config, string checksum )
+        public static async Task saveAsync( string requestUrl, Stream file, IonConfig config, string checksum )
         {
             if( file == null )
             {

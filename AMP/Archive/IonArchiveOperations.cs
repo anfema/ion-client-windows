@@ -44,7 +44,7 @@ namespace Anfema.Ion.Archive
         /// <param name="url"></param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public async Task loadArchive( IIonFiles ionFiles, IIonPages ionPages, string url, Action callback = null )
+        public async Task loadArchiveAsync( IIonFiles ionFiles, IIonPages ionPages, string url, Action callback = null )
         {
             // Temporary used elements in the isolated storage
             StorageFile archiveFile = null;
@@ -60,7 +60,7 @@ namespace Anfema.Ion.Archive
                 try
                 {
                     // Request archive file
-                    archiveFile = await ionFiles.requestArchiveFile( url );
+                    archiveFile = await ionFiles.requestArchiveFileAsync( url );
 
                     // Get tempFolder for extraction
                     tempFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync( tempFolderPath, CreationCollisionOption.ReplaceExisting );

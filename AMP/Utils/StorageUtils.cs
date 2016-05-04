@@ -239,7 +239,7 @@ namespace Anfema.Ion.Utils
         /// <param name="requestURL"></param>
         /// <param name="collectionIdentifier"></param>
         /// <returns>The index file or null, if the index file isn't found</returns>
-        public static async Task<T> getIndex<T>( string requestURL, IonConfig config ) where T : CacheIndex
+        public static async Task<T> getIndexAsync<T>( string requestURL, IonConfig config ) where T : CacheIndex
         {
             try
             {

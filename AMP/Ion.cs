@@ -164,15 +164,15 @@ namespace Anfema.Ion
         }
 
 
-        public async Task<string> DownloadSearchDatabase()
+        public async Task<string> DownloadSearchDatabaseAsync()
         {
-            return await _ionFts.DownloadSearchDatabase().ConfigureAwait( false );
+            return await _ionFts.DownloadSearchDatabaseAsync().ConfigureAwait( false );
         }
 
 
-        public async Task<List<SearchResult>> FullTextSearch( string searchTerm, string locale, string pageLayout = null )
+        public async Task<List<SearchResult>> FullTextSearchAsync( string searchTerm, string locale, string pageLayout = null )
         {
-            return await _ionFts.FullTextSearch( searchTerm, locale, pageLayout ).ConfigureAwait( false );
+            return await _ionFts.FullTextSearchAsync( searchTerm, locale, pageLayout ).ConfigureAwait( false );
         }
 
 
@@ -184,12 +184,12 @@ namespace Anfema.Ion
         /// <param name="content"></param>
         /// <param name="ignoreCaching"></param>
         /// <returns>Storage file including the desired element</returns>
-        public async Task<StorageFile> Request( String url, String checksum, IonContent content, Boolean ignoreCaching = false )
+        public async Task<StorageFile> requestAsync( String url, String checksum, IonContent content, Boolean ignoreCaching = false )
         {
-            return await _ionFiles.request( url, checksum, content, ignoreCaching ).ConfigureAwait( false );
+            return await _ionFiles.requestAsync( url, checksum, content, ignoreCaching ).ConfigureAwait( false );
         }
 
-        public async Task LoadContentFiles( IonPageObservableCollection content )
+        public async Task loadContentFilesAsync( IonPageObservableCollection content )
         {
             foreach( IonImageContent ampImageContent in content.imageContent )
             {
@@ -208,9 +208,9 @@ namespace Anfema.Ion
         /// </summary>
         /// <param name="url"></param>
         /// <returns>Storage file including the archive file</returns>
-        public async Task loadArchive( string url, Action callback = null )
+        public async Task loadArchiveAsync( string url, Action callback = null )
         {
-            await _ionArchive.loadArchive( _ionFiles, _ionPages, url, callback );
+            await _ionArchive.loadArchiveAsync( _ionFiles, _ionPages, url, callback );
         }
 
 

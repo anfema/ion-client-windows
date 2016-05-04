@@ -5,8 +5,9 @@ namespace Anfema.Ion.Utils
 {
     public class OperationLocks
     {
-        private Dictionary<String, LockWithCounter> ongoingOperations = new Dictionary<string, LockWithCounter>();
+        private Dictionary<string, LockWithCounter> ongoingOperations = new Dictionary<string, LockWithCounter>();
         private readonly object syncLock = new object();
+
 
         public AsyncLock ObtainLock( String filePath )
         {
@@ -23,7 +24,8 @@ namespace Anfema.Ion.Utils
             }
         }
 
-        public void ReleaseLock( String filePath )
+
+        public void ReleaseLock( string filePath )
         {
             lock ( syncLock )
             {

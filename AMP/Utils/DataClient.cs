@@ -101,7 +101,7 @@ namespace Anfema.Ion.Utils
         }
 
 
-        public async Task<MemoryStream> PerformRequest( Uri uri )
+        public async Task<MemoryStream> performRequestAsync( Uri uri )
         {
             Stream stream = await _client.GetStreamAsync( uri ).ConfigureAwait( false );
             var memStream = new MemoryStream();

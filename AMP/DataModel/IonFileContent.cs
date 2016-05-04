@@ -30,7 +30,7 @@ namespace Anfema.Ion.DataModel
 
         public async Task loadFile( Ion amp )
         {
-            this.storageFile = await amp.Request( this.fileURL, checksum, this );
+            this.storageFile = await amp.requestAsync( this.fileURL, checksum, this );
         }
 
 

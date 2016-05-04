@@ -51,7 +51,7 @@ namespace Anfema.Ion.DataModel
 
         public async Task loadImage( Ion amp )
         {
-            this.storageFile = await amp.Request( this.imageURL, checksum, this );
+            this.storageFile = await amp.requestAsync( this.imageURL, checksum, this );
         }
 
 

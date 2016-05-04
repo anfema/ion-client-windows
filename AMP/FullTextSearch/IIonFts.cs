@@ -7,7 +7,7 @@ namespace Anfema.Ion.FullTextSearch
 {
     public interface IIonFts : IIonConfigUpdateable
     {
-        Task<String> DownloadSearchDatabase();
-        Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout = null );
+        Task<string> DownloadSearchDatabaseAsync();
+        Task<List<SearchResult>> FullTextSearchAsync( string searchTerm, string locale, string pageLayout = null );
     }
 }

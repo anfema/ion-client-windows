@@ -48,13 +48,13 @@ namespace Anfema.Ion.FullTextSearch
                                                                                         openFlags: SQLite.Net.Interop.SQLiteOpenFlags.ReadOnly ) ) );
         }
 
-        public async Task<String> DownloadSearchDatabase()
+        public async Task<String> DownloadSearchDatabaseAsync()
         {
             String dbTargetFile = FilePaths.GetFtsDbFilePath( _config.collectionIdentifier );
             IonCollection ampCollection = await _ampPages.getCollectionAsync().ConfigureAwait( false );
 
             // Load fts db from server and save data to file
-            using( MemoryStream responseStream = await _dataClient.PerformRequest( ampCollection.fts_db ).ConfigureAwait( false ) )
+            using( MemoryStream responseStream = await _dataClient.performRequestAsync( ampCollection.fts_db ).ConfigureAwait( false ) )
             {
                 await FileUtils.WriteToFile( responseStream, dbTargetFile ).ConfigureAwait( false );
             }
@@ -62,7 +62,7 @@ namespace Anfema.Ion.FullTextSearch
             return dbTargetFile;
         }
 
-        public async Task<List<SearchResult>> FullTextSearch( String searchTerm, String locale, String pageLayout )
+        public async Task<List<SearchResult>> FullTextSearchAsync( String searchTerm, String locale, String pageLayout )
         {
             searchTerm = PrepareSearchTerm( searchTerm );
 
@@ -96,7 +96,7 @@ namespace Anfema.Ion.FullTextSearch
             return await _connection.QueryAsync<SearchResult>( query, args.ToArray() ).ConfigureAwait( false );
         }
 
-        public String PrepareSearchTerm( String searchTerm )
+        public string PrepareSearchTerm( String searchTerm )
         {
             if( searchTerm == null || searchTerm == String.Empty )
             {

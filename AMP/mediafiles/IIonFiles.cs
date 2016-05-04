@@ -7,7 +7,7 @@ namespace Anfema.Ion.MediaFiles
 {
     public interface IIonFiles : IIonConfigUpdateable
     {
-        Task<StorageFile> request( String url, String checksum, IonContent content, Boolean ignoreCaching );
-        Task<StorageFile> requestArchiveFile( string url );
+        Task<StorageFile> requestAsync( String url, String checksum, IonContent content, Boolean ignoreCaching );
+        Task<StorageFile> requestArchiveFileAsync( string url );
     }
 }

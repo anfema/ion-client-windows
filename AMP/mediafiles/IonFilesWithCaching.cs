@@ -35,9 +35,9 @@ namespace Anfema.Ion.MediaFiles
         /// <param name="ignoreCaching"></param>
         /// <param name="inTargetFile"></param>
         /// <returns></returns>
-        public async Task<StorageFile> request( String url, String checksum, IonContent content, Boolean ignoreCaching )
+        public async Task<StorageFile> requestAsync( string url, string checksum, IonContent content, bool ignoreCaching )
         {
-            String targetPath = "other";
+            string targetPath = "other";
             string contentType = content.type;
 
             switch( contentType )
@@ -61,7 +61,7 @@ namespace Anfema.Ion.MediaFiles
                     }
             }
 
-            return await request( url, targetPath, checksum, ignoreCaching );
+            return await requestAsync( url, targetPath, checksum, ignoreCaching );
         }
 
 
@@ -72,10 +72,10 @@ namespace Anfema.Ion.MediaFiles
         /// <param name="checksum"></param>
         /// <param name="ignoreCaching"></param>
         /// <returns>Archive file</returns>
-        public async Task<StorageFile> requestArchiveFile( string url )
+        public async Task<StorageFile> requestArchiveFileAsync( string url )
         {
             string targetFile = FilePaths.getArchiveFilePath( url, _config );
-            return await request( url, targetFile, "", false );
+            return await requestAsync( url, targetFile, "", false );
         }
 
 
@@ -87,14 +87,14 @@ namespace Anfema.Ion.MediaFiles
         /// <param name="checksum"></param>
         /// <param name="ignoreCaching"></param>
         /// <returns></returns>
-        private async Task<StorageFile> request( String url, string filePath, String checksum, Boolean ignoreCaching )
+        private async Task<StorageFile> requestAsync( String url, string filePath, String checksum, Boolean ignoreCaching )
         {
             StorageFile returnFile = null;
             using( await downloadLocks.ObtainLock( url ).LockAsync().ConfigureAwait( false ) )
             {
                 // fetch file from local storage or download it?
                 bool fileExists = FileUtils.exists( filePath );
-                bool upToDate = await IsFileUpToDate( url, checksum ).ConfigureAwait( false );
+                bool upToDate = await IsFileUpToDateAsync( url, checksum ).ConfigureAwait( false );
 
                 if( fileExists && upToDate )
                 {
@@ -105,11 +105,11 @@ namespace Anfema.Ion.MediaFiles
                 else if( NetworkUtils.isOnline() )
                 {
                     // download media file
-                    MemoryStream saveStream = await _dataClient.PerformRequest( new Uri( url ) ).ConfigureAwait( false );
+                    MemoryStream saveStream = await _dataClient.performRequestAsync( new Uri( url ) ).ConfigureAwait( false );
 
                     // save data to file
                     returnFile = await FileUtils.WriteToFile( saveStream, filePath ).ConfigureAwait( false );
-                    await FileCacheIndex.save( url, saveStream, _config, checksum ).ConfigureAwait( false );
+                    await FileCacheIndex.saveAsync( url, saveStream, _config, checksum ).ConfigureAwait( false );
                 }
                 else if( FileUtils.exists( filePath ) )
                 {
@@ -140,9 +140,9 @@ namespace Anfema.Ion.MediaFiles
         }
 
 
-        private async Task<bool> IsFileUpToDate( String url, String checksum )
+        private async Task<bool> IsFileUpToDateAsync( string url, string checksum )
         {
-            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieve( url, _config ).ConfigureAwait( false );
+            FileCacheIndex fileCacheIndex = await FileCacheIndex.retrieveAsync( url, _config ).ConfigureAwait( false );
             if( fileCacheIndex == null )
             {
                 return false;

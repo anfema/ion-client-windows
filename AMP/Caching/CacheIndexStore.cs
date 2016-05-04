@@ -31,7 +31,7 @@ namespace Anfema.Ion.Caching
 
             try
             {
-                index = await StorageUtils.getIndex<T>(requestUrl, config ).ConfigureAwait(false);
+                index = await StorageUtils.getIndexAsync<T>(requestUrl, config ).ConfigureAwait(false);
             }
             catch(Exception e)
             {

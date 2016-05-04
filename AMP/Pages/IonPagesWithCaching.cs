@@ -56,7 +56,7 @@ namespace Anfema.Ion.Pages
             if( currentCacheEntry )
             {
                 // retrieve current version from cache
-                return await getCollectionFromCache( cacheIndex, false ).ConfigureAwait( false );
+                return await getCollectionFromCacheAsync( cacheIndex, false ).ConfigureAwait( false );
             }
             else
             {
@@ -70,7 +70,7 @@ namespace Anfema.Ion.Pages
                     if( cacheIndex != null )
                     {
                         // no network: use potential old version from cache
-                        return await getCollectionFromCache( cacheIndex, false ).ConfigureAwait( false );
+                        return await getCollectionFromCacheAsync( cacheIndex, false ).ConfigureAwait( false );
                     }
                     else
                     {
@@ -117,7 +117,7 @@ namespace Anfema.Ion.Pages
 
             if( !isOutdated )
             {
-                return await getPageFromCache( pageIdentifier ).ConfigureAwait( false );
+                return await getPageFromCacheAsync( pageIdentifier ).ConfigureAwait( false );
             }
             else
             {
@@ -129,7 +129,7 @@ namespace Anfema.Ion.Pages
                 else
                 {
                     // get old version from cache
-                    return await getPageFromCache( pageIdentifier ).ConfigureAwait( false );
+                    return await getPageFromCacheAsync( pageIdentifier ).ConfigureAwait( false );
                 }
             }
         }
@@ -280,7 +280,7 @@ namespace Anfema.Ion.Pages
                     await StorageUtils.saveCollectionToIsolatedStorageAsync( collection, _config ).ConfigureAwait( false );
 
                     // save cacheIndex
-                    await saveCollectionCacheIndex( collection.last_changed ).ConfigureAwait( false );
+                    await saveCollectionCacheIndexAsync( collection.last_changed ).ConfigureAwait( false );
 
                     return collection;
                 }
@@ -302,7 +302,7 @@ namespace Anfema.Ion.Pages
                             }
 
                             // change the last-mofied date in the cacheIndex to now
-                            await saveCollectionCacheIndex( collection.last_changed ).ConfigureAwait( false );
+                            await saveCollectionCacheIndexAsync( collection.last_changed ).ConfigureAwait( false );
 
                             return collection;
                         }
@@ -315,7 +315,7 @@ namespace Anfema.Ion.Pages
                     else
                     {
                         // change the last-mofied date in the cacheIndex to now
-                        await saveCollectionCacheIndex( _memoryCache.collection.last_changed ).ConfigureAwait( false );
+                        await saveCollectionCacheIndexAsync( _memoryCache.collection.last_changed ).ConfigureAwait( false );
                         return _memoryCache.collection;
                     }
                 }
@@ -333,7 +333,7 @@ namespace Anfema.Ion.Pages
         /// </summary>
         /// <param name="collectionIdentifier"></param>
         /// <returns></returns>
-        private async Task<IonCollection> getCollectionFromCache( CollectionCacheIndex cacheIndex, bool serverCallAsBackup )
+        private async Task<IonCollection> getCollectionFromCacheAsync( CollectionCacheIndex cacheIndex, bool serverCallAsBackup )
         {
             string collectionURL = PagesURLs.getCollectionURL( _config );
 
@@ -371,7 +371,7 @@ namespace Anfema.Ion.Pages
         /// </summary>
         /// <param name="pageIdentifier"></param>
         /// <returns></returns>
-        private async Task<IonPage> getPageFromCache( string pageIdentifier )
+        private async Task<IonPage> getPageFromCacheAsync( string pageIdentifier )
         {
             // Try to get page from memory cache
             IonPage page = _memoryCache.getPage( pageIdentifier, _config );
@@ -399,7 +399,7 @@ namespace Anfema.Ion.Pages
         /// Saves the collection cache index
         /// </summary>
         /// <param name="lastModified"></param>
-        private async Task saveCollectionCacheIndex( DateTime lastModified )
+        private async Task saveCollectionCacheIndexAsync( DateTime lastModified )
         {
             await CollectionCacheIndex.save( _config, lastModified ).ConfigureAwait( false );
         }

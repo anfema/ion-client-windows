@@ -77,7 +77,7 @@ namespace AMP_Test
                 _allContent = DataConverters.convertContent(page.getContents());
 
                 // Load files for page content
-                await Ion.getInstance(AppController.instance.ampConfig).LoadContentFiles(_allContent);
+                await Ion.getInstance(AppController.instance.ampConfig).loadContentFilesAsync(_allContent);
 
                 //await Ion.getInstance( AppController.instance.ampConfig ).DownloadSearchDatabase();
                 //List<SearchResult> results = await Ion.getInstance( AppController.instance.ampConfig ).FullTextSearch("test", "de_DE");

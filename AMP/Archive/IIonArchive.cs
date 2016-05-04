@@ -8,6 +8,6 @@ namespace Anfema.Ion.Archive
 {
     public interface IIonArchive : IIonConfigUpdateable
     {
-        Task loadArchive( IIonFiles ionFiles, IIonPages ionPages, string url, Action callback = null );
+        Task loadArchiveAsync( IIonFiles ionFiles, IIonPages ionPages, string url, Action callback = null );
     }
 }
