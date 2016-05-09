@@ -67,6 +67,10 @@ namespace Anfema.Ion.Parsing
                     {
                         return new IonConnectionContent();
                     }
+                case "chartcontent":
+                    {
+                        return new IonChartContent();
+                    }
             }
 
             throw new JsonReaderException( string.Format( "The datetype " + objectTypeString + " is not defined for IonContent" ) );

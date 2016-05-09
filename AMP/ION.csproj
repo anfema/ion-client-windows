@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Archive\IIonArchive.cs" />
     <Compile Include="DataModel\ArchiveElement.cs" />
+    <Compile Include="DataModel\IonChartContent.cs" />
     <Compile Include="Exceptions\NoIonPageRequestException.cs" />
     <Compile Include="Ion.cs" />
     <Compile Include="Authorization\BasicAuth.cs" />

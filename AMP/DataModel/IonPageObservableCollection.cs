@@ -16,6 +16,7 @@ namespace Anfema.Ion.DataModel
         public ObservableCollection<IonTextContent> textContent { get; set; }
         public ObservableCollection<IonConnectionContent> connectionContent { get; set; }
         public ObservableCollection<IonNumberContent> numberContent { get; set; }
+        public ObservableCollection<IonChartContent> chartContent { get; set; }
 
 
         public IonPageObservableCollection()
@@ -30,6 +31,7 @@ namespace Anfema.Ion.DataModel
             textContent = new ObservableCollection<IonTextContent>();
             connectionContent = new ObservableCollection<IonConnectionContent>();
             numberContent = new ObservableCollection<IonNumberContent>();
+            chartContent = new ObservableCollection<IonChartContent>();
         }
     }
 }

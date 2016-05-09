@@ -15,64 +15,69 @@ namespace Anfema.Ion.Utils
         {
             IonPageObservableCollection oc = new IonPageObservableCollection();
 
-            for( int i=0; i< list.Count; i++ )
+            for( int i = 0; i < list.Count; i++ )
             {
                 // Check if the item is avialible (means that is has all properties filled with data)
                 if( !list[i].isAvailable )
                 {
-                   continue;
+                    continue;
                 }
 
-                switch (list[i].type)
+                switch( list[i].type )
                 {
                     case IonConstants.TextContentIdentifier:
                         {
-                            oc.textContent.Add((IonTextContent)list[i]);
+                            oc.textContent.Add( (IonTextContent)list[i] );
                             break;
                         }
                     case IonConstants.ImageContentIdentifier:
                         {
-                            oc.imageContent.Add((IonImageContent)list[i]);
+                            oc.imageContent.Add( (IonImageContent)list[i] );
                             break;
                         }
                     case IonConstants.ColorContentIdentifier:
                         {
-                            oc.colorContent.Add((IonColorContent)list[i]);
+                            oc.colorContent.Add( (IonColorContent)list[i] );
                             break;
                         }
                     case IonConstants.DateTimeContentIdentifier:
                         {
-                            oc.dateTimeContent.Add((IonDateTimeContent)list[i]);
+                            oc.dateTimeContent.Add( (IonDateTimeContent)list[i] );
                             break;
                         }
                     case IonConstants.FileContentIdentifier:
                         {
-                            oc.fileContent.Add((IonFileContent)list[i]);
+                            oc.fileContent.Add( (IonFileContent)list[i] );
                             break;
                         }
                     case IonConstants.FlagContentIdentifier:
                         {
-                            oc.flagContent.Add((IonFlagContent)list[i]);
+                            oc.flagContent.Add( (IonFlagContent)list[i] );
                             break;
                         }
                     case IonConstants.MediaContentIdentifier:
                         {
-                            oc.mediaContent.Add((IonMediaContent)list[i]);
+                            oc.mediaContent.Add( (IonMediaContent)list[i] );
                             break;
                         }
                     case IonConstants.OptionContentIdentifier:
                         {
-                            oc.optionContent.Add((IonOptionContent)list[i]);
+                            oc.optionContent.Add( (IonOptionContent)list[i] );
                             break;
                         }
                     case IonConstants.NumberContentIdentifier:
                         {
-                            oc.numberContent.Add((IonNumberContent)list[i]);
+                            oc.numberContent.Add( (IonNumberContent)list[i] );
                             break;
                         }
                     case IonConstants.ConnectionContentIdentifier:
                         {
-                            oc.connectionContent.Add((IonConnectionContent)list[i]);
+                            oc.connectionContent.Add( (IonConnectionContent)list[i] );
+                            break;
+                        }
+                    case IonConstants.ChartContentIdentifier:
+                        {
+                            oc.chartContent.Add( (IonChartContent)list[i] );
                             break;
                         }
                 }

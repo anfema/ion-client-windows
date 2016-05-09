@@ -16,6 +16,7 @@
         public const string OptionContentIdentifier = "optioncontent";
         public const string NumberContentIdentifier = "numbercontent";
         public const string ConnectionContentIdentifier = "connectioncontent";
+        public const string ChartContentIdentifier = "chartcontent";
 
 
         // Folder identifier
