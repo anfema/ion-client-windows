@@ -135,7 +135,7 @@
     <Compile Include="Pages\PagesURLs.cs" />
     <Compile Include="Parsing\IonContentConverter.cs" />
     <Compile Include="Parsing\IonPageRoot.cs" />
-    <Compile Include="Parsing\ContainerContent.cs" />
+    <Compile Include="DataModel\IonContainerContent.cs" />
     <Compile Include="Parsing\DataParser.cs" />
     <Compile Include="DataModel\IonPagePreview.cs" />
     <Compile Include="Parsing\CollectionPageMeta.cs" />

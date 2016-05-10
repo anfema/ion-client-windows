@@ -25,7 +25,7 @@ namespace Anfema.Ion.DataModel
         public Uri archive { get; set; }
 
         [JsonProperty( Order = 6 )]
-        public List<ContainerContent> contents { get; set; }
+        public List<IonContainerContent> contents { get; set; }
 
         [JsonProperty( Order = 7 )]
         public List<string> children { get; set; }

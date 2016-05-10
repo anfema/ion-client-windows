@@ -4,21 +4,12 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 
 
-namespace Anfema.Ion.Parsing
+namespace Anfema.Ion.DataModel
 {
-    public class ContainerContent
+    public class IonContainerContent : IonContent
     {
-        [JsonProperty( Order = 1 )]
-        public string outlet { get; set; }
-
-        [JsonProperty( Order = 2 )]
-        public string type { get; set; }
-
         [JsonProperty( Order = 3 )]
         public List<IonContent> children { get; set; }
-
-        [JsonProperty( Order = 4 )]
-        public string variation { get; set; }
 
 
         /// <summary>
@@ -47,7 +38,7 @@ namespace Anfema.Ion.Parsing
             try
             {
                 // Try to cast
-                ContainerContent content = (ContainerContent)obj;
+                IonContainerContent content = (IonContainerContent)obj;
 
                 // Compare every value
                 return outlet.Equals( content.outlet )
@@ -69,7 +60,7 @@ namespace Anfema.Ion.Parsing
         /// <returns>HashCode</returns>
         public override int GetHashCode()
         {
-            return ( outlet + type + variation ).GetHashCode();
+            return EqualsUtils.calcHashCode( variation, outlet, type );
         }
     }
 }
