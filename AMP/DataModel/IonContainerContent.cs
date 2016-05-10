@@ -8,7 +8,6 @@ namespace Anfema.Ion.DataModel
 {
     public class IonContainerContent : IonContent
     {
-        [JsonProperty( Order = 3 )]
         public List<IonContent> children { get; set; }
 
 

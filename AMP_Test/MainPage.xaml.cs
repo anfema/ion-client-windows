@@ -1,5 +1,6 @@
 ﻿using Anfema.Ion;
 using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -55,7 +56,9 @@ namespace AMP_Test
 
         private async Task<bool> getPageNames()
         {
-            List<string> pageNames = await Ion.getInstance(_ampConfig).getAllPageIdentifierAsync();
+            List<IonPage> pages = await Ion.getInstance( _ampConfig ).getPagesAsync( PageFilter.all );
+
+            List<string> pageNames = DataConverters.getPageIdentifier( pages );
 
             allPagesList.DataContext = pageNames;
 

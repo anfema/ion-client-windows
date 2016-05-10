@@ -103,16 +103,6 @@ namespace Anfema.Ion
 
 
         /// <summary>
-        /// Returns a list of all page identifiers
-        /// </summary>
-        /// <returns>List of identifier</returns>
-        public async Task<List<string>> getAllPageIdentifierAsync()
-        {
-            return await _ionPages.getAllPagesIdentifierAsync().ConfigureAwait( false );
-        }
-
-
-        /// <summary>
         /// Used to get a list of PagePreviews matching the given filter
         /// </summary>
         /// <param name="filter"></param>
@@ -188,6 +178,7 @@ namespace Anfema.Ion
         {
             return await _ionFiles.requestAsync( url, checksum, content, ignoreCaching ).ConfigureAwait( false );
         }
+
 
         public async Task loadContentFilesAsync( IonPageObservableCollection content )
         {

@@ -85,5 +85,23 @@ namespace Anfema.Ion.Utils
 
             return oc;
         }
+
+
+        /// <summary>
+        /// Uesd to get a list of strings with the identifiers of the given pages
+        /// </summary>
+        /// <param name="pages"></param>
+        /// <returns>List of strings</returns>
+        public static List<string> getPageIdentifier( List<IonPage> pages )
+        {
+            List<string> pageIdentifier = new List<string>();
+
+            for( int i=0; i< pages.Count; i++ )
+            {
+                pageIdentifier.Add( pages[i].identifier );
+            }
+
+            return pageIdentifier;
+        }
     }
 }

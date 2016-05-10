@@ -10,7 +10,6 @@ namespace Anfema.Ion.Pages
     {
         Task<IonCollection> getCollectionAsync();
         Task<IonPage> getPageAsync( string pageIdentifier );
-        Task<List<string>> getAllPagesIdentifierAsync();
         Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter );
         Task<List<IonPagePreview>> getPagePreviewsAsync( Predicate<IonPagePreview> filter );
         Task savePageToCachesAsync( IonPage page, IonConfig config );

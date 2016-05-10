@@ -136,29 +136,6 @@ namespace Anfema.Ion.Pages
 
 
         /// <summary>
-        /// Collects all the identifier of the pages included in this collection
-        /// </summary>
-        /// <returns>List if page identifier</returns>
-        public async Task<List<string>> getAllPagesIdentifierAsync()
-        {
-            if( _memoryCache.collection == null )
-            {
-                // Get collection from server
-                _memoryCache.collection = await getCollectionAsync().ConfigureAwait( false );
-            }
-
-            List<string> allPageIdentifier = new List<string>();
-
-            for( int i = 0; i < _memoryCache.collection.pages.Count; i++ )
-            {
-                allPageIdentifier.Add( _memoryCache.collection.pages[i].identifier );
-            }
-
-            return allPageIdentifier;
-        }
-
-
-        /// <summary>
         /// Used to get a list of pages matching a given filter
         /// </summary>
         /// <param name="filter"></param>

@@ -38,9 +38,6 @@ Size of memory cache
 
 ##Basic API:
 
-Get Instance
-
-    Ion getInstance( IonConfig config )
 
 Get page
 
@@ -50,11 +47,6 @@ Get page
 Get pages
 
     async Task<List<IonPage>> getPagesAsync( Predicate<IonPagePreview> filter = null, Action callback = null )
-
-
-Get all pageIdentifier
-
-    async Task<List<string>> getAllPageIdentifierAsync()
 
 Get pagePreview
 
