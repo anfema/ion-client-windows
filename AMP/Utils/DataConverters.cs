@@ -103,5 +103,23 @@ namespace Anfema.Ion.Utils
 
             return pageIdentifier;
         }
+
+
+        /// <summary>
+        /// Used to get a list of pageIdentifiers from a given list of pagePreviews
+        /// </summary>
+        /// <param name="pagePreviews"></param>
+        /// <returns>List of identifier</returns>
+        public static List<string> getPageIdentifier( List<IonPagePreview> pagePreviews )
+        {
+            List<string> pageIdentifier = new List<string>();
+
+            for( int i=0; i<pagePreviews.Count; i++ )
+            {
+                pageIdentifier.Add( pagePreviews[i].identifier );
+            }
+
+            return pageIdentifier;
+        }
     }
 }

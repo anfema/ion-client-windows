@@ -56,9 +56,11 @@ namespace AMP_Test
 
         private async Task<bool> getPageNames()
         {
-            List<IonPage> pages = await Ion.getInstance( _ampConfig ).getPagesAsync( PageFilter.all );
+            // Get all pagePreviews of the collection
+            List<IonPagePreview> pagePreviews = await Ion.getInstance( _ampConfig ).getPagePreviewsAsync( PageFilter.all );
 
-            List<string> pageNames = DataConverters.getPageIdentifier( pages );
+            // Extract the page names from the pages list
+            List<string> pageNames = DataConverters.getPageIdentifier( pagePreviews );
 
             allPagesList.DataContext = pageNames;
 
