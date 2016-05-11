@@ -29,6 +29,10 @@
         public static string PageFolderIdentifier { get { return "pages"; } }
 
 
+        // File identifier
+        public static string LogFileIdentifier { get { return "ion_log.txt"; } }
+
+
         // Other constants
         public const string BackSlash = "\\";
         public const string Slash = "/";
