@@ -27,11 +27,14 @@ namespace Anfema.Ion.Caching
             }
 
             // check isolated storage
-            IonLogging.log( "Index lookup " + requestUrl + " from isolated storage", IonLogMessageTypes.SUCCESS );
-
             try
             {
                 index = await StorageUtils.getIndexAsync<T>(requestUrl, config ).ConfigureAwait(false);
+
+                if( index != null )
+                {
+                    IonLogging.log( "Index lookup " + requestUrl + " from isolated storage", IonLogMessageTypes.SUCCESS );
+                }
             }
             catch(Exception e)
             {

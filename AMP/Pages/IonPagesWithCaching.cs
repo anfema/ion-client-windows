@@ -56,6 +56,7 @@ namespace Anfema.Ion.Pages
             if( currentCacheEntry )
             {
                 // retrieve current version from cache
+                IonLogging.log( "Loading collection \"" + _config.collectionIdentifier + "\" from cache.", IonLogMessageTypes.SUCCESS );
                 return await getCollectionFromCacheAsync( cacheIndex, false ).ConfigureAwait( false );
             }
             else
@@ -63,6 +64,7 @@ namespace Anfema.Ion.Pages
                 if( networkConnected )
                 {
                     // download collection or check for modifications
+                    IonLogging.log( "Loading collection \"" + _config.collectionIdentifier + "\" from server.", IonLogMessageTypes.SUCCESS );
                     return await getCollectionFromServerAsync( cacheIndex, false ).ConfigureAwait( false );
                 }
                 else
@@ -70,11 +72,13 @@ namespace Anfema.Ion.Pages
                     if( cacheIndex != null )
                     {
                         // no network: use potential old version from cache
+                        IonLogging.log( "Using potentially old version of collection \"" + _config.collectionIdentifier + "\" from cache, because there is no internet connection.", IonLogMessageTypes.WARNING );
                         return await getCollectionFromCacheAsync( cacheIndex, false ).ConfigureAwait( false );
                     }
                     else
                     {
                         // Collection can neither be downloaded nor be found in cache
+                        IonLogging.log( "Couldn't get collection \"" + _config.collectionIdentifier + "\" either from server or cache.", IonLogMessageTypes.ERROR );
                         throw new CollectionNotAvailableException();
                     }
                 }
@@ -97,10 +101,12 @@ namespace Anfema.Ion.Pages
             {
                 if( isNetworkConnected )
                 {
+                    IonLogging.log( "Loading page \"" + pageIdentifier + "\" from server.", IonLogMessageTypes.SUCCESS );
                     return await getPageFromServerAsync( pageIdentifier ).ConfigureAwait( false );
                 }
                 else
                 {
+                    IonLogging.log( "Error getting page \"" + pageIdentifier + "\" from server or cache.", IonLogMessageTypes.ERROR );
                     throw new PageNotAvailableException();
                 }
 
@@ -117,6 +123,7 @@ namespace Anfema.Ion.Pages
 
             if( !isOutdated )
             {
+                IonLogging.log( "Loading page \"" + pageIdentifier + "\" from cache.", IonLogMessageTypes.SUCCESS );
                 return await getPageFromCacheAsync( pageIdentifier ).ConfigureAwait( false );
             }
             else
@@ -124,11 +131,13 @@ namespace Anfema.Ion.Pages
                 if( isNetworkConnected )
                 {
                     // Download page from server
+                    IonLogging.log( "Loading newer version of page \"" + pageIdentifier + "\" from server.", IonLogMessageTypes.SUCCESS );
                     return await getPageFromServerAsync( pageIdentifier ).ConfigureAwait( false );
                 }
                 else
                 {
                     // get old version from cache
+                    IonLogging.log( "Loading potentially old version of page \"" + pageIdentifier + "\" from cache.", IonLogMessageTypes.WARNING );
                     return await getPageFromCacheAsync( pageIdentifier ).ConfigureAwait( false );
                 }
             }
@@ -319,7 +328,6 @@ namespace Anfema.Ion.Pages
 
             if( collection != null )
             {
-                IonLogging.log( "Memory cache lookup", IonLogMessageTypes.INFORMATION );
                 return collection;
             }
 
