@@ -205,7 +205,7 @@ namespace Anfema.Ion.Pages
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error getting page " + pageIdentifier + " from server! " + e.Message );
+                IonLogging.log( "Error getting page " + pageIdentifier + " from server! " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }
@@ -285,7 +285,7 @@ namespace Anfema.Ion.Pages
                         }
                         catch( Exception e )
                         {
-                            Debug.WriteLine( "Error getting collection from isolated storage. Message: " + e.Message );
+                            IonLogging.log( "Error getting collection from isolated storage. Message: " + e.Message, IonLogMessageTypes.ERROR );
                             return null;
                         }
                     }
@@ -299,7 +299,7 @@ namespace Anfema.Ion.Pages
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error retreiving collection data: " + e.Message );
+                IonLogging.log( "Error retreiving collection data: " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }
@@ -319,7 +319,7 @@ namespace Anfema.Ion.Pages
 
             if( collection != null )
             {
-                Debug.WriteLine( "Memory cache lookup" );
+                IonLogging.log( "Memory cache lookup", IonLogMessageTypes.INFORMATION );
                 return collection;
             }
 
@@ -336,7 +336,7 @@ namespace Anfema.Ion.Pages
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error getting collection from isolated storage. Message: " + e.Message );
+                IonLogging.log( "Error getting collection from isolated storage. Message: " + e.Message, IonLogMessageTypes.ERROR );
             }
 
             return collection;

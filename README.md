@@ -64,3 +64,28 @@ Update config
 
     void updateConfig( IonConfig config )
 
+
+
+## Data converters:
+
+Convert a list of IonContent to a IonObservableCollection collection
+
+    IonPageObservableCollection convertContent( List<IonContent> list )
+
+Extract the identifier of a pages list to a list of strings
+
+    List<string> getPageIdentifier( List<IonPage> pages )
+
+Extract the identifier of a pagePreviews list to a list of strings
+
+    List<string> getPageIdentifier( List<IonPagePreviews> pagePreviews )
+
+
+
+## Compiler Flags:
+
+Show logging messages in dev-console
+
+    SHOW_LOGS
+
+

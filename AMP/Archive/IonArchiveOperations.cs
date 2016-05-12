@@ -125,7 +125,7 @@ namespace Anfema.Ion.Archive
 
                             default:
                                 {
-                                    Debug.WriteLine( "Object " + elementsList[i].url + " could not be parsed from archive." );
+                                    IonLogging.log( "Object " + elementsList[i].url + " could not be parsed from archive.", IonLogMessageTypes.ERROR );
                                     break;
                                 }
                         }
@@ -134,7 +134,7 @@ namespace Anfema.Ion.Archive
 
                 catch( Exception e )
                 {
-                    Debug.WriteLine( "Error at the archive download: " + e.Message );
+                    IonLogging.log( "Error at the archive download: " + e.Message, IonLogMessageTypes.ERROR );
                 }
 
                 finally

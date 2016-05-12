@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Anfema.Ion.Utils;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Anfema.Ion.Caching
@@ -119,7 +120,7 @@ namespace Anfema.Ion.Caching
                 // Remove key from the cacheMap
                 cacheMap.Remove( key );
 
-                Debug.WriteLine( "Removed duplicate node from LRU-Cache with the key: " + key.ToString() );
+                IonLogging.log( "Removed duplicate node from LRU-Cache with the key: " + key.ToString(), IonLogMessageTypes.INFORMATION );
             }
         }
     }

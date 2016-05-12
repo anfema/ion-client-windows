@@ -22,12 +22,12 @@ namespace Anfema.Ion.Caching
 
             if( index != null )
             {
-                Debug.WriteLine("Index lookup " + requestUrl + " from memory");
+                IonLogging.log( "Index lookup " + requestUrl + " from memory", IonLogMessageTypes.SUCCESS );
                 return index;
             }
 
             // check isolated storage
-            Debug.WriteLine("Index lookup " + requestUrl + " from isolated storage");
+            IonLogging.log( "Index lookup " + requestUrl + " from isolated storage", IonLogMessageTypes.SUCCESS );
 
             try
             {
@@ -35,7 +35,7 @@ namespace Anfema.Ion.Caching
             }
             catch(Exception e)
             {
-                Debug.WriteLine("Index lookup " + requestUrl + " is not in isolated storage. Message: " + e.Message );
+                IonLogging.log( "Index lookup " + requestUrl + " is not in isolated storage. Message: " + e.Message, IonLogMessageTypes.INFORMATION );
             }
 
             // Save to memory cache, if index is not null
@@ -67,7 +67,7 @@ namespace Anfema.Ion.Caching
             }
             catch( Exception e)
             {
-                Debug.WriteLine("Cache Index " + requestURL + " could not be saved. Message: " + e.Message );
+                IonLogging.log( "Cache Index " + requestURL + " could not be saved. Message: " + e.Message, IonLogMessageTypes.ERROR );
             }
         }
 
@@ -90,7 +90,7 @@ namespace Anfema.Ion.Caching
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error cleaning caches: " + e.Message );
+                IonLogging.log( "Error cleaning caches: " + e.Message, IonLogMessageTypes.ERROR );
             }
         }
     }

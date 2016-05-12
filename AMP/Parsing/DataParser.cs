@@ -1,4 +1,5 @@
 ﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
@@ -47,7 +48,7 @@ namespace Anfema.Ion.Parsing
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error deserializing page json: " + e.Message );
+                IonLogging.log( "Error deserializing page json: " + e.Message, IonLogMessageTypes.ERROR );
             }
 
             return pageParsed;

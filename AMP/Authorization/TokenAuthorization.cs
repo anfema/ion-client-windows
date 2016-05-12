@@ -1,4 +1,5 @@
 ﻿using Anfema.Ion.DataModel;
+using Anfema.Ion.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace Anfema.Ion.Authorization
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error logging in: " + e.Message );
+                IonLogging.log( "Error logging in: " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }

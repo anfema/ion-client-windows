@@ -7,9 +7,9 @@ using Windows.Storage;
 
 namespace Anfema.Ion.Utils
 {
-    public class IonLogHelper
+    public class IonLogging
     {
-        private static Queue<string> _logMessages = new Queue<string>();
+        private static Queue<IonLogMessage> _logMessages = new Queue<IonLogMessage>();
         private static Task _writeToFileTask;
         private static StorageFolder _currentFolder = ApplicationData.Current.LocalFolder;
 
@@ -17,8 +17,9 @@ namespace Anfema.Ion.Utils
         /// Used to log a message
         /// </summary>
         /// <param name="logMessage"></param>
-        public static void log( string logMessage )
+        public static void log( string message, IonLogMessageTypes messageType )
         {
+            IonLogMessage logMessage = new IonLogMessage( message, messageType );
             // Add log message to queue
             _logMessages.Enqueue( logMessage );
 
@@ -37,13 +38,19 @@ namespace Anfema.Ion.Utils
         {
             try
             {
-                // Create filePath from compontents
+                // Get file or create file in the designated filePath
                 StorageFile file = await _currentFolder.CreateFileAsync( IonConstants.LogFileIdentifier, CreationCollisionOption.OpenIfExists );
 
                 // Write the whole log queue to the log-file
                 while( _logMessages.Count > 0 )
                 {
-                    await FileIO.AppendTextAsync( file, DateTimeUtils.now().ToString() + ": " + _logMessages.Dequeue() + Environment.NewLine );
+                    // Dequeue one messe and write it to file
+                    IonLogMessage actualMessage = _logMessages.Dequeue();
+                    await FileIO.AppendTextAsync( file, DateTimeUtils.now().ToString() + ": " + actualMessage.type + " - " + actualMessage.message + Environment.NewLine );
+
+#if SHOW_LOGS
+                    Debug.WriteLine( DateTimeUtils.now().ToString() + ": " + actualMessage.type + " - " + actualMessage.message );
+#endif
                 }
             }
 

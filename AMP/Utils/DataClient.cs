@@ -31,7 +31,7 @@ namespace Anfema.Ion.Utils
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error in configuring the data client: " + e.Message );
+                IonLogging.log( "Error in configuring the data client: " + e.Message, IonLogMessageTypes.ERROR );
             }
         }
 
@@ -62,7 +62,7 @@ namespace Anfema.Ion.Utils
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error getting page response from server! " + e.Message );
+                IonLogging.log( "Error getting page response from server! " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }
@@ -95,7 +95,7 @@ namespace Anfema.Ion.Utils
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error getting collection from server: " + e.Message );
+                IonLogging.log( "Error getting collection from server: " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }

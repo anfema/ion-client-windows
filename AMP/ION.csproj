@@ -62,7 +62,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;SHOW_LOGS</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -152,8 +152,10 @@
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HashUtils.cs" />
     <Compile Include="Utils\IonConstants.cs" />
-    <Compile Include="Utils\IonLogHelper.cs" />
+    <Compile Include="Utils\Logging\IonLogging.cs" />
     <Compile Include="Utils\LockWithCounter.cs" />
+    <Compile Include="Utils\Logging\IonLogMessage.cs" />
+    <Compile Include="Utils\Logging\IonLogMessageTypes.cs" />
     <Compile Include="Utils\OperationLocks.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />
     <Compile Include="Utils\PagesFilter.cs" />

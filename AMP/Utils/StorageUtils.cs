@@ -116,7 +116,7 @@ namespace Anfema.Ion.Utils
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error loading collection " + config.collectionIdentifier + " from isolated storeage. Message: " + e.Message );
+                IonLogging.log( "Error loading collection " + config.collectionIdentifier + " from isolated storeage. Message: " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }
@@ -151,7 +151,7 @@ namespace Anfema.Ion.Utils
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error saving page to isolated storage: " + e.Message );
+                IonLogging.log( "Error saving page to isolated storage: " + e.Message, IonLogMessageTypes.ERROR );
             }
         }
 
@@ -189,7 +189,7 @@ namespace Anfema.Ion.Utils
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error loading page " + pageIdentifier + " of collection " + config.collectionIdentifier + " from isolated storeage. Message: " + e.Message );
+                IonLogging.log( "Error loading page " + pageIdentifier + " of collection " + config.collectionIdentifier + " from isolated storeage. Message: " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }
@@ -227,7 +227,7 @@ namespace Anfema.Ion.Utils
 
             catch( Exception e )
             {
-                Debug.WriteLine( "Error saving cacheIndex to isolated storage. Message: " + e.Message );
+                IonLogging.log( "Error saving cacheIndex to isolated storage. Message: " + e.Message, IonLogMessageTypes.ERROR );
             }
         }
 
@@ -266,7 +266,7 @@ namespace Anfema.Ion.Utils
             }
             catch( Exception e )
             {
-                Debug.WriteLine( "Error loading cacheIndex " + requestURL + " from isolated storage: " + e.Message );
+                IonLogging.log( "Error loading cacheIndex " + requestURL + " from isolated storage: " + e.Message, IonLogMessageTypes.ERROR );
                 return null;
             }
         }
